@@ -1,8 +1,8 @@
-﻿using AssetPro.Application.ViewModels;
-using AssetPro.Domain.Entities;
+﻿using BloodDonation.Application.ViewModels;
+using BloodDonation.Domain.Entities;
 using AutoMapper;
 
-namespace AssetPro.Infra.IoC.MappingProfiles
+namespace BloodDonation.Infra.IoC.MappingProfiles
 {
     public class DepartmentProfile : Profile
     {

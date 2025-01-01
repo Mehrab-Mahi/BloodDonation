@@ -1,13 +1,13 @@
-﻿using AssetPro.Application.Interfaces;
-using AssetPro.Application.ViewModels;
-using AssetPro.Domain.Entities;
-using AssetPro.Domain.Interfaces;
+﻿using BloodDonation.Application.Interfaces;
+using BloodDonation.Application.ViewModels;
+using BloodDonation.Domain.Entities;
+using BloodDonation.Domain.Interfaces;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetPro.Application.Services
+namespace BloodDonation.Application.Services
 {
     public class MaintenanceTypeService : IMaintenanceTypeService
     {

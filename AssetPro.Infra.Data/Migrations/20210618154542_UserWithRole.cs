@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace AssetPro.Infra.Data.Migrations
+namespace BloodDonation.Infra.Data.Migrations
 {
     public partial class UserWithRole : Migration
     {

@@ -1,8 +1,8 @@
-﻿using AssetPro.Application.ViewModels;
-using AssetPro.Domain.Entities;
+﻿using BloodDonation.Application.ViewModels;
+using BloodDonation.Domain.Entities;
 using System.Collections.Generic;
 
-namespace AssetPro.Application.Interfaces
+namespace BloodDonation.Application.Interfaces
 {
     public interface IRoleService
     {

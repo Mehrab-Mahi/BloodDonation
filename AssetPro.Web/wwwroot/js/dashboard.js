@@ -1,4 +1,4 @@
-﻿AssetPro.Settings.Logout = function () {
+﻿BloodDonation.Settings.Logout = function () {
     window.localStorage.clear();
     $.ajax({
         url: '/Account/Logout',
@@ -13,7 +13,7 @@
     });
 }
 
-AssetPro.Settings.ShowDummyData = function () {
+BloodDonation.Settings.ShowDummyData = function () {
     // Sparkline Charts
     $('.inlinebar').sparkline('html', { type: 'bar', barColor: '#ff6264' });
     $('.inlinebar-2').sparkline('html', { type: 'bar', barColor: '#445982' });
@@ -152,7 +152,7 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-AssetPro.Settings.LoadUserMenu = function (id) {
+BloodDonation.Settings.LoadUserMenu = function (id) {
     var keyName = 'role_' + id;
     var menu = '<li id="10000"><a href="/"><i class="entypo-gauge"></i><span class="title">Dashboard</span></a></li>';
     var menuList = window.localStorage.getItem(keyName);

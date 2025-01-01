@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "AssetPro | Asset Types";
+    ViewData["Title"] = "BloodDonation | Asset Types";
 }
 <style>
     td.details-control {
@@ -31,7 +31,7 @@
 
 <h3><i class="entypo-book"></i> All Asset Types</h3>
 <br />
-<a onclick="return AssetPro.AssetType.Add()" class="btn btn-success add_btn create">
+<a onclick="return BloodDonation.AssetType.Add()" class="btn btn-success add_btn create">
     <i class="entypo-plus"></i>
     Add
 </a>
@@ -94,9 +94,9 @@
 <script>
     $(document).ready(function () {
         var roleId = $('#currentUserRole').val();
-        AssetPro.Settings.LoadUserMenu(roleId);
-        AssetPro.Settings.SetMenuActive('4', 'menu_assettype_list');
-        AssetPro.AssetType.GetAllAssetTypes('tblAssetTypes', 'loader');
+        BloodDonation.Settings.LoadUserMenu(roleId);
+        BloodDonation.Settings.SetMenuActive('4', 'menu_assettype_list');
+        BloodDonation.AssetType.GetAllAssetTypes('tblAssetTypes', 'loader');
 
         $("#AssetType_crud_modal").validate({
             rules: {

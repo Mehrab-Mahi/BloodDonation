@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace AssetPro.Web.Controllers
+namespace BloodDonation.Web.Controllers
 {
     public class AccessDeniedController : Controller
     {

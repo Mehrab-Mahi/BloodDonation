@@ -1,19 +1,19 @@
-﻿AssetPro.MaintenanceType = {
+﻿BloodDonation.MaintenanceType = {
     GetAllMaintenanceTypes: ''
 };
 
-AssetPro.MaintenanceType.GetAllMaintenanceTypes = function (id, dimmerId) {
-    AssetPro.Datables.ShowDimmer(dimmerId);
+BloodDonation.MaintenanceType.GetAllMaintenanceTypes = function (id, dimmerId) {
+    BloodDonation.Datables.ShowDimmer(dimmerId);
     var component = '#' + id;
     $(component).DataTable();
 
     appClient.get('/maintenancetypes/getall', null,
         function (response) {
-            AssetPro.MaintenanceType.ShowAll(response.data, component, dimmerId);
+            BloodDonation.MaintenanceType.ShowAll(response.data, component, dimmerId);
         })
 }
 
-AssetPro.MaintenanceType.ShowAll = function (data, component, dimmerId) {
+BloodDonation.MaintenanceType.ShowAll = function (data, component, dimmerId) {
     $(component).dataTable().fnDestroy();
     $(component).DataTable({
         //"order": [[1, "asc"]],
@@ -51,25 +51,25 @@ AssetPro.MaintenanceType.ShowAll = function (data, component, dimmerId) {
             { "data": "createdBy", "name": "Created By", "autoWidth": true },
             {
                 "render": function (data, type, full, meta) {
-                    var btn = "<a title='Edit' class='label label-info icon-left update' onclick=AssetPro.MaintenanceType.Edit('" + encodeURIComponent(full.id) + "') ><i class='entypo-pencil'></i></a>";
+                    var btn = "<a title='Edit' class='label label-info icon-left update' onclick=BloodDonation.MaintenanceType.Edit('" + encodeURIComponent(full.id) + "') ><i class='entypo-pencil'></i></a>";
                     btn = btn + "<a title='Delete' class='label label-danger icon-left delete'  onclick=DeleteEntity('" + encodeURIComponent(full.id) + "','Department','" + component + "')> <i class='entypo-trash'></i></a>";
                     return btn;
                 }
             }
         ]
     });
-    AssetPro.Datables.HideDimmer(dimmerId);
-    AssetPro.Datables.SetDdl(component);
+    BloodDonation.Datables.HideDimmer(dimmerId);
+    BloodDonation.Datables.SetDdl(component);
 }
 
-AssetPro.MaintenanceType.Add = function (id) {
-    AssetPro.MaintenanceType.ResetForm();
+BloodDonation.MaintenanceType.Add = function (id) {
+    BloodDonation.MaintenanceType.ResetForm();
     jQuery.noConflict();
 
     $('#MaintenanceType_crud_modal').modal('show');
 }
 
-AssetPro.MaintenanceType.Edit = function (id) {
+BloodDonation.MaintenanceType.Edit = function (id) {
     $('#entityId').val(id);
 
     appClient.get('/maintenancetypes/get/' + id, null,
@@ -83,7 +83,7 @@ AssetPro.MaintenanceType.Edit = function (id) {
                 $('#MaintenanceType_crud_modal').modal('show');
             }
             else {
-                AssetPro.Settings.Toast('Error', 'An error occured on Getting Maintenance Type Details', 'error');
+                BloodDonation.Settings.Toast('Error', 'An error occured on Getting Maintenance Type Details', 'error');
             }
         })
 }
@@ -102,14 +102,14 @@ $("#MaintenanceType_crud_frm").submit(function (e) {
             description: description
         }, function (response) {
             if (response.data.isSuccess) {
-                AssetPro.Settings.Toast('Success', 'Maintenance Type  ' + msg + ' has been Succeed', 'Success');
+                BloodDonation.Settings.Toast('Success', 'Maintenance Type  ' + msg + ' has been Succeed', 'Success');
                 $('#MaintenanceType_crud_modal').modal('hide');
-                AssetPro.Settings.ReloadDt();
+                BloodDonation.Settings.ReloadDt();
             }
             else {
-                AssetPro.Settings.Toast('Error', 'Maintenance Type ' + msg + ' has been Failed!', 'error');
+                BloodDonation.Settings.Toast('Error', 'Maintenance Type ' + msg + ' has been Failed!', 'error');
                 $('#MaintenanceType_crud_modal').modal('hide');
-                AssetPro.Settings.ReloadDt();
+                BloodDonation.Settings.ReloadDt();
             }
         })
 
@@ -120,20 +120,20 @@ $("#MaintenanceType_crud_frm").submit(function (e) {
             description: description
         }, function (response) {
             if (response.data.isSuccess) {
-                AssetPro.Settings.Toast('Success', 'Maintenance Type  ' + msg + ' has been Succeed', 'Success');
+                BloodDonation.Settings.Toast('Success', 'Maintenance Type  ' + msg + ' has been Succeed', 'Success');
                 $('#MaintenanceType_crud_modal').modal('hide');
-                AssetPro.Settings.ReloadDt();
+                BloodDonation.Settings.ReloadDt();
             }
             else {
-                AssetPro.Settings.Toast('Error', 'Maintenance Type ' + msg + ' has been Failed!', 'error');
+                BloodDonation.Settings.Toast('Error', 'Maintenance Type ' + msg + ' has been Failed!', 'error');
                 $('#MaintenanceType_crud_modal').modal('hide');
-                AssetPro.Settings.ReloadDt();
+                BloodDonation.Settings.ReloadDt();
             }
         })
     }
 });
 
-AssetPro.MaintenanceType.ResetForm = function () {
+BloodDonation.MaintenanceType.ResetForm = function () {
     $('#entityId').val('');
     $("#name").val('');
     $("#description").val('');

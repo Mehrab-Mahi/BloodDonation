@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace AssetPro.Web.Controllers
+namespace BloodDonation.Web.Controllers
 {
     public class AccountController : Controller
     {

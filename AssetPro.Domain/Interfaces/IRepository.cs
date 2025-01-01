@@ -1,4 +1,4 @@
-﻿using AssetPro.Domain.Entities;
+﻿using BloodDonation.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetPro.Domain.Interfaces
+namespace BloodDonation.Domain.Interfaces
 {
     public interface IRepository<T> where T : Entity
     {

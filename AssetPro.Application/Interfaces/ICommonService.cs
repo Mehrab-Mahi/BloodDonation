@@ -1,4 +1,4 @@
-﻿namespace AssetPro.Application.Interfaces
+﻿namespace BloodDonation.Application.Interfaces
 {
     public interface ICommonService
     {

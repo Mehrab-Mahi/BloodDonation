@@ -1,15 +1,15 @@
-﻿using AssetPro.Application.Interfaces;
+﻿using BloodDonation.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace AssetPro.Application.Helper
+namespace BloodDonation.Application.Helper
 {
-    public class AssetProAuthorizeFilter : IAuthorizationFilter
+    public class BloodDonationAuthorizeFilter : IAuthorizationFilter
     {
         private readonly IAuthService _authService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public AssetProAuthorizeFilter(IAuthService authService, IHttpContextAccessor httpContextAccessor)
+        public BloodDonationAuthorizeFilter(IAuthService authService, IHttpContextAccessor httpContextAccessor)
         {
             _authService = authService;
             _httpContextAccessor = httpContextAccessor;

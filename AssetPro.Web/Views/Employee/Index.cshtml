@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "AssetPro | Employees";
+    ViewData["Title"] = "BloodDonation | Employees";
 }
 <style>
     td.details-control {
@@ -30,7 +30,7 @@
 
 <h3><i class="entypo-cc-by"></i>All Employees</h3>
 <br />
-<a onclick="return AssetPro.Employee.Add()" class="btn btn-success add_btn create">
+<a onclick="return BloodDonation.Employee.Add()" class="btn btn-success add_btn create">
     <i class="entypo-plus"></i>
     Add
 </a>
@@ -177,9 +177,9 @@
 <script>
     $(document).ready(function () {
         var roleId = $('#currentUserRole').val();
-        AssetPro.Settings.LoadUserMenu(roleId);
-        AssetPro.Settings.SetMenuActive('5', 'menu-clients');
-        AssetPro.Client.GetAllClients('tblClients', 'loader');
+        BloodDonation.Settings.LoadUserMenu(roleId);
+        BloodDonation.Settings.SetMenuActive('5', 'menu-clients');
+        BloodDonation.Client.GetAllClients('tblClients', 'loader');
         $('#dob').datepicker();
 
         $("#Client_crud_frm").validate({

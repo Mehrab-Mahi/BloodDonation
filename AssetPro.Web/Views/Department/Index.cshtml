@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "AssetPro | Departments";
+    ViewData["Title"] = "BloodDonation | Departments";
 }
 <style>
     td.details-control {
@@ -31,7 +31,7 @@
 
 <h3><i class="entypo-flow-branch"></i> All Departments</h3>
 <br />
-<a onclick="return AssetPro.Department.Add()" class="btn btn-success add_btn create">
+<a onclick="return BloodDonation.Department.Add()" class="btn btn-success add_btn create">
     <i class="entypo-plus"></i>
     Add
 </a>
@@ -94,9 +94,9 @@
 <script>
     $(document).ready(function () {
         var roleId = $('#currentUserRole').val();
-        AssetPro.Settings.LoadUserMenu(roleId);
-        AssetPro.Settings.SetMenuActive('8', 'menu_department_list');
-        AssetPro.Department.GetAllDepartments('tblDepartments', 'loader');
+        BloodDonation.Settings.LoadUserMenu(roleId);
+        BloodDonation.Settings.SetMenuActive('8', 'menu_department_list');
+        BloodDonation.Department.GetAllDepartments('tblDepartments', 'loader');
 
         $("#Department_crud_modal").validate({
             rules: {

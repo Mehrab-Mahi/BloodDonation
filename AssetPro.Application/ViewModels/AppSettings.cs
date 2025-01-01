@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetPro.Application.ViewModels
+namespace BloodDonation.Application.ViewModels
 {
     public class AppSettings
     {

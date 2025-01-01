@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "AssetPro | Users";
+    ViewData["Title"] = "BloodDonation | Users";
 }
 <style>
     td.details-control {
@@ -31,7 +31,7 @@
 
 <h3><i class="entypo-user"></i> All System Users</h3>
 <br />
-<a onclick="return AssetPro.User.Add()" class="btn btn-success add_btn create">
+<a onclick="return BloodDonation.User.Add()" class="btn btn-success add_btn create">
     <i class="entypo-plus"></i>
     Add
 </a>
@@ -156,7 +156,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <button type="button" onclick="return AssetPro.User.ShowPass()" style="margin-top:23px;" class="btn btn-primary btn-icon">
+                            <button type="button" onclick="return BloodDonation.User.ShowPass()" style="margin-top:23px;" class="btn btn-primary btn-icon">
                                 Show
                                 <i class="entypo-network"></i>
                             </button>
@@ -193,9 +193,9 @@
 <script>
     $(document).ready(function () {
         var roleId = $('#currentUserRole').val();
-        AssetPro.Settings.LoadUserMenu(roleId);
-        AssetPro.Settings.SetMenuActive('3', 'menu_User_list');
-        AssetPro.Datables.GetAllUser('tblUser', 'loader');
+        BloodDonation.Settings.LoadUserMenu(roleId);
+        BloodDonation.Settings.SetMenuActive('3', 'menu_User_list');
+        BloodDonation.Datables.GetAllUser('tblUser', 'loader');
 
         $("#User_pass_frm").validate({
             rules: {

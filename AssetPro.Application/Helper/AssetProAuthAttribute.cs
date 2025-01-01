@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AssetPro.Application.Helper
+namespace BloodDonation.Application.Helper
 {
-    public class AssetProAuthAttribute : TypeFilterAttribute
+    public class BloodDonationAuthAttribute : TypeFilterAttribute
     {
-        public AssetProAuthAttribute() : base(typeof(AssetProAuthorizeFilter))
+        public BloodDonationAuthAttribute() : base(typeof(BloodDonationAuthorizeFilter))
         {
             Arguments = new object[] { };
         }

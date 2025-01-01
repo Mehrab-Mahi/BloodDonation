@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "AssetPro | Invite User";
+    ViewData["Title"] = "BloodDonation | Invite User";
 }
 
 <script src="~/js/jquery.toast.min.js"></script>
@@ -16,7 +16,7 @@
 <h3>All Invitations</h3>
 <br />
 
-<a onclick="return AssetPro.InviteUser.Invite()" class="btn btn-success add_btn create">
+<a onclick="return BloodDonation.InviteUser.Invite()" class="btn btn-success add_btn create">
     <i class="entypo-forward"></i>
     New Invitation
 </a>
@@ -99,9 +99,9 @@
 <script>
     $(document).ready(function () {
         var roleId = $('#currentUserRole').val();
-        AssetPro.Settings.LoadUserMenu(roleId);
-        AssetPro.Settings.SetMenuActive('3', 'menu_user_invite');
-        AssetPro.Datables.GetAllInvitation('tblInvite', 'loader');
+        BloodDonation.Settings.LoadUserMenu(roleId);
+        BloodDonation.Settings.SetMenuActive('3', 'menu_user_invite');
+        BloodDonation.Datables.GetAllInvitation('tblInvite', 'loader');
 
         $("#user_invite_frm").validate({
             rules: {

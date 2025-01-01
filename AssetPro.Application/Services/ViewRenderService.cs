@@ -1,4 +1,4 @@
-﻿using AssetPro.Application.Interfaces;
+﻿using BloodDonation.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetPro.Application.Services
+namespace BloodDonation.Application.Services
 {
     public class ViewRenderService : IViewRenderService
     {

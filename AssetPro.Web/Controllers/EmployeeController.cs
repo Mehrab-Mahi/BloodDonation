@@ -1,11 +1,11 @@
-﻿using AssetPro.Application.Helper;
-using AssetPro.Application.Interfaces;
-using AssetPro.Application.ViewModels;
+﻿using BloodDonation.Application.Helper;
+using BloodDonation.Application.Interfaces;
+using BloodDonation.Application.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AssetPro.Web.Controllers
+namespace BloodDonation.Web.Controllers
 {
-    [AssetProAuth]
+    [BloodDonationAuth]
     [Route("employees")]
     public class EmployeeController : Controller
     {

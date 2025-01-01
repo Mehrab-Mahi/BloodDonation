@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace AssetPro.Application.Interfaces
+namespace BloodDonation.Application.Interfaces
 {
     public interface IMailService
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetPro.Domain.Interfaces
+namespace BloodDonation.Domain.Interfaces
 {
     public interface IConnectionStringProvider
     {

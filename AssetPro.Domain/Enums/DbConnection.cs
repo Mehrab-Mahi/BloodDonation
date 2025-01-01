@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetPro.Domain.Enums
+namespace BloodDonation.Domain.Enums
 {
     public enum DbConnection
     {
-        AssetProConnection_Local,
-        AssetProConnection_Live
+        BloodDonationConnection_Local,
+        BloodDonationConnection_Live
     }
 
     public enum PaymentType

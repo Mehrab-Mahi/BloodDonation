@@ -1,14 +1,14 @@
-﻿using AssetPro.Application.Interfaces;
-using AssetPro.Application.ViewModels;
-using AssetPro.Domain.Entities;
-using AssetPro.Domain.Interfaces;
+﻿using BloodDonation.Application.Interfaces;
+using BloodDonation.Application.ViewModels;
+using BloodDonation.Domain.Entities;
+using BloodDonation.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetPro.Application.Services
+namespace BloodDonation.Application.Services
 {
     public class InvitationService : IInvitationService
     {

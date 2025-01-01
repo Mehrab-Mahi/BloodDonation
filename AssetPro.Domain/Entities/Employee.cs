@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetPro.Domain.Entities
+namespace BloodDonation.Domain.Entities
 {
     public class Employee : Entity
     {

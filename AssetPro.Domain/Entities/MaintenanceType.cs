@@ -1,4 +1,4 @@
-﻿namespace AssetPro.Domain.Entities
+﻿namespace BloodDonation.Domain.Entities
 {
     public class MaintenanceType : Entity
     {

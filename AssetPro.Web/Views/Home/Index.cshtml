@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "AssetPro | Home";
+    ViewData["Title"] = "BloodDonation | Home";
 }
 
 
@@ -216,14 +216,14 @@
 <script type="text/javascript">
     $(document).ready(function () {
         var roleId = $('#currentUserRole').val();
-            //AssetPro.Datables.ShowDimmer('loader');
-             AssetPro.Settings.LoadUserMenu(roleId);
-             AssetPro.Settings.SetMenuActive('1000', 'menu_dashboard');
+            //BloodDonation.Datables.ShowDimmer('loader');
+             BloodDonation.Settings.LoadUserMenu(roleId);
+             BloodDonation.Settings.SetMenuActive('1000', 'menu_dashboard');
             //var hasMenu = window.localStorage.getItem("hasMenu");
             //if (!hasMenu) {
-            //      AssetPro.Settings.LoadUserMenu(roleId);
+            //      BloodDonation.Settings.LoadUserMenu(roleId);
             //}
-            AssetPro.Settings.ShowDummyData();
-            //AssetPro.Datables.HideDimmer('loader');
+            BloodDonation.Settings.ShowDummyData();
+            //BloodDonation.Datables.HideDimmer('loader');
         });
 </script>

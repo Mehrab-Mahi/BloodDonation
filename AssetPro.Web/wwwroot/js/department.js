@@ -1,19 +1,19 @@
-﻿AssetPro.Department = {
+﻿BloodDonation.Department = {
     GetAllDepartments: ''
 };
 
-AssetPro.Department.GetAllDepartments = function (id, dimmerId) {
-    AssetPro.Datables.ShowDimmer(dimmerId);
+BloodDonation.Department.GetAllDepartments = function (id, dimmerId) {
+    BloodDonation.Datables.ShowDimmer(dimmerId);
     var component = '#' + id;
     $(component).DataTable();
 
     appClient.get('/departments/getall', null,
         function (response) {
-            AssetPro.Department.ShowAll(response.data, component, dimmerId);
+            BloodDonation.Department.ShowAll(response.data, component, dimmerId);
         })
 }
 
-AssetPro.Department.ShowAll = function (data, component, dimmerId) {
+BloodDonation.Department.ShowAll = function (data, component, dimmerId) {
     $(component).dataTable().fnDestroy();
     $(component).DataTable({
         //"order": [[1, "asc"]],
@@ -51,25 +51,25 @@ AssetPro.Department.ShowAll = function (data, component, dimmerId) {
             { "data": "createdBy", "name": "Created By", "autoWidth": true },
             {
                 "render": function (data, type, full, meta) {
-                    var btn = "<a title='Edit' class='label label-info icon-left update' onclick=AssetPro.Department.Edit('" + encodeURIComponent(full.id) + "') ><i class='entypo-pencil'></i></a>";
+                    var btn = "<a title='Edit' class='label label-info icon-left update' onclick=BloodDonation.Department.Edit('" + encodeURIComponent(full.id) + "') ><i class='entypo-pencil'></i></a>";
                     btn = btn + "<a title='Delete' class='label label-danger icon-left delete'  onclick=DeleteEntity('" + encodeURIComponent(full.id) + "','Department','" + component + "')> <i class='entypo-trash'></i></a>";
                     return btn;
                 }
             }
         ]
     });
-    AssetPro.Datables.HideDimmer(dimmerId);
-    AssetPro.Datables.SetDdl(component);
+    BloodDonation.Datables.HideDimmer(dimmerId);
+    BloodDonation.Datables.SetDdl(component);
 }
 
-AssetPro.Department.Add = function (id) {
-    AssetPro.Department.ResetForm();
+BloodDonation.Department.Add = function (id) {
+    BloodDonation.Department.ResetForm();
     jQuery.noConflict();
 
     $('#Department_crud_modal').modal('show');
 }
 
-AssetPro.Department.Edit = function (id) {
+BloodDonation.Department.Edit = function (id) {
     $('#entityId').val(id);
 
     appClient.get('/departments/get/' + id, null,
@@ -83,7 +83,7 @@ AssetPro.Department.Edit = function (id) {
                 $('#Department_crud_modal').modal('show');
             }
             else {
-                AssetPro.Settings.Toast('Error', 'An error occured on Getting Department Details', 'error');
+                BloodDonation.Settings.Toast('Error', 'An error occured on Getting Department Details', 'error');
             }
         })
 }
@@ -102,14 +102,14 @@ $("#Department_crud_frm").submit(function (e) {
             description: description
         }, function (response) {
             if (response.data.isSuccess) {
-                AssetPro.Settings.Toast('Success', 'Department  ' + msg + ' has been Succeed', 'Success');
+                BloodDonation.Settings.Toast('Success', 'Department  ' + msg + ' has been Succeed', 'Success');
                 $('#Department_crud_modal').modal('hide');
-                AssetPro.Settings.ReloadDt();
+                BloodDonation.Settings.ReloadDt();
             }
             else {
-                AssetPro.Settings.Toast('Error', 'Department ' + msg + ' has been Failed!', 'error');
+                BloodDonation.Settings.Toast('Error', 'Department ' + msg + ' has been Failed!', 'error');
                 $('#Department_crud_modal').modal('hide');
-                AssetPro.Settings.ReloadDt();
+                BloodDonation.Settings.ReloadDt();
             }
         })
 
@@ -120,20 +120,20 @@ $("#Department_crud_frm").submit(function (e) {
             description: description
         }, function (response) {
             if (response.data.isSuccess) {
-                AssetPro.Settings.Toast('Success', 'Department  ' + msg + ' has been Succeed', 'Success');
+                BloodDonation.Settings.Toast('Success', 'Department  ' + msg + ' has been Succeed', 'Success');
                 $('#Department_crud_modal').modal('hide');
-                AssetPro.Settings.ReloadDt();
+                BloodDonation.Settings.ReloadDt();
             }
             else {
-                AssetPro.Settings.Toast('Error', 'Department ' + msg + ' has been Failed!', 'error');
+                BloodDonation.Settings.Toast('Error', 'Department ' + msg + ' has been Failed!', 'error');
                 $('#Department_crud_modal').modal('hide');
-                AssetPro.Settings.ReloadDt();
+                BloodDonation.Settings.ReloadDt();
             }
         })
     }
 });
 
-AssetPro.Department.ResetForm = function () {
+BloodDonation.Department.ResetForm = function () {
     $('#entityId').val('');
     $("#name").val('');
     $("#description").val('');

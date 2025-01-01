@@ -1,20 +1,20 @@
-﻿AssetPro.Role = {
+﻿BloodDonation.Role = {
     GetAllRoles: ''
 };
 
-AssetPro.Role.GetAllRoles = function (id, dimmerId) {
-    AssetPro.Datables.ShowDimmer(dimmerId);
+BloodDonation.Role.GetAllRoles = function (id, dimmerId) {
+    BloodDonation.Datables.ShowDimmer(dimmerId);
     var component = '#' + id;
     $(component).DataTable();
 
     appClient.get('/roles/getall', null,
         function (response) {
-            AssetPro.Role.ShowAll(response.data, component, dimmerId);
+            BloodDonation.Role.ShowAll(response.data, component, dimmerId);
         })
 }
-AssetPro.Role.ShowAll = function (data, component, dimmerId) {
+BloodDonation.Role.ShowAll = function (data, component, dimmerId) {
     $(component).dataTable().fnDestroy();
-    AssetPro.Role.table = $(component).DataTable({
+    BloodDonation.Role.table = $(component).DataTable({
         //"order": [[1, "asc"]],
 
         "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -49,18 +49,18 @@ AssetPro.Role.ShowAll = function (data, component, dimmerId) {
             { "data": "createdBy", "name": "Created By", "autoWidth": true },
             {
                 "render": function (data, type, full, meta) {
-                    var btn = "<a title='Edit' class='label label-info icon-left update' onclick=AssetPro.Role.Edit('" + encodeURIComponent(full.id) + "') ><i class='entypo-pencil'></i></a>";
+                    var btn = "<a title='Edit' class='label label-info icon-left update' onclick=BloodDonation.Role.Edit('" + encodeURIComponent(full.id) + "') ><i class='entypo-pencil'></i></a>";
                     btn = btn + "<a title='Delete' class='label label-danger icon-left delete'  onclick=DeleteEntity('" + encodeURIComponent(full.id) + "','Role','" + component + "')> <i class='entypo-trash'></i></a>";
                     return btn;
                 }
             }
         ]
     });
-    AssetPro.Datables.HideDimmer(dimmerId);
-    AssetPro.Datables.SetDdl(component);
+    BloodDonation.Datables.HideDimmer(dimmerId);
+    BloodDonation.Datables.SetDdl(component);
 }
 
-AssetPro.Role.Edit = function (id) {
+BloodDonation.Role.Edit = function (id) {
     $('#role-id').val(id);
 
     appClient.get('/roles/getroletree/' + id, null,
@@ -101,7 +101,7 @@ AssetPro.Role.Edit = function (id) {
                 $('#Role_add_modal').modal('show');
             }
             else {
-                AssetPro.Settings.Toast('Error', 'An error occured on Getting Role Details', 'error');
+                BloodDonation.Settings.Toast('Error', 'An error occured on Getting Role Details', 'error');
             }
         })
 }
@@ -128,25 +128,25 @@ $("#Role_add_modal").submit(function (e) {
     },
         function (response) {
             if (response.isSuccess) {
-                AssetPro.Settings.Toast('Success', 'Role  ' + msg + ' has been Succeed', 'Success');
+                BloodDonation.Settings.Toast('Success', 'Role  ' + msg + ' has been Succeed', 'Success');
                 $('#Role_add_modal').modal('hide');
-                AssetPro.Settings.ReloadDt();
+                BloodDonation.Settings.ReloadDt();
             }
             else {
-                AssetPro.Settings.Toast('Error', 'Role ' + msg + ' has been Succeedl', 'error');
+                BloodDonation.Settings.Toast('Error', 'Role ' + msg + ' has been Succeedl', 'error');
                 $('#Role_add_modal').modal('hide');
-                AssetPro.Settings.ReloadDt();
+                BloodDonation.Settings.ReloadDt();
             }
         })
 });
 
-AssetPro.Role.ResetRoleForm = function () {
+BloodDonation.Role.ResetRoleForm = function () {
     $('#role-id').val('');
     $("#name").val('');
 };
 
-AssetPro.Role.Add = function (id) {
-    AssetPro.Role.ResetRoleForm();
+BloodDonation.Role.Add = function (id) {
+    BloodDonation.Role.ResetRoleForm();
 
     jQuery.noConflict();
     $('#Role_add_modal').modal('show');

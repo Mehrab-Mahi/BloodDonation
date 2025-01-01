@@ -1,8 +1,8 @@
-﻿using AssetPro.Infra.IoC.MappingProfiles;
+﻿using BloodDonation.Infra.IoC.MappingProfiles;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AssetPro.Infra.IoC
+namespace BloodDonation.Infra.IoC
 {
     public class AutomapperConfig
     {

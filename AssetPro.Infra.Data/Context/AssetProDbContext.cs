@@ -1,4 +1,4 @@
-﻿using AssetPro.Domain.Entities;
+﻿using BloodDonation.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetPro.Infra.Data.Context
+namespace BloodDonation.Infra.Data.Context
 {
-   public class AssetProDbContext : DbContext
+   public class BloodDonationDbContext : DbContext
     {
-        public AssetProDbContext(DbContextOptions<AssetProDbContext> options)
+        public BloodDonationDbContext(DbContextOptions<BloodDonationDbContext> options)
           : base(options)
         {
         }

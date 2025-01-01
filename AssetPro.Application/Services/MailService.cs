@@ -1,5 +1,5 @@
-﻿using AssetPro.Application.Interfaces;
-using AssetPro.Application.ViewModels;
+﻿using BloodDonation.Application.Interfaces;
+using BloodDonation.Application.ViewModels;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetPro.Application.Services
+namespace BloodDonation.Application.Services
 {
     public class MailService : IMailService
     {

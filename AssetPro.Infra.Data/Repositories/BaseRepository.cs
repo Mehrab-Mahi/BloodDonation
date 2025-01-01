@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using AssetPro.Domain.Interfaces;
+using BloodDonation.Domain.Interfaces;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetPro.Infra.Data.Repositories
+namespace BloodDonation.Infra.Data.Repositories
 {
     public class BaseRepository : IBaseRepository
     {

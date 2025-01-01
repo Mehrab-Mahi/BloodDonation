@@ -1,6 +1,6 @@
-﻿using AssetPro.Domain.Entities;
-using AssetPro.Domain.Interfaces;
-using AssetPro.Infra.Data.Context;
+﻿using BloodDonation.Domain.Entities;
+using BloodDonation.Domain.Interfaces;
+using BloodDonation.Infra.Data.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,14 +8,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace AssetPro.Infra.Data.Repositories
+namespace BloodDonation.Infra.Data.Repositories
 {
     public class Repository<T> : IRepository<T> where T : Entity
     {
-        private readonly AssetProDbContext _dbContext;
+        private readonly BloodDonationDbContext _dbContext;
         private IHttpContextAccessor _httpContextAccessor;
         private string LoggedInUserName = string.Empty;
-        public Repository(AssetProDbContext dbContext, IHttpContextAccessor httpContextAccessor)
+        public Repository(BloodDonationDbContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
             _dbContext = dbContext;
             _httpContextAccessor = httpContextAccessor;

@@ -1,20 +1,20 @@
-﻿AssetPro.Employee = {
+﻿BloodDonation.Employee = {
     GetAllEmployees: ''
 };
 
-AssetPro.Employee.GetAllEmployees = function (id, dimmerId) {
-    AssetPro.Datables.ShowDimmer(dimmerId);
+BloodDonation.Employee.GetAllEmployees = function (id, dimmerId) {
+    BloodDonation.Datables.ShowDimmer(dimmerId);
     var component = '#' + id;
     $(component).DataTable();
 
     appClient.get('/client/getall', null,
         function (response) {
-            AssetPro.Employee.ShowAll(response.data, component, dimmerId);
+            BloodDonation.Employee.ShowAll(response.data, component, dimmerId);
         })
 }
-AssetPro.Employee.ShowAll = function (data, component, dimmerId) {
+BloodDonation.Employee.ShowAll = function (data, component, dimmerId) {
     $(component).dataTable().fnDestroy();
-    AssetPro.Employee.table = $(component).DataTable({
+    BloodDonation.Employee.table = $(component).DataTable({
         //"order": [[1, "asc"]],
 
         "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -48,18 +48,18 @@ AssetPro.Employee.ShowAll = function (data, component, dimmerId) {
             { "data": "rating", "name": "Rating", "autoWidth": true },
             {
                 "render": function (data, type, full, meta) {
-                    var btn = "<a title='Edit' class='label label-info icon-left update' onclick=AssetPro.Client.Edit('" + encodeURIComponent(full.id) + "') ><i class='entypo-pencil'></i>Edit</a>";
+                    var btn = "<a title='Edit' class='label label-info icon-left update' onclick=BloodDonation.Client.Edit('" + encodeURIComponent(full.id) + "') ><i class='entypo-pencil'></i>Edit</a>";
                     btn = btn + "<a class='label label-danger icon-left delete'  onclick=DeleteEntity('" + encodeURIComponent(full.id) + "','Client','" + component + "')> <i class='entypo-cancel'></i>Delete</a>";
                     return btn;
                 }
             }
         ]
     });
-    AssetPro.Datables.HideDimmer(dimmerId);
-    AssetPro.Datables.SetDdl(component);
+    BloodDonation.Datables.HideDimmer(dimmerId);
+    BloodDonation.Datables.SetDdl(component);
 }
 
-AssetPro.Employee.Edit = function (id) {
+BloodDonation.Employee.Edit = function (id) {
     $('#entityId').val(id);
 
     appClient.get('/client/get/' + id, null,
@@ -82,7 +82,7 @@ AssetPro.Employee.Edit = function (id) {
                 $('#Client_crud_modal').modal('show');
             }
             else {
-                AssetPro.Settings.Toast('Error', 'An error occured on Getting Client Details', 'error');
+                BloodDonation.Settings.Toast('Error', 'An error occured on Getting Client Details', 'error');
             }
         })
 }
@@ -128,19 +128,19 @@ $("#Client_crud_frm").submit(function (e) {
     },
         function (response) {
             if (response.isSuccess) {
-                AssetPro.Settings.Toast('Success', 'Client  ' + msg + ' has been Succeed', 'Success');
+                BloodDonation.Settings.Toast('Success', 'Client  ' + msg + ' has been Succeed', 'Success');
                 $('#Client_crud_modal').modal('hide');
-                AssetPro.Settings.ReloadDt();
+                BloodDonation.Settings.ReloadDt();
             }
             else {
-                AssetPro.Settings.Toast('Error', 'Client ' + msg + ' has been Succeedl', 'error');
+                BloodDonation.Settings.Toast('Error', 'Client ' + msg + ' has been Succeedl', 'error');
                 $('#Client_crud_modal').modal('hide');
-                AssetPro.Settings.ReloadDt();
+                BloodDonation.Settings.ReloadDt();
             }
         })
 });
 
-AssetPro.Employee.ResetEmployeeForm = function () {
+BloodDonation.Employee.ResetEmployeeForm = function () {
     $('#entityId').val('');
     $("#name").val('');
     $("#userName").val('');
@@ -155,8 +155,8 @@ AssetPro.Employee.ResetEmployeeForm = function () {
     $("#note").val('');
 };
 
-AssetPro.Employee.Add = function (id) {
-    AssetPro.Employee.ResetClientForm();
+BloodDonation.Employee.Add = function (id) {
+    BloodDonation.Employee.ResetClientForm();
 
     jQuery.noConflict();
     $('#Client_crud_modal').modal('show');

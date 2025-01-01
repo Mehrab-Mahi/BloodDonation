@@ -1,6 +1,6 @@
 using System;
 
-namespace AssetPro.Web.Models
+namespace BloodDonation.Web.Models
 {
     public class ErrorViewModel
     {

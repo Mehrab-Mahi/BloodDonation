@@ -1,8 +1,8 @@
-using AssetPro.Application.Helper;
-using AssetPro.Application.ViewModels;
-using AssetPro.Domain.Enums;
-using AssetPro.Infra.Data.Context;
-using AssetPro.Infra.IoC;
+using BloodDonation.Application.Helper;
+using BloodDonation.Application.ViewModels;
+using BloodDonation.Domain.Enums;
+using BloodDonation.Infra.Data.Context;
+using BloodDonation.Infra.IoC;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,7 +14,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Text;
 
-namespace AssetPro.Web
+namespace BloodDonation.Web
 {
     public class Startup
     {
@@ -27,8 +27,8 @@ namespace AssetPro.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AssetProDbContext>(options =>
-              options.UseSqlServer(Configuration.GetConnectionString(Enum.GetName(typeof(DbConnection), DbConnection.AssetProConnection_Local))));
+            services.AddDbContext<BloodDonationDbContext>(options =>
+              options.UseSqlServer(Configuration.GetConnectionString(Enum.GetName(typeof(DbConnection), DbConnection.BloodDonationConnection_Local))));
 
             services.AddCors(options =>
             {

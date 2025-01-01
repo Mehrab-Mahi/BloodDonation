@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "AssetPro | Maintenance Types";
+    ViewData["Title"] = "BloodDonation | Maintenance Types";
 }
 <style>
     td.details-control {
@@ -31,7 +31,7 @@
 
 <h3><i class="entypo-infinity"></i> All Maintenance Types</h3>
 <br />
-<a onclick="return AssetPro.MaintenanceType.Add()" class="btn btn-success add_btn create">
+<a onclick="return BloodDonation.MaintenanceType.Add()" class="btn btn-success add_btn create">
     <i class="entypo-plus"></i>
     Add
 </a>
@@ -94,9 +94,9 @@
 <script>
     $(document).ready(function () {
         var roleId = $('#currentUserRole').val();
-        AssetPro.Settings.LoadUserMenu(roleId);
-        AssetPro.Settings.SetMenuActive('5', 'menu_MaintenanceType_list');
-        AssetPro.MaintenanceType.GetAllMaintenanceTypes('tblMaintenanceTypes', 'loader');
+        BloodDonation.Settings.LoadUserMenu(roleId);
+        BloodDonation.Settings.SetMenuActive('5', 'menu_MaintenanceType_list');
+        BloodDonation.MaintenanceType.GetAllMaintenanceTypes('tblMaintenanceTypes', 'loader');
 
         $("#MaintenanceType_crud_modal").validate({
             rules: {

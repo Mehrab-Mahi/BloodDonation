@@ -1,4 +1,4 @@
-﻿@using AssetPro.Application.Interfaces
+﻿@using BloodDonation.Application.Interfaces
 @inject IAuthService _authService
 <!DOCTYPE html>
 <html lang="en">
@@ -7,12 +7,12 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="AssetPro" />
+    <meta name="description" content="BloodDonation" />
     <meta name="author" content="" />
 
     <link rel="icon" href="~/Neon/images/favicon.ico">
 
-    <title>AssetPro</title>
+    <title>BloodDonation</title>
 
     <link rel="stylesheet" href="~/Neon/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css">
     <link rel="stylesheet" href="~/Neon/css/font-icons/entypo/css/entypo.css">
@@ -100,8 +100,8 @@
                     <!-- logo -->
                     <div id="logo" class="logo" style="margin-left:-15px;margin-top: -17px;">
                         <a href="/">
-                            <img src="~/Neon/images/asset_logo.png" width="190" alt="AssetPro Web Dashboard" />
-                            @*<h2 style="color:#ffffff !important;">AssetPro</h2>*@
+                            <img src="~/Neon/images/asset_logo.png" width="190" alt="BloodDonation Web Dashboard" />
+                            @*<h2 style="color:#ffffff !important;">BloodDonation</h2>*@
                         </a>
                     </div>
 
@@ -158,7 +158,7 @@
                                 </li>
 
                                 <li>
-                                    <a onclick="return AssetPro.Settings.Logout()" style="cursor:pointer !important;">
+                                    <a onclick="return BloodDonation.Settings.Logout()" style="cursor:pointer !important;">
                                         <i class="entypo-logout"></i>
                                         Log Out
                                     </a>
@@ -183,7 +183,7 @@
                         <li class="sep"></li>
 
                         <li>
-                            <a onclick="return AssetPro.Settings.Logout()" style="cursor:pointer !important;">
+                            <a onclick="return BloodDonation.Settings.Logout()" style="cursor:pointer !important;">
                                 Log Out <i class="entypo-logout right"></i>
                             </a>
 
@@ -199,7 +199,7 @@
             @RenderBody()
 
             <!-- Footer -->
-            <footer class="main">  Copyright &copy; 2022 <a href="#" target="_blank">AssetPro | Dashboard</a>. All rights reserved.  </footer>
+            <footer class="main">  Copyright &copy; 2022 <a href="#" target="_blank">BloodDonation | Dashboard</a>. All rights reserved.  </footer>
         </div>
     </div>
 
@@ -283,7 +283,7 @@
                 <input type="hidden" id="modal_component_id" value="" />
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-danger btn-ok" onclick=AssetPro.Settings.DeleteConfirm()>Delete</a>
+                    <a class="btn btn-danger btn-ok" onclick=BloodDonation.Settings.DeleteConfirm()>Delete</a>
                 </div>
             </div>
         </div>

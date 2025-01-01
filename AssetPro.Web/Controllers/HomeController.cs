@@ -1,12 +1,12 @@
-﻿using AssetPro.Application.Helper;
-using AssetPro.Web.Models;
+﻿using BloodDonation.Application.Helper;
+using BloodDonation.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
-namespace AssetPro.Web.Controllers
+namespace BloodDonation.Web.Controllers
 {
-    [AssetProAuth]
+    [BloodDonationAuth]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

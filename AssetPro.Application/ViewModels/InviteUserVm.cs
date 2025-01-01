@@ -1,11 +1,11 @@
-﻿using AssetPro.Domain.Entities;
+﻿using BloodDonation.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetPro.Application.ViewModels
+namespace BloodDonation.Application.ViewModels
 {
     public class InviteUserVm : InviteUser
     {

@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Text;
 
-namespace AssetPro.Application.Helper
+namespace BloodDonation.Application.Helper
 {
     public static class SessionExtensions
     {

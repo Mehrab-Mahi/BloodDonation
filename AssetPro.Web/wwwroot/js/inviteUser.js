@@ -1,16 +1,16 @@
-﻿AssetPro.InviteUser = {};
+﻿BloodDonation.InviteUser = {};
 
-AssetPro.Datables.GetAllInvitation = function (id, dimmerId) {
-    AssetPro.Datables.ShowDimmer(dimmerId);
+BloodDonation.Datables.GetAllInvitation = function (id, dimmerId) {
+    BloodDonation.Datables.ShowDimmer(dimmerId);
     var component = '#' + id;
     $(component).DataTable();
 
     appClient.get('/invite/getall', null,
         function (response) {
-            AssetPro.Datables.ShowAllInvitation(response, component, dimmerId);
+            BloodDonation.Datables.ShowAllInvitation(response, component, dimmerId);
         })
 }
-AssetPro.Datables.ShowAllInvitation = function (data, component, dimmerId) {
+BloodDonation.Datables.ShowAllInvitation = function (data, component, dimmerId) {
     $(component).dataTable().fnDestroy();
     $(component).DataTable({
         //"order": [[1, "asc"]],
@@ -52,7 +52,7 @@ AssetPro.Datables.ShowAllInvitation = function (data, component, dimmerId) {
                 "render": function (data, type, full, meta) {
                     var btn = "";
                     if (full.status === '2') {
-                        btn = "<a title='Approve User' class='label label-success icon-left update' onclick=AssetPro.InviteUser.Approve('" + encodeURIComponent(full.id) + "') ><i class='entypo-thumbs-up'></i> Approve</a>";
+                        btn = "<a title='Approve User' class='label label-success icon-left update' onclick=BloodDonation.InviteUser.Approve('" + encodeURIComponent(full.id) + "') ><i class='entypo-thumbs-up'></i> Approve</a>";
                     }
                     btn = btn + "<a title='Delete' class='label label-danger icon-left delete'  onclick=DeleteEntity('" + encodeURIComponent(full.id) + "','InviteUser','" + component + "')> <i class='entypo-trash'></i></a>";
                     return btn;
@@ -60,12 +60,12 @@ AssetPro.Datables.ShowAllInvitation = function (data, component, dimmerId) {
             },
         ]
     });
-    AssetPro.Datables.HideDimmer(dimmerId);
-    AssetPro.Datables.SetDdl(component);
+    BloodDonation.Datables.HideDimmer(dimmerId);
+    BloodDonation.Datables.SetDdl(component);
 }
 
-AssetPro.InviteUser.Invite = function () {
-    AssetPro.InviteUser.ResetCrudForm();
+BloodDonation.InviteUser.Invite = function () {
+    BloodDonation.InviteUser.ResetCrudForm();
     jQuery.noConflict();
 
     appClient.get('/role/getall', null,
@@ -77,7 +77,7 @@ AssetPro.InviteUser.Invite = function () {
         })
 }
 
-AssetPro.InviteUser.ResetCrudForm = function () {
+BloodDonation.InviteUser.ResetCrudForm = function () {
     $("#firstName").val('');
     $("#lastName").val('');
     $('#email').val('');
@@ -101,37 +101,37 @@ $("#user_invite_frm").submit(function (e) {
         },
             function (response) {
                 if (response.isSuccess) {
-                    AssetPro.Settings.Toast('Success', 'User has been Invitted', 'Success');
+                    BloodDonation.Settings.Toast('Success', 'User has been Invitted', 'Success');
                 }
                 else {
-                    AssetPro.Settings.Toast('Error', 'User Already in Pending State', 'error');
+                    BloodDonation.Settings.Toast('Error', 'User Already in Pending State', 'error');
                 }
 
                 jQuery.noConflict();
-                AssetPro.InviteUser.ResetCrudForm();
+                BloodDonation.InviteUser.ResetCrudForm();
                 $('#User_invite_modal').modal('hide');
-                AssetPro.Settings.ReloadDt();
+                BloodDonation.Settings.ReloadDt();
             })
     }
     else {
-        AssetPro.Settings.Toast('Error', 'Mandetory fields should not be empty', 'error');
+        BloodDonation.Settings.Toast('Error', 'Mandetory fields should not be empty', 'error');
         return;
     }
 });
 
-AssetPro.InviteUser.Approve = function (id) {
+BloodDonation.InviteUser.Approve = function (id) {
     jQuery.noConflict();
 
     appClient.get('/invite/approve/' + id, null,
         function (data) {
             if (data.isSuccess) {
-                AssetPro.Settings.Toast('Success', 'User has been Approved', 'Success');
+                BloodDonation.Settings.Toast('Success', 'User has been Approved', 'Success');
             }
             else {
-                AssetPro.Settings.Toast('Error', 'User approval unsuccessful', 'error');
+                BloodDonation.Settings.Toast('Error', 'User approval unsuccessful', 'error');
             }
 
             jQuery.noConflict();
-            AssetPro.Settings.ReloadDt();
+            BloodDonation.Settings.ReloadDt();
         })
 }

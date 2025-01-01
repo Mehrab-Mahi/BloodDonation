@@ -1,8 +1,8 @@
-﻿var AssetPro = {};
-AssetPro.Settings = {};
-AssetPro.Datables = {};
-AssetPro.User = {};
-AssetPro.Settings.Toast = function (heading, text, icon) {
+﻿var BloodDonation = {};
+BloodDonation.Settings = {};
+BloodDonation.Datables = {};
+BloodDonation.User = {};
+BloodDonation.Settings.Toast = function (heading, text, icon) {
     $.toast({
         heading: heading,
         text: text,
@@ -11,7 +11,7 @@ AssetPro.Settings.Toast = function (heading, text, icon) {
     })
 }
 
-AssetPro.Settings.ConvertToBase64 = function (btn, elementId) {
+BloodDonation.Settings.ConvertToBase64 = function (btn, elementId) {
     var id = '#' + elementId;
     if (btn.files && btn.files[0]) {
         var f = btn.files[0];
@@ -29,33 +29,33 @@ AssetPro.Settings.ConvertToBase64 = function (btn, elementId) {
 }
 
 //Common
-AssetPro.Datables.ShowDimmer = function (dimmerId) {
+BloodDonation.Datables.ShowDimmer = function (dimmerId) {
     if (dimmerId !== '') {
         var dimmer = '#' + dimmerId;
         $(dimmer).show();
     }
 }
 
-AssetPro.Datables.HideDimmer = function (dimmerId) {
+BloodDonation.Datables.HideDimmer = function (dimmerId) {
     if (dimmerId !== '') {
         var dimmer = '#' + dimmerId;
         $(dimmer).hide();
     }
 }
 
-AssetPro.Datables.SetDdl = function (component) {
+BloodDonation.Datables.SetDdl = function (component) {
     $(component).closest('.dataTables_wrapper').find('select').select2({
         minimumResultsForSearch: -1
     });
 }
 
-AssetPro.Settings.ReloadDt = function () {
+BloodDonation.Settings.ReloadDt = function () {
     setTimeout(function () {
         location.reload();
     }, 3000);
 }
 
-AssetPro.Settings.DeleteConfirm = function () {
+BloodDonation.Settings.DeleteConfirm = function () {
     var id = $('#modal_entity_id').val();
     var table = $('#modal_sql_table_id').val();
     var component = $('#modal_component_id').val();
@@ -70,15 +70,15 @@ AssetPro.Settings.DeleteConfirm = function () {
         dataType: "json",
         success: function (response) {
             if (response.status) {
-                AssetPro.Settings.Toast('Success', 'Entity has been deleted Successfully', 'Success');
+                BloodDonation.Settings.Toast('Success', 'Entity has been deleted Successfully', 'Success');
                 jQuery.noConflict();
             } else {
-                AssetPro.Settings.Toast('Error', response.message, 'error');
+                BloodDonation.Settings.Toast('Error', response.message, 'error');
                 jQuery.noConflict();
             }
 
             $('#confirm_delete').modal('hide');
-            AssetPro.Settings.ReloadDt();
+            BloodDonation.Settings.ReloadDt();
         },
         error: function (e) {
             alert(e.statusText);
@@ -105,11 +105,11 @@ function EditEntity(entityId, dbTable, componentName) {
     var component = decodeURIComponent(componentName);
 
     if (table === 'User') {
-        AssetPro.User.Edit(id);
+        BloodDonation.User.Edit(id);
     }
 }
 
-AssetPro.Settings.SetMenuActive = function (menu, action) {
+BloodDonation.Settings.SetMenuActive = function (menu, action) {
     var roleId = $('#currentUserRole').val();
     var keyName = 'role_' + roleId;
     var menuList = window.localStorage.getItem(keyName);
@@ -127,15 +127,15 @@ AssetPro.Settings.SetMenuActive = function (menu, action) {
     var menuId = '#' + menu;
     var actionId = '#' + action;
 
-    AssetPro.Settings.DeactiveAllMenu();
+    BloodDonation.Settings.DeactiveAllMenu();
     $(menuId).addClass("active opened parent_menu");
     $(actionId).addClass("active");
 }
 
-AssetPro.Settings.DeactiveAllMenu = function () {
+BloodDonation.Settings.DeactiveAllMenu = function () {
 }
 
-AssetPro.User.GetCurentUser = function () {
+BloodDonation.User.GetCurentUser = function () {
     appClient.get('/auth/currentuser', null,
         function (response) {
             window.localStorage.setItem('currentuser', response);
@@ -143,18 +143,18 @@ AssetPro.User.GetCurentUser = function () {
 }
 
 //User Management
-AssetPro.Datables.GetAllUser = function (id, dimmerId) {
-    AssetPro.Datables.ShowDimmer(dimmerId);
+BloodDonation.Datables.GetAllUser = function (id, dimmerId) {
+    BloodDonation.Datables.ShowDimmer(dimmerId);
     var component = '#' + id;
     $(component).DataTable();
 
     appClient.get('/users/getall', null,
         function (response) {
-            AssetPro.Datables.ShowAllUser(response.data, component, dimmerId);
+            BloodDonation.Datables.ShowAllUser(response.data, component, dimmerId);
         })
 }
 
-AssetPro.Datables.ShowAllUser = function (data, component, dimmerId) {
+BloodDonation.Datables.ShowAllUser = function (data, component, dimmerId) {
     $(component).dataTable().fnDestroy();
     $(component).DataTable({
         //"order": [[1, "asc"]],
@@ -210,7 +210,7 @@ AssetPro.Datables.ShowAllUser = function (data, component, dimmerId) {
             { "data": "createdBy", "name": "Created By", "width": "8%" },
             {
                 "render": function (data, type, full, meta) {
-                    var btn = "<a title='Reset Password' class='label label-reset icon-left update' onclick=AssetPro.User.ResetPassword('" + encodeURIComponent(full.id) + "') ><i class='entypo-eye'></i></a>";
+                    var btn = "<a title='Reset Password' class='label label-reset icon-left update' onclick=BloodDonation.User.ResetPassword('" + encodeURIComponent(full.id) + "') ><i class='entypo-eye'></i></a>";
                     btn = btn + "<a title='Edit' class='label label-info icon-left update' onclick=EditEntity('" + encodeURIComponent(full.id) + "','User','" + component + "') ><i class='entypo-pencil'></i></a>";
                     btn = btn + "<a title='Delete' class='label label-danger icon-left delete'  onclick=DeleteEntity('" + encodeURIComponent(full.id) + "','User','" + component + "')> <i class='entypo-trash'></i></a>";
 
@@ -219,11 +219,11 @@ AssetPro.Datables.ShowAllUser = function (data, component, dimmerId) {
             },
         ]
     });
-    AssetPro.Datables.HideDimmer(dimmerId);
-    AssetPro.Datables.SetDdl(component);
+    BloodDonation.Datables.HideDimmer(dimmerId);
+    BloodDonation.Datables.SetDdl(component);
 }
 
-AssetPro.User.ResetCrudForm = function () {
+BloodDonation.User.ResetCrudForm = function () {
     $("#firstName").val('');
     $("#lastName").val('');
     $('#email').val('');
@@ -235,7 +235,7 @@ AssetPro.User.ResetCrudForm = function () {
     $('#roleid').empty();
 }
 
-AssetPro.User.ResetPassForm = function () {
+BloodDonation.User.ResetPassForm = function () {
     $("#oldPass").val('');
     $("#newPass").val('');
     $("#confirmPass").val('');
@@ -243,7 +243,7 @@ AssetPro.User.ResetPassForm = function () {
     $('#modal_entity_id').val('0');
 }
 
-AssetPro.User.ShowPass = function () {
+BloodDonation.User.ShowPass = function () {
     var oldPassProp = $('#oldPass');
     var newPassProp = $('#newPass');
     var verifyPassProp = $('#confirmPass');
@@ -258,8 +258,8 @@ AssetPro.User.ShowPass = function () {
     verifyPassProp.prop('type', verifyPassType);
 }
 
-AssetPro.User.ResetPassword = function (entityId) {
-    AssetPro.User.ResetPassForm();
+BloodDonation.User.ResetPassword = function (entityId) {
+    BloodDonation.User.ResetPassForm();
     var id = decodeURIComponent(entityId);
 
     jQuery.noConflict();
@@ -268,8 +268,8 @@ AssetPro.User.ResetPassword = function (entityId) {
     $('#User_reset_pass').modal('show');
 }
 
-AssetPro.User.Add = function () {
-    AssetPro.User.ResetCrudForm();
+BloodDonation.User.Add = function () {
+    BloodDonation.User.ResetCrudForm();
     jQuery.noConflict();
     $('#passInput').show();
 
@@ -282,10 +282,10 @@ AssetPro.User.Add = function () {
         })
 }
 
-AssetPro.User.Edit = function (id) {
+BloodDonation.User.Edit = function (id) {
     var header = '#myModalLabel';
     $(header).text('Edit User');
-    AssetPro.User.ResetCrudForm();
+    BloodDonation.User.ResetCrudForm();
 
     appClient.get('/roles/getall', null,
         function (response) {
@@ -310,7 +310,7 @@ AssetPro.User.Edit = function (id) {
                 $('#User_crud_modal').modal('show');
             }
             else {
-                AssetPro.Settings.Toast('Error', 'An error occured on Getting User Details', 'error');
+                BloodDonation.Settings.Toast('Error', 'An error occured on Getting User Details', 'error');
             }
         })
 }
@@ -344,20 +344,20 @@ $("#User_crud_frm").submit(function (e) {
             },
                 function (response) {
                     if (response.data.isSuccess) {
-                        AssetPro.Settings.Toast('Success', 'User  Creation has been Succeed', 'Success');
-                        AssetPro.User.ResetCrudForm();
+                        BloodDonation.Settings.Toast('Success', 'User  Creation has been Succeed', 'Success');
+                        BloodDonation.User.ResetCrudForm();
 
                         jQuery.noConflict();
                         $('#User_crud_modal').modal('hide');
-                        AssetPro.Settings.ReloadDt();
+                        BloodDonation.Settings.ReloadDt();
                     }
                     else {
-                        AssetPro.Settings.Toast('Error', response.data.message, 'error');
-                        AssetPro.User.ResetCrudForm();
+                        BloodDonation.Settings.Toast('Error', response.data.message, 'error');
+                        BloodDonation.User.ResetCrudForm();
 
                         jQuery.noConflict();
                         $('#User_crud_modal').modal('hide');
-                        AssetPro.Settings.ReloadDt();
+                        BloodDonation.Settings.ReloadDt();
                     }
                 })
         }
@@ -370,20 +370,20 @@ $("#User_crud_frm").submit(function (e) {
             },
                 function (response) {
                     if (response.data.isSuccess) {
-                        AssetPro.Settings.Toast('Success', 'User  Update has been Succeed', 'Success');
-                        AssetPro.User.ResetCrudForm();
+                        BloodDonation.Settings.Toast('Success', 'User  Update has been Succeed', 'Success');
+                        BloodDonation.User.ResetCrudForm();
 
                         jQuery.noConflict();
                         $('#User_crud_modal').modal('hide');
-                        AssetPro.Settings.ReloadDt();
+                        BloodDonation.Settings.ReloadDt();
                     }
                     else {
-                        AssetPro.Settings.Toast('Error', 'User Update became unsuccessful', 'error');
-                        AssetPro.User.ResetCrudForm();
+                        BloodDonation.Settings.Toast('Error', 'User Update became unsuccessful', 'error');
+                        BloodDonation.User.ResetCrudForm();
 
                         jQuery.noConflict();
                         $('#User_crud_modal').modal('hide');
-                        AssetPro.Settings.ReloadDt();
+                        BloodDonation.Settings.ReloadDt();
                     }
                 })
         }
@@ -407,15 +407,15 @@ $("#User_pass_frm").submit(function (e) {
         },
             function (response) {
                 if (response.data.isSuccess) {
-                    AssetPro.Settings.Toast('Success', 'User Password reset has been Succeed', 'Success');
-                    AssetPro.User.ResetPassForm();
+                    BloodDonation.Settings.Toast('Success', 'User Password reset has been Succeed', 'Success');
+                    BloodDonation.User.ResetPassForm();
 
                     jQuery.noConflict();
                     $('#User_reset_pass').modal('hide');
                 }
                 else {
-                    AssetPro.Settings.Toast('Error', 'User  Password reset became unsuccessful', 'error');
-                    AssetPro.User.ResetPassForm();
+                    BloodDonation.Settings.Toast('Error', 'User  Password reset became unsuccessful', 'error');
+                    BloodDonation.User.ResetPassForm();
 
                     jQuery.noConflict();
                     $('#User_reset_pass').modal('hide');

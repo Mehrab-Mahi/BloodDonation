@@ -1,9 +1,9 @@
-﻿using AssetPro.Application.Interfaces;
-using AssetPro.Application.ViewModels;
+﻿using BloodDonation.Application.Interfaces;
+using BloodDonation.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AssetPro.Web.Controllers
+namespace BloodDonation.Web.Controllers
 {
     [Route("api/[controller]")]
     public class AuthController : Controller

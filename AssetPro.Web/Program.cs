@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AssetPro.Web
+namespace BloodDonation.Web
 {
     public class Program
     {

@@ -1,7 +1,7 @@
-﻿using AssetPro.Application.ViewModels;
+﻿using BloodDonation.Application.ViewModels;
 using System.Collections.Generic;
 
-namespace AssetPro.Application.Interfaces
+namespace BloodDonation.Application.Interfaces
 {
     public interface IAssetTypeService
     {

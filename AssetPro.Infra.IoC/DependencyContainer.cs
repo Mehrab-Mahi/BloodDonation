@@ -1,13 +1,13 @@
-﻿using AssetPro.Application.Interfaces;
-using AssetPro.Application.Services;
-using AssetPro.Domain.Interfaces;
-using AssetPro.Infra.Data.Context;
-using AssetPro.Infra.Data.Repositories;
+﻿using BloodDonation.Application.Interfaces;
+using BloodDonation.Application.Services;
+using BloodDonation.Domain.Interfaces;
+using BloodDonation.Infra.Data.Context;
+using BloodDonation.Infra.Data.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace AssetPro.Infra.IoC
+namespace BloodDonation.Infra.IoC
 {
     public class DependencyContainer
     {

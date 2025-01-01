@@ -1,8 +1,8 @@
-﻿using AssetPro.Application.Interfaces;
-using AssetPro.Application.ViewModels;
+﻿using BloodDonation.Application.Interfaces;
+using BloodDonation.Application.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AssetPro.Web.Controllers
+namespace BloodDonation.Web.Controllers
 {
     [Route("maintenancetypes")]
     public class MaintenanceTypeController : Controller

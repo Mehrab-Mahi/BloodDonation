@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetPro.Application.ViewModels
+namespace BloodDonation.Application.ViewModels
 {
     public class AssetTypeVm
     {
