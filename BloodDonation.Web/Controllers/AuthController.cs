@@ -24,7 +24,7 @@ namespace BloodDonation.Web.Controllers
         }
         
         [AllowAnonymous]
-        [HttpPost("usertype")]
+        [HttpGet("usertype")]
         public IActionResult UserType([FromBody] AuthRequest model)
         {
             var response = _authService.UserType(model);

@@ -91,14 +91,10 @@ namespace BloodDonation.Application.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new(ClaimTypes.Name, (user.FirstName +" "+ user.LastName)),
-                    new(ClaimTypes.Email, user.EmailAddress),
+                    new(ClaimTypes.Name, (user.FullName)),
                     new(type: "UserId", user.Id),
-                    new(type: "RoleId", user.RoleId),
                     new(type: "IsSuperAdmin", user.IsSuperAdmin.ToString()),
-                    new(type: "UserName", user.UserName),
                     new(type: "FullName", user.FullName),
-                    new(type: "BloodGroup", user.BloodGroup),
                     new(type: "UserType", user.UserType)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(20),
@@ -107,7 +103,6 @@ namespace BloodDonation.Application.Services
             var tokenValue = tokenHandler.CreateToken(tokenDescriptor);
             var token = tokenHandler.WriteToken(tokenValue);
             _httpContextAccessor.HttpContext.Session.SetString("token", token);
-            _httpContextAccessor.HttpContext.Session.SetString("userName", user.UserName);
             _httpContextAccessor.HttpContext.Session.SetString("userType", user.UserType);
             return token;
         }
@@ -134,20 +129,14 @@ namespace BloodDonation.Application.Services
         {
             if (principal.Identity.IsAuthenticated)
             {
-                var email = principal.Claims.Where(_ => _.Type == ClaimTypes.Email).FirstOrDefault().Value;
-                var name = principal.Claims.Where(_ => _.Type == ClaimTypes.Name).FirstOrDefault().Value;
-                var id = principal.Claims.Where(_ => _.Type == "UserId").FirstOrDefault().Value;
-                var roleId = principal.Claims.Where(_ => _.Type == "RoleId").FirstOrDefault().Value;
-                var isSuperAdmin = principal.Claims.Where(_ => _.Type == "IsSuperAdmin").FirstOrDefault().Value;
-                var userName = principal.Claims.Where(_ => _.Type == "UserName").FirstOrDefault().Value;
+                var name = principal.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.Name).Value;
+                var id = principal.Claims.FirstOrDefault(_ => _.Type == "UserId").Value;
+                var isSuperAdmin = principal.Claims.FirstOrDefault(_ => _.Type == "IsSuperAdmin").Value;
                 return new UserAuthVm
                 {
                     IsAuthenticate = true,
-                    EmailAddress = email,
                     Name = name,
-                    UserName = userName,
                     Id = id,
-                    RoleId = roleId,
                     IsSuperAdmin = Convert.ToBoolean(isSuperAdmin)
                 };
             }

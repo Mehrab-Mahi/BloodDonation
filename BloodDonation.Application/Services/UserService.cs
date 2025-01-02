@@ -6,6 +6,7 @@ using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BloodDonation.Application.Util;
 
 namespace BloodDonation.Application.Services
 {
@@ -24,7 +25,7 @@ namespace BloodDonation.Application.Services
 
         public User Get(AuthRequest model)
         {
-            var user = _userRepo.GetConditional(u => u.MobileNumber == model.MobileNumber && u.DateOfBirth == model.MobileNumber); 
+            var user = _userRepo.GetConditional(u => u.MobileNumber == model.MobileNumber && u.DateOfBirth == model.DateOfBirth); 
 
             return user;
         }
@@ -59,13 +60,13 @@ namespace BloodDonation.Application.Services
                 var model = new User();
                 model = _mapper.Map(user, model);
 
-                if (model.UserType != "Admin")
+                if (model.UserType != UserTypes.Admin)
                 {
                     model.IsApproved = true;
                     user.Password = "123";
                 }
 
-                if (model.UserType == "Volunteer")
+                if (model.UserType == UserTypes.Volunteer)
                 {
                     model.IsApproved = false;
                 }
@@ -105,7 +106,7 @@ namespace BloodDonation.Application.Services
             return BCrypt.Net.BCrypt.HashPassword(defaultPass, workFactor: 12);
         }
 
-        public PayloadResponse Update(string id, UserVm user)
+        public PayloadResponse Update(string id, UserCreationVm user)
         {
             var model = _userRepo.GetConditional(_ => _.Id == id);
             try
@@ -120,7 +121,7 @@ namespace BloodDonation.Application.Services
                     IsSuccess = true,
                     PayloadType = "User Update",
                     Content = null,
-                    Message = "User Update successfull"
+                    Message = "User Update successful"
                 };
             }
             catch (Exception)
@@ -130,7 +131,7 @@ namespace BloodDonation.Application.Services
                     IsSuccess = false,
                     PayloadType = "User Update",
                     Content = null,
-                    Message = "User Update become unsuccessfull"
+                    Message = "User Update become failed"
                 };
             }
         }
@@ -181,6 +182,42 @@ namespace BloodDonation.Application.Services
                 IsSuccess = true,
                 Message = "Mobile number and date of birth has been matched!"
             };
+        }
+
+        public PayloadResponse ApproveUser(string id)
+        {
+            var model = _userRepo.GetConditional(u => u.Id == id);
+
+            if (model is null)
+            {
+                return new PayloadResponse()
+                {
+                    IsSuccess = false,
+                    Message = "User not found!"
+                };
+            }
+
+            model.IsApproved = true;
+
+            _userRepo.Update(model);
+            _userRepo.SaveChanges();
+
+            return new PayloadResponse()
+            {
+                IsSuccess = true,
+                Message = "User has been approved successfully!"
+            };
+        }
+
+        public List<User> GetUnapprovedUser()
+        {
+            var data = _userRepo
+                .GetAll()
+                .Where(u => u.IsApproved == false && u.UserType == UserTypes.Volunteer)
+                .OrderByDescending(u => u.CreateTime)
+                .ToList();
+            
+            return data;
         }
     }
 }

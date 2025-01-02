@@ -33,9 +33,25 @@ namespace BloodDonation.Web.Controllers
 
         [BloodDonationAuth]
         [HttpPut("update/{id}")]
-        public IActionResult Update(string id, [FromBody] UserVm model)
+        public IActionResult Update(string id, [FromBody] UserCreationVm model)
         {
             var data = _userService.Update(id, model);
+            return Ok(new { data });
+        }
+        
+        [BloodDonationAuth]
+        [HttpPost("approve")]
+        public IActionResult ApproveUser([FromBody] UserApproval userApproval)
+        {
+            var data = _userService.ApproveUser(userApproval.Id);
+            return Ok(new { data });
+        }
+
+        [BloodDonationAuth]
+        [HttpGet("unapprovedUser")]
+        public IActionResult GetUnapprovedUser()
+        {
+            var data = _userService.GetUnapprovedUser();
             return Ok(new { data });
         }
 
