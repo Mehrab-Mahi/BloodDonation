@@ -22,13 +22,10 @@ namespace BloodDonation.Application.Services
             _mapper = mapper;
         }
 
-        public User Get(string email)
+        public User Get(AuthRequest model)
         {
-            var user = _userRepo.GetConditional(_ => _.EmailAddress == email);
-            if (user is null)
-            {
-                return _userRepo.GetConditional(_ => _.UserName == email);
-            }
+            var user = _userRepo.GetConditional(u => u.MobileNumber == model.MobileNumber && u.DateOfBirth == model.MobileNumber); 
+
             return user;
         }
 
@@ -57,33 +54,22 @@ namespace BloodDonation.Application.Services
 
         public PayloadResponse Insert(UserCreationVm user)
         {
-            var hasEmailRegistered = IsEmailExists(user);
-            if (hasEmailRegistered)
-            {
-                return new PayloadResponse
-                {
-                    IsSuccess = false,
-                    PayloadType = "User Creation",
-                    Content = null,
-                    Message = "Error !!! email already registered."
-                };
-            }
-
-            var hasUserNameRegistered = IsUserNameExists(user);
-            if (hasUserNameRegistered)
-            {
-                return new PayloadResponse
-                {
-                    IsSuccess = false,
-                    PayloadType = "User Creation",
-                    Content = null,
-                    Message = "Error !!! username already registered."
-                };
-            }
             try
             {
                 var model = new User();
                 model = _mapper.Map(user, model);
+
+                if (model.UserType != "Admin")
+                {
+                    model.IsApproved = true;
+                    user.Password = "123";
+                }
+
+                if (model.UserType == "Volunteer")
+                {
+                    model.IsApproved = false;
+                }
+
                 model.PasswordHash = GeneratePassword(user.Password);
 
                 _userRepo.Insert(model);
@@ -94,7 +80,7 @@ namespace BloodDonation.Application.Services
                     IsSuccess = true,
                     PayloadType = "User Creation",
                     Content = null,
-                    Message = "User Creation has been successfull"
+                    Message = "User Creation has been successful"
                 };
             }
             catch (Exception)
@@ -104,7 +90,7 @@ namespace BloodDonation.Application.Services
                     IsSuccess = false,
                     PayloadType = "User Creation",
                     Content = null,
-                    Message = "User Creation become unsuccessfull"
+                    Message = "User Creation become unsuccessful"
                 };
             }
         }
@@ -173,6 +159,28 @@ namespace BloodDonation.Application.Services
             {
                 return false;
             }
+        }
+
+        public UserTypeResponse GetUserTypeByPhoneNumberAndDob(AuthRequest model)
+        {
+            var data = _userRepo.GetConditional(u =>
+                u.MobileNumber == model.MobileNumber && u.DateOfBirth == model.DateOfBirth);
+
+            if (data is null)
+            {
+                return new UserTypeResponse()
+                {
+                    IsSuccess = false,
+                    Message = "Mobile number and date of birth doesn't match!"
+                };
+            }
+
+            return new UserTypeResponse()
+            {
+                UserType = data.UserType,
+                IsSuccess = true,
+                Message = "Mobile number and date of birth has been matched!"
+            };
         }
     }
 }

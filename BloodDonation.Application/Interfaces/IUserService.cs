@@ -6,7 +6,7 @@ namespace BloodDonation.Application.Interfaces
 {
     public interface IUserService
     {
-        User Get(string email);
+        User Get(AuthRequest model);
 
         User GetById(string id);
 
@@ -17,5 +17,6 @@ namespace BloodDonation.Application.Interfaces
         PayloadResponse Insert(UserCreationVm model);
 
         public bool Delete(string id, string table);
+        UserTypeResponse GetUserTypeByPhoneNumberAndDob(AuthRequest model);
     }
 }

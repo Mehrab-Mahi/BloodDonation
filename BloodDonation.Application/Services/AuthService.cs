@@ -34,7 +34,7 @@ namespace BloodDonation.Application.Services
 
         public PayloadResponse Authenticate(AuthRequest model)
         {
-            var user = _userService.Get(model.Email);
+            var user = _userService.Get(model);
             if (user == null)
             {
                 return new PayloadResponse
@@ -42,7 +42,7 @@ namespace BloodDonation.Application.Services
                     IsSuccess = false,
                     PayloadType = "authentication",
                     Content = null,
-                    Message = "authentication unsuccessful.User not found!"
+                    Message = "User not found!"
                 };
             }
             if (!user.IsApproved)
@@ -52,8 +52,13 @@ namespace BloodDonation.Application.Services
                     IsSuccess = false,
                     PayloadType = "authentication",
                     Content = null,
-                    Message = "authentication unsuccessful.User not Approved!"
+                    Message = "User not Approved!"
                 };
+            }
+
+            if (user.UserType != "Admin" && string.IsNullOrEmpty(model.Password))
+            {
+                model.Password = "123";
             }
             var isVerified = VerifyPassword(model.Password, user.PasswordHash);
             if (!isVerified)
@@ -86,12 +91,15 @@ namespace BloodDonation.Application.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, (user.FirstName.ToString() +" "+ user.LastName.ToString())),
-                    new Claim(ClaimTypes.Email, user.EmailAddress.ToString()),
-                    new Claim(type: "UserId", user.Id.ToString()),
-                    new Claim(type: "RoleId", user.RoleId.ToString()),
-                    new Claim(type: "IsSuperAdmin", user.IsSuperAdmin.ToString()),
-                    new Claim(type: "UserName", user.UserName.ToString())
+                    new(ClaimTypes.Name, (user.FirstName +" "+ user.LastName)),
+                    new(ClaimTypes.Email, user.EmailAddress),
+                    new(type: "UserId", user.Id),
+                    new(type: "RoleId", user.RoleId),
+                    new(type: "IsSuperAdmin", user.IsSuperAdmin.ToString()),
+                    new(type: "UserName", user.UserName),
+                    new(type: "FullName", user.FullName),
+                    new(type: "BloodGroup", user.BloodGroup),
+                    new(type: "UserType", user.UserType)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(20),
                 SigningCredentials = credentials
@@ -99,7 +107,8 @@ namespace BloodDonation.Application.Services
             var tokenValue = tokenHandler.CreateToken(tokenDescriptor);
             var token = tokenHandler.WriteToken(tokenValue);
             _httpContextAccessor.HttpContext.Session.SetString("token", token);
-            _httpContextAccessor.HttpContext.Session.SetString("userName", user.UserName.ToString());
+            _httpContextAccessor.HttpContext.Session.SetString("userName", user.UserName);
+            _httpContextAccessor.HttpContext.Session.SetString("userType", user.UserType);
             return token;
         }
 
@@ -173,6 +182,13 @@ namespace BloodDonation.Application.Services
                         join AccessControls ac on mc.AccessControlId = ac.Id where mc.RoleId = '{roleId}'; ";
             }
             return BuildMenuTree(_repo.Query<AccessControlVm>(query));
+        }
+
+        public UserTypeResponse UserType(AuthRequest model)
+        {
+            var response = _userService.GetUserTypeByPhoneNumberAndDob(model);
+            
+            return response;
         }
 
         private List<AccessControlVm> BuildMenuTree(List<AccessControlVm> accessControlVms)

@@ -1,11 +1,11 @@
 ﻿using BloodDonation.Application.Helper;
 using BloodDonation.Application.Interfaces;
 using BloodDonation.Application.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BloodDonation.Web.Controllers
 {
-    [BloodDonationAuth]
     [Route("users")]
     public class UserController : Controller
     {
@@ -23,13 +23,15 @@ namespace BloodDonation.Web.Controllers
             return View();
         }
 
-        [HttpPost("create")]
+        [AllowAnonymous]
+        [HttpPost("registration")]
         public IActionResult Create([FromBody] UserCreationVm model)
         {
             var data = _userService.Insert(model);
             return Ok(new { data });
         }
 
+        [BloodDonationAuth]
         [HttpPut("update/{id}")]
         public IActionResult Update(string id, [FromBody] UserVm model)
         {
@@ -37,6 +39,7 @@ namespace BloodDonation.Web.Controllers
             return Ok(new { data });
         }
 
+        [BloodDonationAuth]
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
@@ -44,13 +47,14 @@ namespace BloodDonation.Web.Controllers
             return Ok(new { data = list });
         }
 
+        [BloodDonationAuth]
         [HttpGet("getbyid/{id}")]
         public IActionResult GetById(string id)
         {
             var list = _userService.GetById(id);
             return Ok(new { data = list });
         }
-
+        [BloodDonationAuth]
         [HttpGet("getusermenu/{id}")]
         public IActionResult GetUserMenu(string id)
         {

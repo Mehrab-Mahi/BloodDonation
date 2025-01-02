@@ -9,14 +9,18 @@ namespace BloodDonation.Application.ViewModels
 {
     public class AuthRequest
     {
-        [Required]
         [Display(Name = "UserName")]
         public string Email { get; set; }
 
-        [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
+        
+        [Display(Name = "MobileNumber")]
+        public string MobileNumber { get; set; }
+
+        [Display(Name = "DateOfBirth")]
+        public string DateOfBirth { get; set; }
     }
 
     public class AuthResponse

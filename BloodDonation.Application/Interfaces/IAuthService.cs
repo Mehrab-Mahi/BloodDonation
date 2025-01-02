@@ -12,5 +12,6 @@ namespace BloodDonation.Application.Interfaces
         UserAuthVm GetCurrentUser();
 
         List<AccessControlVm> GetUserMenu(string id);
+        UserTypeResponse UserType(AuthRequest model);
     }
 }
