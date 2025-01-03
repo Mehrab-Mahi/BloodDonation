@@ -26,7 +26,10 @@ namespace BloodDonation.Infra.Data.Context
         public DbSet<AssetType> AssetTypes { get; set; }       
         public DbSet<AssetStatus> AssetStatuses { get; set; }       
         public DbSet<MaintenanceType> MaintenanceTypes { get; set; }       
-        public DbSet<MailHost> MailHosts { get; set; }       
+        public DbSet<MailHost> MailHosts { get; set; }   
+        public DbSet<Campaign> Campaigns { get; set; }
+        public DbSet<CampaignVolunteerMapping> CampaignVolunteerMappings { get; set; }
+        public DbSet<Location> Locations { get; set; }
       
         protected override void OnModelCreating(ModelBuilder builder)
         {

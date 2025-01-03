@@ -21,7 +21,7 @@ namespace BloodDonation.Web.Controllers
             return View();
         }
 
-        public IActionResult Create([FromForm] UserCreationVm model)
+        public IActionResult Create([FromForm] UserVm model)
         {
             var inviteModel = _inviteService.GetByEmail(model.EmailAddress);
             if (inviteModel == null)
@@ -32,7 +32,7 @@ namespace BloodDonation.Web.Controllers
             model.IsSuperAdmin = false;
             model.RoleId = inviteModel.RoleId;
 
-            var data = _userService.Insert(model);
+            //var data = _userService.Insert(model);
             inviteModel.Status = "2";
             _inviteService.Update(inviteModel);
             return Json(new { success = true, responseText = "Registration Successful.Please contact with the Admin for approval." });

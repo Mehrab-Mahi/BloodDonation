@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BloodDonation.Web.Controllers
 {
-    [Route("users")]
+    [Route("api/user")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -40,18 +40,34 @@ namespace BloodDonation.Web.Controllers
         }
         
         [BloodDonationAuth]
-        [HttpPost("approve")]
+        [HttpPost("approvevolunteer")]
         public IActionResult ApproveUser([FromBody] UserApproval userApproval)
         {
             var data = _userService.ApproveUser(userApproval.Id);
             return Ok(new { data });
         }
+        
+        [BloodDonationAuth]
+        [HttpPost("Disapprovevolunteer")]
+        public IActionResult DisapproveUser([FromBody] UserApproval userApproval)
+        {
+            var data = _userService.DisapproveUser(userApproval.Id);
+            return Ok(new { data });
+        }
 
         [BloodDonationAuth]
-        [HttpGet("unapprovedUser")]
+        [HttpGet("unapprovedVolunteer")]
         public IActionResult GetUnapprovedUser()
         {
             var data = _userService.GetUnapprovedUser();
+            return Ok(new { data });
+        }
+        
+        [BloodDonationAuth]
+        [HttpGet("getallapprovedvolunteer")]
+        public IActionResult GetAllApprovedVolunteer(int pageNo, int pageSize)
+        {
+            var data = _userService.GetAllApprovedVolunteer(pageNo, pageSize);
             return Ok(new { data });
         }
 

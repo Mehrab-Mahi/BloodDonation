@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BloodDonation.Application.Util;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace BloodDonation.Application.Services
 {
@@ -15,12 +17,13 @@ namespace BloodDonation.Application.Services
         private readonly IRepository<User> _userRepo;
         private readonly IRepository<Role> _roleRepo;
         private readonly IMapper _mapper;
-
-        public UserService(IRepository<User> userRepo, IRepository<Role> roleRepo, IMapper mapper)
+        private readonly IFileService _fileService;
+        public UserService(IRepository<User> userRepo, IRepository<Role> roleRepo, IMapper mapper, IFileService fileService)
         {
             _userRepo = userRepo;
             _roleRepo = roleRepo;
             _mapper = mapper;
+            _fileService = fileService;
         }
 
         public User Get(AuthRequest model)
@@ -57,8 +60,26 @@ namespace BloodDonation.Application.Services
         {
             try
             {
-                var model = new User();
-                model = _mapper.Map(user, model);
+                var model = new User()
+                {
+                    FullName = user.FullName,
+                    BloodGroup = user.BloodGroup,
+                    DateOfBirth = user.DateOfBirth,
+                    MobileNumber = user.MobileNumber,
+                    District = user.District,
+                    Upazila = user.Upazila,
+                    Union = user.Union,
+                    Address = user.Address,
+                    FatherName = user.FatherName,
+                    MotherName = user.MotherName,
+                    BloodDonationStatus = user.BloodDonationStatus,
+                    Gender = user.Gender,
+                    UserType = user.UserType,
+                    LastDonationTime = user.LastDonationTime,
+                    ImageUrl = user.ImageUrl,
+                    IsSuperAdmin = user.IsSuperAdmin,
+                    BloodDonationCount = user.BloodDonationCount
+                };
 
                 if (model.UserType != UserTypes.Admin)
                 {
@@ -72,6 +93,7 @@ namespace BloodDonation.Application.Services
                 }
 
                 model.PasswordHash = GeneratePassword(user.Password);
+                model.ImageUrl = UploadAndGetImageUrl(user.ProfilePicture);
 
                 _userRepo.Insert(model);
                 _userRepo.SaveChanges();
@@ -96,6 +118,23 @@ namespace BloodDonation.Application.Services
             }
         }
 
+        private string UploadAndGetImageUrl(IFormFile userProfilePicture)
+        {
+            if (userProfilePicture is null) return string.Empty;
+
+            var fileName = GetFileName(userProfilePicture.FileName);
+            var path = Path.Combine(_fileService.GetRootPath(), @"\ProfilePicture\");
+            _fileService.CreateDirectoryIfNotExists(path);
+            var filePath = Path.Combine(path, fileName);
+            _fileService.SaveFile(filePath, userProfilePicture);
+            return filePath;
+        }
+
+        private string GetFileName(string fileName)
+        {
+            return Guid.NewGuid().ToString("N") + "-" + fileName;
+        }
+
         private string GeneratePassword(string password)
         {
             var defaultPass = Guid.NewGuid().ToString("N");
@@ -111,7 +150,27 @@ namespace BloodDonation.Application.Services
             var model = _userRepo.GetConditional(_ => _.Id == id);
             try
             {
-                model = _mapper.Map(user, model);
+                model.FullName = user.FullName;
+                model.BloodGroup = user.BloodGroup;
+                model.DateOfBirth = user.DateOfBirth;
+                model.MobileNumber = user.MobileNumber;
+                model.District = user.District;
+                model.Upazila = user.Upazila;
+                model.Union = user.Union;
+                model.Address = user.Address;
+                model.FatherName = user.FatherName;
+                model.MotherName = user.MotherName;
+                model.BloodDonationStatus = user.BloodDonationStatus;
+                model.Gender = user.Gender;
+                model.UserType = user.UserType;
+                model.LastDonationTime = user.LastDonationTime;
+                model.BloodDonationCount = user.BloodDonationCount;
+
+                if (user.ProfilePicture is { Length: > 0 })
+                {
+                    _fileService.DeleteFile(model.ImageUrl);
+                    model.ImageUrl = UploadAndGetImageUrl(user.ProfilePicture);
+                }
 
                 _userRepo.Update(model);
                 _userRepo.SaveChanges();
@@ -136,13 +195,13 @@ namespace BloodDonation.Application.Services
             }
         }
 
-        private bool IsEmailExists(UserCreationVm user)
+        private bool IsEmailExists(UserVm user)
         {
             var model = _userRepo.GetConditional(_ => _.EmailAddress == user.EmailAddress);
             return model != null;
         }
 
-        private bool IsUserNameExists(UserCreationVm user)
+        private bool IsUserNameExists(UserVm user)
         {
             var model = _userRepo.GetConditional(_ => _.UserName == user.UserName);
             return model != null;
@@ -209,7 +268,7 @@ namespace BloodDonation.Application.Services
             };
         }
 
-        public List<User> GetUnapprovedUser()
+        public List<UserCreationVm> GetUnapprovedUser()
         {
             var data = _userRepo
                 .GetAll()
@@ -217,7 +276,71 @@ namespace BloodDonation.Application.Services
                 .OrderByDescending(u => u.CreateTime)
                 .ToList();
             
-            return data;
+            return GetMappedData(data);
+        }
+
+        public List<UserCreationVm> GetAllApprovedVolunteer(int pageNo, int pageSize)
+        {
+            var userData = _userRepo
+                .GetAll()
+                .Where(u => u.UserType == UserTypes.Volunteer)
+                .OrderByDescending(u => u.LastModifiedTime)
+                .Skip((pageNo-1)*pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return GetMappedData(userData);
+        }
+
+        public PayloadResponse DisapproveUser(string id)
+        {
+            var model = _userRepo.GetConditional(u => u.Id == id);
+
+            if (model is null)
+            {
+                return new PayloadResponse()
+                {
+                    IsSuccess = false,
+                    Message = "User not found!"
+                };
+            }
+
+            model.IsApproved = false;
+
+            _userRepo.Update(model);
+            _userRepo.SaveChanges();
+
+            return new PayloadResponse()
+            {
+                IsSuccess = true,
+                Message = "User has been disapproved successfully!"
+            };
+        }
+
+        private List<UserCreationVm> GetMappedData(List<User> userData)
+        {
+            var mappedUserData = userData.Select(user => new UserCreationVm()
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                BloodGroup = user.BloodGroup,
+                DateOfBirth = user.DateOfBirth,
+                MobileNumber = user.MobileNumber,
+                District = user.District,
+                Upazila = user.Upazila,
+                Union = user.Union,
+                Address = user.Address,
+                FatherName = user.FatherName,
+                MotherName = user.MotherName,
+                BloodDonationStatus = user.BloodDonationStatus,
+                Gender = user.Gender,
+                UserType = user.UserType,
+                LastDonationTime = user.LastDonationTime,
+                ImageUrl = user.ImageUrl,
+                IsSuperAdmin = user.IsSuperAdmin
+            }).ToList();
+
+            return mappedUserData;
         }
     }
 }

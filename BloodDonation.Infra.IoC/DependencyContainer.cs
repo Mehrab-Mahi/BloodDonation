@@ -30,6 +30,10 @@ namespace BloodDonation.Infra.IoC
             services.AddScoped<IMailService, MailService>();
             services.AddScoped<IViewRenderService, ViewRenderService>();
             services.AddScoped<IInvitationService, InvitationService>();
+            services.AddScoped<ICampaignService, CampaignService>();
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<ILoggedInUserService, LoggedInUserService>();
+            services.AddScoped<ILocationService, LocationService>();
         }
     }
 }
