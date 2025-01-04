@@ -78,7 +78,8 @@ namespace BloodDonation.Application.Services
                     LastDonationTime = user.LastDonationTime,
                     ImageUrl = user.ImageUrl,
                     IsSuperAdmin = user.IsSuperAdmin,
-                    BloodDonationCount = user.BloodDonationCount
+                    BloodDonationCount = user.BloodDonationCount,
+                    Dob = DateTime.Parse(user.DateOfBirth)
                 };
 
                 if (model.UserType != UserTypes.Admin)
@@ -165,6 +166,7 @@ namespace BloodDonation.Application.Services
                 model.UserType = user.UserType;
                 model.LastDonationTime = user.LastDonationTime;
                 model.BloodDonationCount = user.BloodDonationCount;
+                model.Dob = DateTime.Parse(user.DateOfBirth);
 
                 if (user.ProfilePicture is { Length: > 0 })
                 {

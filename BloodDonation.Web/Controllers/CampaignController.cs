@@ -53,10 +53,10 @@ namespace BloodDonation.Web.Controllers
 
         [AllowAnonymous]
         [HttpGet("getall")]
-        public IActionResult GetAll(int pageNo, int pageSize)
+        public IActionResult GetAll(int pageNo = 1, int pageSize = 10)
         {
             var response = _campaignService.GetAll(pageNo, pageSize);
-
+            
             return Ok(response);
         }
     }

@@ -65,7 +65,7 @@ namespace BloodDonation.Web.Controllers
         
         [BloodDonationAuth]
         [HttpGet("getallapprovedvolunteer")]
-        public IActionResult GetAllApprovedVolunteer(int pageNo, int pageSize)
+        public IActionResult GetAllApprovedVolunteer(int pageNo = 1, int pageSize = 10)
         {
             var data = _userService.GetAllApprovedVolunteer(pageNo, pageSize);
             return Ok(new { data });
