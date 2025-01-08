@@ -30,6 +30,8 @@ namespace BloodDonation.Infra.Data.Context
         public DbSet<Campaign> Campaigns { get; set; }
         public DbSet<CampaignVolunteerMapping> CampaignVolunteerMappings { get; set; }
         public DbSet<Location> Locations { get; set; }
+        public DbSet<Notice> Notices { get; set; }
+        public DbSet<FileModelMapping> FileModelMappings { get; set; }
       
         protected override void OnModelCreating(ModelBuilder builder)
         {
