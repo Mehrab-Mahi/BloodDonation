@@ -35,6 +35,8 @@ namespace BloodDonation.Infra.IoC
             services.AddScoped<ILoggedInUserService, LoggedInUserService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IBloodBankService, BloodBankService>();
+            services.AddScoped<INoticeService, NoticeService>();
+            services.AddScoped<IMediaService, MediaService>();
         }
     }
 }

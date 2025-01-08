@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using System;
 
 namespace BloodDonation.Application.Services
 {
@@ -42,6 +43,23 @@ namespace BloodDonation.Application.Services
             {
                 File.Delete(filePath);
             }
+        }
+
+        public string UploadFile(IFormFile file, string folderName)
+        {
+            if (file is null) return string.Empty;
+
+            var fileName = GetFileName(file.FileName);
+            var path = Path.Combine(GetRootPath(), @$"\{folderName}\");
+            CreateDirectoryIfNotExists(path);
+            var filePath = Path.Combine(path, fileName);
+            SaveFile(filePath, file);
+            return filePath;
+        }
+
+        private static string GetFileName(string fileName)
+        {
+            return Guid.NewGuid().ToString("N") + "-" + fileName;
         }
     }
 }

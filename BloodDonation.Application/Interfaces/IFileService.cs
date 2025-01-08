@@ -8,5 +8,6 @@ namespace BloodDonation.Application.Interfaces
         void CreateDirectoryIfNotExists(string path);
         void SaveFile(string filePath, IFormFile campaignBanner);
         void DeleteFile(string filePath);
+        string UploadFile(IFormFile file, string folderName);
     }
 }
