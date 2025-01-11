@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 
 namespace BloodDonation.Application.ViewModels
@@ -10,5 +11,6 @@ namespace BloodDonation.Application.ViewModels
         public string Description { get; set; }
         public List<string> FileUrls { get; set; }
         public List<IFormFile> Files { get; set; }
+        public DateTime PublishDate { get; set; }
     }
 }

@@ -153,7 +153,8 @@ namespace BloodDonation.Application.Services
                 Id = id,
                 Name = notice.Name,
                 Description = notice.Description,
-                FileUrls = fileUrls
+                FileUrls = fileUrls,
+                PublishDate = notice.CreateTime
             };
         }
 
@@ -184,7 +185,8 @@ namespace BloodDonation.Application.Services
                     Id = notice.Id,
                     Name = notice.Name,
                     Description = notice.Description,
-                    FileUrls = fileList
+                    FileUrls = fileList,
+                    PublishDate = notice.CreateTime
                 };
 
                 noticeList.Add(noticeVm);
