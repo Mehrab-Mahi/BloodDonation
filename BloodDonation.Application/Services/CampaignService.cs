@@ -68,11 +68,11 @@ namespace BloodDonation.Application.Services
             }
         }
 
-        public PayloadResponse Update(string id, CampaignVm campaignData)
+        public PayloadResponse Update(CampaignVm campaignData)
         {
             try
             {
-                var previousData = _campaignRepository.GetConditional(c => c.Id == id);
+                var previousData = _campaignRepository.GetConditional(c => c.Id == campaignData.Id);
                 var newBannerUrl = string.Empty;
 
                 if (previousData == null)
@@ -101,7 +101,7 @@ namespace BloodDonation.Application.Services
                 _campaignRepository.Update(previousData);
                 _campaignRepository.SaveChanges();
 
-                UpdateVolunteerToCampaign(id, campaignData.VolunteerList);
+                UpdateVolunteerToCampaign(campaignData.Id, campaignData.VolunteerList);
 
                 return new PayloadResponse()
                 {
@@ -242,13 +242,16 @@ namespace BloodDonation.Application.Services
 
             _campaignVolunteerMappingRepository.Delete(previousVolunteer);
 
-            foreach (var volunteerId in volunteerList)
+            if (volunteerList is not null)
             {
-                _campaignVolunteerMappingRepository.Insert(new CampaignVolunteerMapping()
+                foreach (var volunteerId in volunteerList)
                 {
-                    CampaignId = id,
-                    VolunteerId = volunteerId
-                });
+                    _campaignVolunteerMappingRepository.Insert(new CampaignVolunteerMapping()
+                    {
+                        CampaignId = id,
+                        VolunteerId = volunteerId
+                    });
+                }
             }
 
             _campaignVolunteerMappingRepository.SaveChanges();
@@ -259,11 +262,11 @@ namespace BloodDonation.Application.Services
             if(campaignBanner is null) return string.Empty;
 
             var fileName = GetFileName(campaignBanner.FileName);
-            var path = Path.Combine(_fileService.GetRootPath(), @"\Campaign\");
+            var path = Path.Combine(_fileService.GetRootPath(), "Campaign");
             _fileService.CreateDirectoryIfNotExists(path);
             var filePath = Path.Combine(path, fileName);
             _fileService.SaveFile(filePath, campaignBanner);
-            return filePath;
+            return Path.Combine("Campaign", fileName);
         }
 
         private static string GetFileName(string campaignBannerFileName)
@@ -273,6 +276,8 @@ namespace BloodDonation.Application.Services
 
         private void AssignVolunteerToCampaign(string campaignId, List<string> campaignDataVolunteerList)
         {
+            if(campaignDataVolunteerList is null) return;
+
             foreach (var volunteerId in campaignDataVolunteerList)
             {
                 _campaignVolunteerMappingRepository.Insert(new CampaignVolunteerMapping()

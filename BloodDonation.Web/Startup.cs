@@ -38,7 +38,8 @@ namespace BloodDonation.Web
                 });
             });
 
-            services.AddControllersWithViews();
+            services.AddControllers();
+            services.AddSwaggerGen();
             services.AddHttpContextAccessor();
 
             services.AddSession(options =>
@@ -92,8 +93,13 @@ namespace BloodDonation.Web
                 app.UseHsts();
             }
             //app.UseHttpsRedirection();
+            
             app.UseStaticFiles();
-
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
             app.UseRouting();
             app.UseAuthorization();
             app.UseCors(options => options.AllowAnyOrigin());
@@ -109,10 +115,10 @@ namespace BloodDonation.Web
             });
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
+
+            
         }
 
         private void RegisterServices(IServiceCollection services)

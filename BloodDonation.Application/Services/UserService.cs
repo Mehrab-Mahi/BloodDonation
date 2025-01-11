@@ -36,7 +36,7 @@ namespace BloodDonation.Application.Services
         public List<UserVm> GetAll()
         {
             var list = new List<UserVm>();
-            var users = _userRepo.GetAll().Where(_ => _.IsApproved == true).ToList();
+            var users = _userRepo.GetAll().Where(u => u.IsApproved == true).ToList();
             list = _mapper.Map(users, list);
 
             foreach (var item in list)
@@ -53,7 +53,7 @@ namespace BloodDonation.Application.Services
 
         public User GetById(string id)
         {
-            return _userRepo.GetConditional(_ => _.Id == id);
+            return _userRepo.GetConditional(u => u.Id == id);
         }
 
         public PayloadResponse Insert(UserCreationVm user)
@@ -146,9 +146,9 @@ namespace BloodDonation.Application.Services
             return BCrypt.Net.BCrypt.HashPassword(defaultPass, workFactor: 12);
         }
 
-        public PayloadResponse Update(string id, UserCreationVm user)
+        public PayloadResponse Update(UserCreationVm user)
         {
-            var model = _userRepo.GetConditional(_ => _.Id == id);
+            var model = _userRepo.GetConditional(u => u.Id == user.Id);
             try
             {
                 model.FullName = user.FullName;
@@ -195,18 +195,6 @@ namespace BloodDonation.Application.Services
                     Message = "User Update become failed"
                 };
             }
-        }
-
-        private bool IsEmailExists(UserVm user)
-        {
-            var model = _userRepo.GetConditional(_ => _.EmailAddress == user.EmailAddress);
-            return model != null;
-        }
-
-        private bool IsUserNameExists(UserVm user)
-        {
-            var model = _userRepo.GetConditional(_ => _.UserName == user.UserName);
-            return model != null;
         }
 
         public bool Delete(string id, string table)

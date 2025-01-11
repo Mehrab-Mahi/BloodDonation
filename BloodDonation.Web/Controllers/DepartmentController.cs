@@ -14,10 +14,10 @@ namespace BloodDonation.Web.Controllers
         {
             _service = service;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
         [HttpGet("getall")]
         public IActionResult GetAll()

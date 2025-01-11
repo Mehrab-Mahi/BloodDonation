@@ -13,15 +13,15 @@ namespace BloodDonation.Web.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public IActionResult Login()
-        {
-            return View();
-        }
+        //public IActionResult Login()
+        //{
+        //    return View();
+        //}
 
-        public async Task<IActionResult> Logout()
-        {
-            _httpContextAccessor.HttpContext.Session.Clear();
-            return RedirectToAction("Login");
-        }
+        //public async Task<IActionResult> Logout()
+        //{
+        //    _httpContextAccessor.HttpContext.Session.Clear();
+        //    return RedirectToAction("Login");
+        //}
     }
 }

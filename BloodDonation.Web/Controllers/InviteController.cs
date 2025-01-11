@@ -15,10 +15,10 @@ namespace BloodDonation.Web.Controllers
             _inviteService = inviteService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
         [HttpGet]
         public IActionResult GetAll()

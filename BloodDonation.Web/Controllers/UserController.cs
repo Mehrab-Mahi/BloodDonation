@@ -18,10 +18,10 @@ namespace BloodDonation.Web.Controllers
             _authService = authService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
         [AllowAnonymous]
         [HttpPost("registration")]
@@ -32,10 +32,10 @@ namespace BloodDonation.Web.Controllers
         }
 
         [BloodDonationAuth]
-        [HttpPut("update/{id}")]
-        public IActionResult Update(string id, [FromBody] UserCreationVm model)
+        [HttpPut("update")]
+        public IActionResult Update([FromBody] UserCreationVm model)
         {
-            var data = _userService.Update(id, model);
+            var data = _userService.Update(model);
             return Ok(new { data });
         }
         
@@ -48,7 +48,7 @@ namespace BloodDonation.Web.Controllers
         }
         
         [BloodDonationAuth]
-        [HttpPost("Disapprovevolunteer")]
+        [HttpPost("disapprovevolunteer")]
         public IActionResult DisapproveUser([FromBody] UserApproval userApproval)
         {
             var data = _userService.DisapproveUser(userApproval.Id);
@@ -71,27 +71,27 @@ namespace BloodDonation.Web.Controllers
             return Ok(new { data });
         }
 
-        [BloodDonationAuth]
-        [HttpGet("getall")]
-        public IActionResult GetAll()
-        {
-            var list = _userService.GetAll();
-            return Ok(new { data = list });
-        }
+        //[BloodDonationAuth]
+        //[HttpGet("getall")]
+        //public IActionResult GetAll()
+        //{
+        //    var list = _userService.GetAll();
+        //    return Ok(new { data = list });
+        //}
 
-        [BloodDonationAuth]
-        [HttpGet("getbyid/{id}")]
-        public IActionResult GetById(string id)
-        {
-            var list = _userService.GetById(id);
-            return Ok(new { data = list });
-        }
-        [BloodDonationAuth]
-        [HttpGet("getusermenu/{id}")]
-        public IActionResult GetUserMenu(string id)
-        {
-            var data = _authService.GetUserMenu(id);
-            return Ok(data);
-        }
+        //[BloodDonationAuth]
+        //[HttpGet("getbyid/{id}")]
+        //public IActionResult GetById(string id)
+        //{
+        //    var list = _userService.GetById(id);
+        //    return Ok(new { data = list });
+        //}
+        //[BloodDonationAuth]
+        //[HttpGet("getusermenu/{id}")]
+        //public IActionResult GetUserMenu(string id)
+        //{
+        //    var data = _authService.GetUserMenu(id);
+        //    return Ok(data);
+        //}
     }
 }

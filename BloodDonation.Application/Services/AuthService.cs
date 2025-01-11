@@ -132,7 +132,7 @@ namespace BloodDonation.Application.Services
                 var name = principal.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.Name).Value;
                 var id = principal.Claims.FirstOrDefault(_ => _.Type == "UserId").Value;
                 var isSuperAdmin = principal.Claims.FirstOrDefault(_ => _.Type == "IsSuperAdmin").Value;
-                var userType = principal.Claims.FirstOrDefault(_ => _.Type == "userType").Value;
+                var userType = principal.Claims.FirstOrDefault(_ => _.Type == "UserType").Value;
                 return new UserAuthVm
                 {
                     IsAuthenticate = true,

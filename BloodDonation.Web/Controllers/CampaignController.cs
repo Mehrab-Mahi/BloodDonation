@@ -25,10 +25,10 @@ namespace BloodDonation.Web.Controllers
         }
 
         [BloodDonationAuth]
-        [HttpPut("update/{id}")]
-        public IActionResult Update(string id, [FromForm] CampaignVm campaignData)
+        [HttpPut("update")]
+        public IActionResult Update([FromForm] CampaignVm campaignData)
         {
-            var response = _campaignService.Update(id, campaignData);
+            var response = _campaignService.Update(campaignData);
 
             return Ok(response);
         }

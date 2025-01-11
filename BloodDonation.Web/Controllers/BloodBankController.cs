@@ -24,7 +24,7 @@ namespace BloodDonation.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
+        [HttpGet("getdashboarddata")]
         public IActionResult GetDashboardData()
         {
             var data = _bloodBankService.GetDashboardData();

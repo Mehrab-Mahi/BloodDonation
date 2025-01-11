@@ -29,24 +29,24 @@ namespace BloodDonation.Application.Services
 
             if (!string.IsNullOrEmpty(filter.BloodGroup))
             {
-                user.Where(u => u.BloodGroup == filter.BloodGroup);
+                user = FilterByBloodGroup(user, filter.BloodGroup);
             }
 
             if (!string.IsNullOrEmpty(filter.Upazila))
             {
-                user.Where(u => u.Upazila == filter.Upazila);
+                user = FilterByUpazila(user, filter.Upazila);
             }
 
             if (!string.IsNullOrEmpty(filter.Union))
             {
-                user.Where(u => u.Union == filter.Union);
+                user = FilterByUnion(user, filter.Union);
             }
 
             var startDob = GetDateDifference(filter.StartAge);
             var endDob = GetDateDifference(filter.EndAge);
             var minimumLastDonationDate = GetMinimumLastDonationDate();
 
-            user.Where(u => u.Dob <= startDob && u.Dob >= endDob && u.LastDonationTime <= minimumLastDonationDate);
+            user = FilterByDate(user, startDob, endDob, minimumLastDonationDate);
 
             return user
                 .Skip((filter.PageNo - 1) * filter.PageSize)
@@ -64,6 +64,26 @@ namespace BloodDonation.Application.Services
                     LastDonationDayCount = u.LastDonationTime == null ? 0 : (DateTime.Now - u.LastDonationTime.Value).Days
                 })
                 .ToList();
+        }
+
+        private IQueryable<User> FilterByDate(IQueryable<User> user, DateTime startDob, DateTime endDob, DateTime minimumLastDonationDate)
+        {
+            return user.Where(u => u.Dob <= startDob && u.Dob >= endDob && u.LastDonationTime <= minimumLastDonationDate);
+        }
+
+        private IQueryable<User> FilterByUnion(IQueryable<User> user, string union)
+        {
+            return user.Where(u => u.Union == union);
+        }
+
+        private IQueryable<User> FilterByUpazila(IQueryable<User> user, string upazila)
+        {
+            return user.Where(u => u.Upazila == upazila);
+        }
+
+        private IQueryable<User> FilterByBloodGroup(IQueryable<User> user, string bloodGroup)
+        {
+            return user.Where(u => u.BloodGroup == bloodGroup);
         }
 
         public DashboardDataVm GetDashboardData()

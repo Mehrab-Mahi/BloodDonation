@@ -17,7 +17,7 @@ namespace BloodDonation.Application.Services
 
         public string GetRootPath()
         {
-            return _webHostEnvironment.ContentRootPath;
+            return _webHostEnvironment.WebRootPath;
         }
 
         public void CreateDirectoryIfNotExists(string path)
@@ -50,11 +50,11 @@ namespace BloodDonation.Application.Services
             if (file is null) return string.Empty;
 
             var fileName = GetFileName(file.FileName);
-            var path = Path.Combine(GetRootPath(), @$"\{folderName}\");
+            var path = Path.Combine(GetRootPath(), $"{folderName}");
             CreateDirectoryIfNotExists(path);
             var filePath = Path.Combine(path, fileName);
             SaveFile(filePath, file);
-            return filePath;
+            return Path.Combine(folderName,fileName);
         }
 
         private static string GetFileName(string fileName)
