@@ -124,11 +124,11 @@ namespace BloodDonation.Application.Services
             if (userProfilePicture is null) return string.Empty;
 
             var fileName = GetFileName(userProfilePicture.FileName);
-            var path = Path.Combine(_fileService.GetRootPath(), @"\ProfilePicture\");
+            var path = Path.Combine(_fileService.GetRootPath(), "ProfilePicture");
             _fileService.CreateDirectoryIfNotExists(path);
             var filePath = Path.Combine(path, fileName);
             _fileService.SaveFile(filePath, userProfilePicture);
-            return filePath;
+            return Path.Combine("ProfilePicture", fileName);
         }
 
         private string GetFileName(string fileName)

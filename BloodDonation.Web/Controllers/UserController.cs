@@ -25,7 +25,7 @@ namespace BloodDonation.Web.Controllers
 
         [AllowAnonymous]
         [HttpPost("registration")]
-        public IActionResult Create([FromBody] UserCreationVm model)
+        public IActionResult Create([FromForm] UserCreationVm model)
         {
             var data = _userService.Insert(model);
             return Ok(new { data });
@@ -33,7 +33,7 @@ namespace BloodDonation.Web.Controllers
 
         [BloodDonationAuth]
         [HttpPut("update")]
-        public IActionResult Update([FromBody] UserCreationVm model)
+        public IActionResult Update([FromForm] UserCreationVm model)
         {
             var data = _userService.Update(model);
             return Ok(new { data });
