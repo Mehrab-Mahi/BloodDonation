@@ -107,14 +107,14 @@ namespace BloodDonation.Application.Services
                     Message = "User Creation has been successful"
                 };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return new PayloadResponse
                 {
                     IsSuccess = false,
                     PayloadType = "User Creation",
                     Content = null,
-                    Message = "User Creation become unsuccessful"
+                    Message = $"User Creation become unsuccessful because {ex.Message}"
                 };
             }
         }
