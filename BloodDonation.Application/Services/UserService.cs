@@ -58,6 +58,17 @@ namespace BloodDonation.Application.Services
 
         public PayloadResponse Insert(UserCreationVm user)
         {
+            if (IfDuplicateUser(user.MobileNumber, user.DateOfBirth))
+            {
+                return new PayloadResponse
+                {
+                    IsSuccess = false,
+                    PayloadType = "User Creation",
+                    Content = null,
+                    Message = $"User with this mobile number and date of birth is already exist!"
+                };
+            }
+
             try
             {
                 var model = new User()
@@ -117,6 +128,13 @@ namespace BloodDonation.Application.Services
                     Message = $"User Creation become unsuccessful because {ex.Message}"
                 };
             }
+        }
+
+        private bool IfDuplicateUser(string mobileNumber, string dateOfBirth)
+        {
+            var user = _userRepo.GetAll().FirstOrDefault(u => u.MobileNumber == mobileNumber && u.DateOfBirth == dateOfBirth);
+
+            return user is not null;
         }
 
         private string UploadAndGetImageUrl(IFormFile userProfilePicture)

@@ -92,8 +92,13 @@ namespace BloodDonation.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
             //app.UseHttpsRedirection();
-            
+
             app.UseStaticFiles();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -102,7 +107,7 @@ namespace BloodDonation.Web
             });
             app.UseRouting();
             app.UseAuthorization();
-            app.UseCors(options => options.AllowAnyOrigin());
+            
             app.UseSession();
             app.Use(async (context, next) =>
             {
@@ -117,8 +122,6 @@ namespace BloodDonation.Web
             {
                 endpoints.MapControllers();
             });
-
-            
         }
 
         private void RegisterServices(IServiceCollection services)
