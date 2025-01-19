@@ -19,6 +19,7 @@ namespace BloodDonation.Application.Helper
         {
             var request = context.HttpContext.Request;
             var authorization = request.Headers["Authorization"];
+            var referer = request.Headers["Referer"].ToString();
 
             if (!string.IsNullOrEmpty(authorization.ToString()))
             {
@@ -28,7 +29,7 @@ namespace BloodDonation.Application.Helper
                     var auth = _authService.ValidateToken(arr[1]);
                     if (!auth.IsAuthenticate)
                     {
-                        context.Result = new RedirectResult("~/account/login");
+                        context.Result = new RedirectResult($"{referer}login");
                     }
                     else
                     {
@@ -37,13 +38,13 @@ namespace BloodDonation.Application.Helper
                 }
                 else
                 {
-                    context.Result = new RedirectResult("~/account/login");
+                    context.Result = new RedirectResult($"{referer}login");
                     context.HttpContext.Response.StatusCode = 401;
                 }
             }
             else
             {
-                context.Result = new RedirectResult("~/account/login");
+                context.Result = new RedirectResult($"{referer}login");
                 context.HttpContext.Response.StatusCode = 401;
             }
             return;
