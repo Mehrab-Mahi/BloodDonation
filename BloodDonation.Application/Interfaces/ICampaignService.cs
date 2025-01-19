@@ -10,6 +10,6 @@ namespace BloodDonation.Application.Interfaces
         PayloadResponse Update(CampaignVm campaignData);
         PayloadResponse Delete(string id);
         CampaignVm Get(string id);
-        List<Campaign> GetAll(int pageNo, int pageSize);
+        List<CampaignVm> GetAll(int pageNo, int pageSize);
     }
 }

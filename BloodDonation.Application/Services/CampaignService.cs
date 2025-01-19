@@ -196,7 +196,7 @@ namespace BloodDonation.Application.Services
             };
         }
 
-        public List<Campaign> GetAll(int pageNo, int pageSize)
+        public List<CampaignVm> GetAll(int pageNo, int pageSize)
         {
             var currentUser = _loggedInUserService.GetLoggedInUser();
 
@@ -212,10 +212,33 @@ namespace BloodDonation.Application.Services
                 .Take(pageSize)
                 .ToList();
 
-            return campaignList;
+            var campaignVolunteer = _campaignVolunteerMappingRepository.GetAll()
+                .Where(cv => campaignList.Select(c => c.Id).Contains(cv.CampaignId));
+
+            var permittedCampaignList = new List<CampaignVm>();
+
+            foreach (var campaign in campaignList)
+            {
+                permittedCampaignList.Add(new CampaignVm()
+                {
+                    Id = campaign.Id,
+                    Name = campaign.Name,
+                    StartDate = campaign.StartDate,
+                    EndDate = campaign.EndDate,
+                    Address = campaign.Address,
+                    BannerUrl = campaign.BannerUrl,
+                    VolunteerList = campaignVolunteer
+                        .Where(c => c.CampaignId == campaign.Id)
+                        .Select(v => v.VolunteerId)
+                        .ToList()
+
+                });
+            }
+
+            return permittedCampaignList;
         }
 
-        private List<Campaign> VolunteerPermittedCampaign(string currentUserId, int pageNo, int pageSize)
+        private List<CampaignVm> VolunteerPermittedCampaign(string currentUserId, int pageNo, int pageSize)
         {
             var permittedCampaign = _campaignVolunteerMappingRepository
                 .GetConditionalList(v => v.VolunteerId == currentUserId)
@@ -229,6 +252,15 @@ namespace BloodDonation.Application.Services
                 .OrderByDescending(c => c.CreateTime)
                 .Skip((pageNo - 1)*pageSize)
                 .Take(pageSize)
+                .Select(campaign => new CampaignVm()
+                {
+                    Id = campaign.Id,
+                    Name = campaign.Name,
+                    StartDate = campaign.StartDate,
+                    EndDate = campaign.EndDate,
+                    Address = campaign.Address,
+                    BannerUrl = campaign.BannerUrl
+                })
                 .ToList();
 
             return campaignList;
