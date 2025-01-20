@@ -19,5 +19,6 @@ namespace BloodDonation.Application.Interfaces
         List<UserCreationVm> GetUnapprovedUser();
         List<UserCreationVm> GetAllApprovedVolunteer(int pageNo, int pageSize);
         PayloadResponse DisapproveUser(string id);
+        PayloadResponse DeleteUser(string id);
     }
 }

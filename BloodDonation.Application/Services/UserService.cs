@@ -325,6 +325,31 @@ namespace BloodDonation.Application.Services
             };
         }
 
+        public PayloadResponse DeleteUser(string id)
+        {
+            var model = _userRepo.GetConditional(u => u.Id == id);
+
+            if (model is null)
+            {
+                return new PayloadResponse()
+                {
+                    IsSuccess = false,
+                    Message = "User not found!"
+                };
+            }
+
+            model.IsApproved = false;
+
+            _userRepo.Delete(model);
+            _userRepo.SaveChanges();
+
+            return new PayloadResponse()
+            {
+                IsSuccess = true,
+                Message = "User has been deleted successfully!"
+            };
+        }
+
         private List<UserCreationVm> GetMappedData(List<User> userData)
         {
             var mappedUserData = userData.Select(user => new UserCreationVm()

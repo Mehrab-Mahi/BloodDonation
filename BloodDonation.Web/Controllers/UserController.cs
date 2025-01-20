@@ -36,7 +36,7 @@ namespace BloodDonation.Web.Controllers
         public IActionResult Update([FromForm] UserCreationVm model)
         {
             var data = _userService.Update(model);
-            return Ok(new { data });
+            return Ok(data);
         }
         
         [BloodDonationAuth]
@@ -70,6 +70,15 @@ namespace BloodDonation.Web.Controllers
             var data = _userService.GetAllApprovedVolunteer(pageNo, pageSize);
             return Ok(new { data });
         }
+
+        [BloodDonationAuth]
+        [HttpDelete("delete/{id}")]
+        public IActionResult DeleteUser(string id)
+        {
+            var data = _userService.DeleteUser(id);
+            return Ok(new { data });
+        }
+
 
         //[BloodDonationAuth]
         //[HttpGet("getall")]
