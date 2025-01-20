@@ -25,7 +25,7 @@ namespace BloodDonation.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("getcampaignmedia")]
+        [HttpPost("getcampaignmedia")]
         public IActionResult GetCampaignMedia([FromBody] MediaDataSizeVm mediaDataSize)
         {
             var response = _mediaService.GetCampaignMedia(mediaDataSize);

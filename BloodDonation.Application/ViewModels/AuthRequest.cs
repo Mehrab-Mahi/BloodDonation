@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BloodDonation.Application.ViewModels
 {
     public class AuthRequest
     {
+        [JsonIgnore]
         [Display(Name = "UserName")]
         public string Email { get; set; }
 

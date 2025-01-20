@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace BloodDonation.Application.ViewModels
 {
@@ -24,8 +25,11 @@ namespace BloodDonation.Application.ViewModels
     public class UserCreationVm
     {
         public string Id { get; set; }
+        [JsonIgnore]
         public bool IsSuperAdmin { get; set; }
+        [JsonIgnore]
         public string Password { get; set; }
+        [JsonIgnore]
         public bool IsApproved { get; set; }
         public string FullName { get; set; }
         public string BloodGroup { get; set; }
