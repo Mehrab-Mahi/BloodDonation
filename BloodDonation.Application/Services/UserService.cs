@@ -291,7 +291,7 @@ namespace BloodDonation.Application.Services
         {
             var userData = _userRepo
                 .GetAll()
-                .Where(u => u.UserType == UserTypes.Volunteer)
+                .Where(u => u.UserType == UserTypes.Volunteer && u.IsApproved == true)
                 .OrderByDescending(u => u.LastModifiedTime)
                 .Skip((pageNo-1)*pageSize)
                 .Take(pageSize)
@@ -345,7 +345,8 @@ namespace BloodDonation.Application.Services
                 UserType = user.UserType,
                 LastDonationTime = user.LastDonationTime,
                 ImageUrl = user.ImageUrl,
-                IsSuperAdmin = user.IsSuperAdmin
+                IsSuperAdmin = user.IsSuperAdmin,
+                IsApproved = user.IsApproved
             }).ToList();
 
             return mappedUserData;
