@@ -36,8 +36,11 @@ namespace BloodDonation.Application.ViewModels
         public string DateOfBirth { get; set; }
         public string MobileNumber { get; set; }
         public string District { get; set; }
+        public string DistrictName { get; set; }
         public string Upazila { get; set; }
+        public string UpazilaName { get; set; }
         public string Union { get; set; }
+        public string UnionName { get; set; }
         public string Address { get; set; }
         public string? FatherName { get; set; }
         public string? MotherName { get; set; }

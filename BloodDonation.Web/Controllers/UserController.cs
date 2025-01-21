@@ -80,13 +80,13 @@ namespace BloodDonation.Web.Controllers
         }
 
 
-        //[BloodDonationAuth]
-        //[HttpGet("getall")]
-        //public IActionResult GetAll()
-        //{
-        //    var list = _userService.GetAll();
-        //    return Ok(new { data = list });
-        //}
+        [BloodDonationAuth]
+        [HttpPost("getall")]
+        public IActionResult GetAll([FromBody] UserFilter userFilter)
+        {
+            var data = _userService.GetAll(userFilter);
+            return Ok(data);
+        }
 
         //[BloodDonationAuth]
         //[HttpGet("getbyid/{id}")]

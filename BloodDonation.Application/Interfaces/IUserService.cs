@@ -11,7 +11,7 @@ namespace BloodDonation.Application.Interfaces
         User GetById(string id);
 
         PayloadResponse Update(UserCreationVm User);
-        List<UserVm> GetAll();
+        List<UserCreationVm> GetAll(UserFilter userFilter);
         PayloadResponse Insert(UserCreationVm model);
         public bool Delete(string id, string table);
         UserTypeResponse GetUserTypeByPhoneNumberAndDob(AuthRequest model);

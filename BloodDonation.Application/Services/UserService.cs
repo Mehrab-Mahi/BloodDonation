@@ -9,6 +9,7 @@ using System.Linq;
 using BloodDonation.Application.Util;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using static System.Net.WebRequestMethods;
 
 namespace BloodDonation.Application.Services
 {
@@ -16,14 +17,20 @@ namespace BloodDonation.Application.Services
     {
         private readonly IRepository<User> _userRepo;
         private readonly IRepository<Role> _roleRepo;
+        private readonly IRepository<Location> _locationRepository;
         private readonly IMapper _mapper;
         private readonly IFileService _fileService;
-        public UserService(IRepository<User> userRepo, IRepository<Role> roleRepo, IMapper mapper, IFileService fileService)
+        public UserService(IRepository<User> userRepo,
+            IRepository<Role> roleRepo,
+            IMapper mapper,
+            IFileService fileService, 
+            IRepository<Location> locationRepository)
         {
             _userRepo = userRepo;
             _roleRepo = roleRepo;
             _mapper = mapper;
             _fileService = fileService;
+            _locationRepository = locationRepository;
         }
 
         public User Get(AuthRequest model)
@@ -33,17 +40,112 @@ namespace BloodDonation.Application.Services
             return user;
         }
 
-        public List<UserVm> GetAll()
+        public List<UserCreationVm> GetAll(UserFilter filter)
         {
-            var list = new List<UserVm>();
-            var users = _userRepo.GetAll().Where(u => u.IsApproved == true).ToList();
-            list = _mapper.Map(users, list);
+            var allUser = _userRepo
+                .GetAll().Where(u => !u.IsSuperAdmin);
 
-            foreach (var item in list)
+            if (!string.IsNullOrEmpty(filter.BloodGroup))
             {
-                item.RoleName = string.IsNullOrEmpty(item.RoleId) ? "No Role" : GetRoleName(item.RoleId);
+                allUser = FilterByBloodGroup(allUser, filter.BloodGroup);
             }
-            return list;
+
+            if (!string.IsNullOrEmpty(filter.Upazila))
+            {
+                allUser = FilterByUpazila(allUser, filter.Upazila);
+            }
+
+            if (!string.IsNullOrEmpty(filter.Union))
+            {
+                allUser = FilterByUnion(allUser, filter.Union);
+            }
+            
+            if (!string.IsNullOrEmpty(filter.BloodDonationStatus))
+            {
+                allUser = FilterByBloodDonationStatus(allUser, filter.BloodDonationStatus);
+            }
+
+            if (!string.IsNullOrEmpty(filter.UserType))
+            {
+                allUser = FilterByUserType(allUser, filter.UserType);
+            }
+
+            var startDob = GetDateDifference(filter.StartAge);
+            var endDob = GetDateDifference(filter.EndAge);
+
+            allUser = FilterByDate(allUser, startDob, endDob);
+
+            allUser = allUser
+                .OrderByDescending(u => u.CreateTime)
+                .Skip((filter.PageNo - 1) * filter.PageSize)
+                .Take(filter.PageSize);
+
+            return (from user in allUser
+                join district in _locationRepository.GetAll() on user.District equals district.Id
+                join upazila in _locationRepository.GetAll() on user.Upazila equals upazila.Id
+                join union in _locationRepository.GetAll() on user.Union equals union.Id
+                select new UserCreationVm()
+                {
+                    Id = user.Id,
+                    FullName = user.FullName,
+                    BloodGroup = user.BloodGroup,
+                    DateOfBirth = user.DateOfBirth,
+                    MobileNumber = user.MobileNumber,
+                    District = user.District,
+                    DistrictName = district.Name,
+                    Upazila = user.Upazila,
+                    UpazilaName = upazila.Name,
+                    Union = user.Union,
+                    UnionName = union.Name,
+                    Address = user.Address,
+                    FatherName = user.FatherName,
+                    MotherName = user.MotherName,
+                    BloodDonationStatus = user.BloodDonationStatus,
+                    Gender = user.Gender,
+                    UserType = user.UserType,
+                    LastDonationTime = user.LastDonationTime,
+                    ImageUrl = user.ImageUrl,
+                    BloodDonationCount = user.BloodDonationCount,
+                    IsApproved = user.IsApproved
+                })
+                .ToList();
+        }
+
+        private IQueryable<User> FilterByBloodDonationStatus(IQueryable<User> allUser, string bloodDonationStatus)
+        {
+            return allUser.Where(u => u.BloodDonationStatus == bloodDonationStatus);
+        }
+
+        private static IQueryable<User> FilterByUserType(IQueryable<User> allUser, string userType)
+        {
+            return allUser.Where(u => u.UserType == userType);
+        }
+
+        private static DateTime GetDateDifference(int ageToReduce)
+        {
+            var date = DateTime.Now.AddYears((0 - ageToReduce));
+
+            return date;
+        }
+
+        private IQueryable<User> FilterByDate(IQueryable<User> user, DateTime startDob, DateTime endDob)
+        {
+            return user.Where(u => u.Dob <= startDob && u.Dob >= endDob);
+        }
+
+        private IQueryable<User> FilterByUnion(IQueryable<User> user, string union)
+        {
+            return user.Where(u => u.Union == union);
+        }
+
+        private IQueryable<User> FilterByUpazila(IQueryable<User> user, string upazila)
+        {
+            return user.Where(u => u.Upazila == upazila);
+        }
+
+        private IQueryable<User> FilterByBloodGroup(IQueryable<User> user, string bloodGroup)
+        {
+            return user.Where(u => u.BloodGroup == bloodGroup);
         }
 
         private string GetRoleName(string roleId)
@@ -169,6 +271,20 @@ namespace BloodDonation.Application.Services
             var model = _userRepo.GetConditional(u => u.Id == user.Id);
             try
             {
+                if (user.MobileNumber != model.MobileNumber || user.DateOfBirth != model.DateOfBirth)
+                {
+                    if (IfDuplicateUser(user.MobileNumber, user.DateOfBirth))
+                    {
+                        return new PayloadResponse
+                        {
+                            IsSuccess = false,
+                            PayloadType = "User Update",
+                            Content = null,
+                            Message = "User with the mobile number and date of birth already exists!"
+                        };
+                    }
+                }
+
                 model.FullName = user.FullName;
                 model.BloodGroup = user.BloodGroup;
                 model.DateOfBirth = user.DateOfBirth;

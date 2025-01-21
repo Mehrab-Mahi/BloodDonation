@@ -49,9 +49,9 @@ namespace BloodDonation.Application.Services
             user = FilterByDate(user, startDob, endDob, minimumLastDonationDate);
 
             return user
+                .OrderBy(u => u.LastDonationTime)
                 .Skip((filter.PageNo - 1) * filter.PageSize)
                 .Take(filter.PageSize)
-                .OrderBy(u => u.LastDonationTime)
                 .Select(u => new BloodBankDonorDataVm()
                 {
                     Id = u.Id,
