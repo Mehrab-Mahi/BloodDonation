@@ -85,7 +85,7 @@ namespace BloodDonation.Application.Services
             {
                 List<string> volunteerList;
 
-                if (campaignData.VolunteerList.Count == 1 && campaignData.VolunteerList.Contains(","))
+                if (campaignData.VolunteerList.Count == 1 && campaignData.VolunteerList[0].Contains(","))
                 {
                     volunteerList = campaignData.VolunteerList[0].Trim('"', '"').Split(',').ToList();
                 }
