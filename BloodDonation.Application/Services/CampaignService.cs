@@ -33,6 +33,17 @@ namespace BloodDonation.Application.Services
         {
             try
             {
+                List<string> volunteerList;
+
+                if (campaignData.VolunteerList.Count == 1 && campaignData.VolunteerList[0].Contains(","))
+                {
+                    volunteerList = campaignData.VolunteerList[0].Trim('"', '"').Split(',').ToList();
+                }
+                else
+                {
+                    volunteerList = campaignData.VolunteerList;
+                }
+                
                 var bannerUrl = UploadAndGetBannerUrl(campaignData.Banner);
                 var campaign = new Campaign()
                 {
@@ -46,7 +57,7 @@ namespace BloodDonation.Application.Services
                 _campaignRepository.Insert(campaign);
                 _campaignRepository.SaveChanges();
 
-                AssignVolunteerToCampaign(campaign.Id, campaignData.VolunteerList);
+                AssignVolunteerToCampaign(campaign.Id, volunteerList);
 
                 return new PayloadResponse
                 {
@@ -72,6 +83,17 @@ namespace BloodDonation.Application.Services
         {
             try
             {
+                List<string> volunteerList;
+
+                if (campaignData.VolunteerList.Count == 1 && campaignData.VolunteerList.Contains(","))
+                {
+                    volunteerList = campaignData.VolunteerList[0].Trim('"', '"').Split(',').ToList();
+                }
+                else
+                {
+                    volunteerList = campaignData.VolunteerList;
+                }
+
                 var previousData = _campaignRepository.GetConditional(c => c.Id == campaignData.Id);
                 var newBannerUrl = string.Empty;
 
@@ -101,7 +123,7 @@ namespace BloodDonation.Application.Services
                 _campaignRepository.Update(previousData);
                 _campaignRepository.SaveChanges();
 
-                UpdateVolunteerToCampaign(campaignData.Id, campaignData.VolunteerList);
+                UpdateVolunteerToCampaign(campaignData.Id, volunteerList);
 
                 return new PayloadResponse()
                 {

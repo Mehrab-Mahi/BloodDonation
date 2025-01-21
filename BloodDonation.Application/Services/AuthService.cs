@@ -97,7 +97,7 @@ namespace BloodDonation.Application.Services
                     new(type: "FullName", user.FullName),
                     new(type: "UserType", user.UserType)
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(20),
+                Expires = DateTime.UtcNow.AddHours(24),
                 SigningCredentials = credentials
             };
             var tokenValue = tokenHandler.CreateToken(tokenDescriptor);
