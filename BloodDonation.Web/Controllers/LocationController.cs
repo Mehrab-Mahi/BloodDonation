@@ -52,7 +52,7 @@ namespace BloodDonation.Web.Controllers
             return Ok(locations);
         }
         
-        [BloodDonationAuth]
+        [AllowAnonymous]
         [HttpGet("get/{id}")]
         public IActionResult Get(string id)
         {
