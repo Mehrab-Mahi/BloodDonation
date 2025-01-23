@@ -68,7 +68,7 @@ namespace BloodDonation.Application.Services
 
         private IQueryable<User> FilterByDate(IQueryable<User> user, DateTime startDob, DateTime endDob, DateTime minimumLastDonationDate)
         {
-            return user.Where(u => u.Dob <= startDob && u.Dob >= endDob && u.LastDonationTime <= minimumLastDonationDate);
+            return user.Where(u => u.Dob <= startDob && u.Dob >= endDob && (u.LastDonationTime <= minimumLastDonationDate || u.LastDonationTime == null));
         }
 
         private IQueryable<User> FilterByUnion(IQueryable<User> user, string union)

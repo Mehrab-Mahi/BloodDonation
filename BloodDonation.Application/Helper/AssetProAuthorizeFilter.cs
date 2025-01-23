@@ -33,7 +33,7 @@ namespace BloodDonation.Application.Helper
                     }
                     else
                     {
-                        _httpContextAccessor.HttpContext.Session.SetObject("Auth", auth);
+                        _httpContextAccessor.HttpContext.Session.SetObject("userId", auth.Id);
                     }
                 }
                 else

@@ -25,10 +25,10 @@ namespace BloodDonation.Infra.Data.Repositories
         private void ParseLoggedInUser()
         {
             var bytes = new byte[1024];
-            _httpContextAccessor.HttpContext.Session.TryGetValue("userName", out bytes);
+            _httpContextAccessor.HttpContext.Session.TryGetValue("userId", out bytes);
             if (bytes is not null)
             {
-                LoggedInUserName = System.Text.Encoding.UTF8.GetString(bytes);
+                LoggedInUserName = System.Text.Encoding.UTF8.GetString(bytes).Trim('"');
             }
         }
 

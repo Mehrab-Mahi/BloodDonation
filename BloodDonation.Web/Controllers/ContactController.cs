@@ -17,7 +17,7 @@ namespace BloodDonation.Web.Controllers
             _contactService = contactService;
         }
 
-        [AllowAnonymous]
+        [BloodDonationAuth]
         [HttpPost("create")]
         public IActionResult Create([FromBody] Contact contactData)
         {
@@ -27,7 +27,7 @@ namespace BloodDonation.Web.Controllers
         
         [BloodDonationAuth]
         [HttpGet("getall")]
-        public IActionResult GetAll(string contactType, int pageNo, int pageSize)
+        public IActionResult GetAll(string contactType, int pageNo = 1, int pageSize = 10)
         {
             var response = _contactService.GetAll(contactType, pageNo, pageSize);
             return Ok(response);
