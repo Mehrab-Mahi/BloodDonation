@@ -12,12 +12,15 @@ namespace BloodDonation.Application.Services
     {
         public readonly IRepository<Contact> _contactRepository;
         public readonly IRepository<User> _userRepository;
+        private readonly IRepository<Location> _locationRepository;
 
         public ContactService(IRepository<Contact> contactRepository,
-            IRepository<User> userRepository)
+            IRepository<User> userRepository,
+            IRepository<Location> locationRepository)
         {
             _contactRepository = contactRepository;
             _userRepository = userRepository;
+            _locationRepository = locationRepository;
         }
 
         public PayloadResponse Create(Contact contactData)
@@ -60,6 +63,9 @@ namespace BloodDonation.Application.Services
                 join user in _userRepository.GetAll()
                     on contact.CreatedBy equals user.Id into contactUserData
                 from cu in contactUserData
+                join district in _locationRepository.GetAll() on cu.District equals district.Id
+                join upazila in _locationRepository.GetAll() on cu.Upazila equals upazila.Id
+                join union in _locationRepository.GetAll() on cu.Union equals union.Id
                 select new ContactVm()
                 {
                     Id = contact.Id,
@@ -68,17 +74,30 @@ namespace BloodDonation.Application.Services
                     Subject = contact.Subject,
                     Message = contact.Message,
                     IsRead = contact.IsRead,
+                    CreatedBy = cu.FullName,
                     UserData = new UserCreationVm()
                     {
                         Id = cu.Id,
                         FullName = cu.FullName,
-                        UserType = cu.UserType,
-                        MobileNumber = cu.MobileNumber,
                         BloodGroup = cu.BloodGroup,
-                        Address = cu.Address,
-                        Gender = cu.Gender,
                         DateOfBirth = cu.DateOfBirth,
-                        ImageUrl = cu.ImageUrl
+                        MobileNumber = cu.MobileNumber,
+                        District = cu.District,
+                        DistrictName = district.Name,
+                        Upazila = cu.Upazila,
+                        UpazilaName = upazila.Name,
+                        Union = cu.Union,
+                        UnionName = union.Name,
+                        Address = cu.Address,
+                        FatherName = cu.FatherName,
+                        MotherName = cu.MotherName,
+                        BloodDonationStatus = cu.BloodDonationStatus,
+                        Gender = cu.Gender,
+                        UserType = cu.UserType,
+                        LastDonationTime = cu.LastDonationTime,
+                        ImageUrl = cu.ImageUrl,
+                        BloodDonationCount = cu.BloodDonationCount,
+                        IsApproved = cu.IsApproved
                     }
                 }).ToList();
 
