@@ -21,7 +21,7 @@ namespace BloodDonation.Web.Controllers
         {
             var response = _campaignService.Create(campaignData);
 
-            return Ok(response);
+            return Ok(new {data = response});
         }
 
         [BloodDonationAuth]
@@ -30,7 +30,7 @@ namespace BloodDonation.Web.Controllers
         {
             var response = _campaignService.Update(campaignData);
 
-            return Ok(response);
+            return Ok(new {data = response});
         }
 
         [BloodDonationAuth]
@@ -39,7 +39,7 @@ namespace BloodDonation.Web.Controllers
         {
             var response = _campaignService.Delete(id);
 
-            return Ok(response);
+            return Ok(new {data = response});
         }
 
         [AllowAnonymous]
@@ -48,7 +48,7 @@ namespace BloodDonation.Web.Controllers
         {
             var response = _campaignService.Get(id);
 
-            return Ok(response);
+            return Ok(new  {data = response});
         }
 
         [AllowAnonymous]

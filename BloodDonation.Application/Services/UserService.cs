@@ -40,7 +40,7 @@ namespace BloodDonation.Application.Services
             return user;
         }
 
-        public List<UserCreationVm> GetAll(UserFilter filter)
+        public object GetAll(UserFilter filter)
         {
             var allUser = _userRepo
                 .GetAll().Where(u => !u.IsSuperAdmin);
@@ -75,12 +75,14 @@ namespace BloodDonation.Application.Services
 
             allUser = FilterByDate(allUser, startDob, endDob);
 
+            var totalRowCount = allUser.Count();
+
             allUser = allUser
                 .OrderByDescending(u => u.CreateTime)
                 .Skip((filter.PageNo - 1) * filter.PageSize)
                 .Take(filter.PageSize);
 
-            return (from user in allUser
+            var userData = (from user in allUser
                 join district in _locationRepository.GetAll() on user.District equals district.Id
                 join upazila in _locationRepository.GetAll() on user.Upazila equals upazila.Id
                 join union in _locationRepository.GetAll() on user.Union equals union.Id
@@ -109,6 +111,12 @@ namespace BloodDonation.Application.Services
                     IsApproved = user.IsApproved
                 })
                 .ToList();
+
+            return new
+            {
+                data = userData,
+                rowCount = totalRowCount
+            };
         }
 
         private IQueryable<User> FilterByBloodDonationStatus(IQueryable<User> allUser, string bloodDonationStatus)
@@ -392,28 +400,44 @@ namespace BloodDonation.Application.Services
             };
         }
 
-        public List<UserCreationVm> GetUnapprovedUser()
+        public object GetUnapprovedUser(int pageNo, int pageSize)
         {
-            var data = _userRepo
+            var unapprovedData = _userRepo
                 .GetAll()
                 .Where(u => u.IsApproved == false && u.UserType == UserTypes.Volunteer)
-                .OrderByDescending(u => u.CreateTime)
-                .ToList();
+                .OrderByDescending(u => u.CreateTime);
+
+            var totalRowCount = unapprovedData
+                .Count();
             
-            return GetMappedData(data);
+            var mappedData = GetMappedData(unapprovedData.Skip((pageNo-1)*pageSize).Take(pageSize).ToList());
+
+            return new
+            {
+                data = mappedData,
+                rowCount = totalRowCount
+            };
         }
 
-        public List<UserCreationVm> GetAllApprovedVolunteer(int pageNo, int pageSize)
+        public object GetApprovedVolunteer(int pageNo, int pageSize)
         {
             var userData = _userRepo
                 .GetAll()
                 .Where(u => u.UserType == UserTypes.Volunteer && u.IsApproved == true)
-                .OrderByDescending(u => u.LastModifiedTime)
-                .Skip((pageNo-1)*pageSize)
-                .Take(pageSize)
-                .ToList();
+                .OrderByDescending(u => u.LastModifiedTime);
 
-            return GetMappedData(userData);
+            var totalRowCount = userData.Count();
+
+            var mappedData = GetMappedData(userData
+                .Skip((pageNo - 1) * pageSize)
+                .Take(pageSize)
+                .ToList());
+
+            return new
+            {
+                data = mappedData,
+                rowCount = totalRowCount
+            };
         }
 
         public PayloadResponse DisapproveUser(string id)

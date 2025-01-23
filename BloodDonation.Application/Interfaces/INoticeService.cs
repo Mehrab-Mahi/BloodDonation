@@ -9,6 +9,6 @@ namespace BloodDonation.Application.Interfaces
         PayloadResponse Update(NoticeVm noticeData);
         PayloadResponse Delete(string id);
         NoticeVm Get(string id);
-        List<NoticeVm> GetAll(int pageNo, int pageSize);
+        object GetAll(int pageNo, int pageSize);
     }
 }

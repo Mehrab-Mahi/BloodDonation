@@ -20,7 +20,7 @@ namespace BloodDonation.Web.Controllers
         public IActionResult Token([FromBody] AuthRequest model)
         {
             var response = _authService.Authenticate(model);
-            return Ok(response);
+            return Ok(new {data = response});
         }
         
         [AllowAnonymous]
@@ -28,7 +28,7 @@ namespace BloodDonation.Web.Controllers
         public IActionResult UserType([FromBody] AuthRequest model)
         {
             var response = _authService.UserType(model);
-            return Ok(response);
+            return Ok(new {data = response});
         }
 
         [Authorize]

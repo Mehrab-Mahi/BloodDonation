@@ -21,7 +21,7 @@ namespace BloodDonation.Web.Controllers
         public IActionResult UploadCampaignMedia([FromForm] MediaVm mediaData)
         {
             var response = _mediaService.UploadCampaignMedia(mediaData);
-            return Ok(response);
+            return Ok(new {data = response});
         }
 
         [AllowAnonymous]
@@ -29,7 +29,7 @@ namespace BloodDonation.Web.Controllers
         public IActionResult GetCampaignMedia([FromBody] MediaDataSizeVm mediaDataSize)
         {
             var response = _mediaService.GetCampaignMedia(mediaDataSize);
-            return Ok(response);
+            return Ok(new {data = response});
         }
 
         [BloodDonationAuth]
@@ -37,7 +37,7 @@ namespace BloodDonation.Web.Controllers
         public IActionResult DeleteCampaignMedia([FromBody] MediaDeleteVm mediaDeleteData)
         {
             var response = _mediaService.DeleteCampaignMedia(mediaDeleteData);
-            return Ok(response);
+            return Ok(new {data = response});
         }
     }
 }

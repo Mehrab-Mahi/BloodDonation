@@ -11,13 +11,13 @@ namespace BloodDonation.Application.Interfaces
         User GetById(string id);
 
         PayloadResponse Update(UserCreationVm User);
-        List<UserCreationVm> GetAll(UserFilter userFilter);
+        object GetAll(UserFilter userFilter);
         PayloadResponse Insert(UserCreationVm model);
         public bool Delete(string id, string table);
         UserTypeResponse GetUserTypeByPhoneNumberAndDob(AuthRequest model);
         PayloadResponse ApproveUser(string id);
-        List<UserCreationVm> GetUnapprovedUser();
-        List<UserCreationVm> GetAllApprovedVolunteer(int pageNo, int pageSize);
+        object GetUnapprovedUser(int pageNo, int pageSize);
+        object GetApprovedVolunteer(int pageNo, int pageSize);
         PayloadResponse DisapproveUser(string id);
         PayloadResponse DeleteUser(string id);
     }

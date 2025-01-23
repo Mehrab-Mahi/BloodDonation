@@ -35,8 +35,8 @@ namespace BloodDonation.Web.Controllers
         [HttpPut("update")]
         public IActionResult Update([FromForm] UserCreationVm model)
         {
-            var data = _userService.Update(model);
-            return Ok(data);
+            var response = _userService.Update(model);
+            return Ok(new {data = response});
         }
         
         [BloodDonationAuth]
@@ -56,27 +56,27 @@ namespace BloodDonation.Web.Controllers
         }
 
         [BloodDonationAuth]
-        [HttpGet("unapprovedVolunteer")]
-        public IActionResult GetUnapprovedUser()
+        [HttpGet("getUnapprovedVolunteer")]
+        public IActionResult GetUnapprovedUser(int pageNo = 1, int pageSize = 10)
         {
-            var data = _userService.GetUnapprovedUser();
-            return Ok(new { data });
+            var data = _userService.GetUnapprovedUser(pageNo, pageSize);
+            return Ok(data);
         }
         
         [BloodDonationAuth]
-        [HttpGet("getallapprovedvolunteer")]
+        [HttpGet("getApprovedVolunteer")]
         public IActionResult GetAllApprovedVolunteer(int pageNo = 1, int pageSize = 10)
         {
-            var data = _userService.GetAllApprovedVolunteer(pageNo, pageSize);
-            return Ok(new { data });
+            var data = _userService.GetApprovedVolunteer(pageNo, pageSize);
+            return Ok(data);
         }
 
         [BloodDonationAuth]
         [HttpDelete("delete/{id}")]
         public IActionResult DeleteUser(string id)
         {
-            var data = _userService.DeleteUser(id);
-            return Ok(new { data });
+            var response = _userService.DeleteUser(id);
+            return Ok(new {data = response});
         }
 
 

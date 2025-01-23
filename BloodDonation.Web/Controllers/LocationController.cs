@@ -22,7 +22,7 @@ namespace BloodDonation.Web.Controllers
         {
             var locations = _locationService.GetLocationByParentId(parentId);
 
-            return Ok(locations);
+            return Ok(new {data = locations});
         }
 
         [BloodDonationAuth]
@@ -31,7 +31,7 @@ namespace BloodDonation.Web.Controllers
         {
             var locations = _locationService.Create(locationData);
 
-            return Ok(locations);
+            return Ok(new {data = locations});
         }
         
         [BloodDonationAuth]
@@ -40,7 +40,7 @@ namespace BloodDonation.Web.Controllers
         {
             var locations = _locationService.Update(locationData);
 
-            return Ok(locations);
+            return Ok(new {data = locations});
         }
 
         [BloodDonationAuth]
@@ -49,7 +49,7 @@ namespace BloodDonation.Web.Controllers
         {
             var locations = _locationService.Delete(id);
 
-            return Ok(locations);
+            return Ok(new {data = locations});
         }
         
         [AllowAnonymous]
@@ -58,7 +58,7 @@ namespace BloodDonation.Web.Controllers
         {
             var locations = _locationService.Get(id);
 
-            return Ok(locations);
+            return Ok(new {data = locations});
         }
     }
 }

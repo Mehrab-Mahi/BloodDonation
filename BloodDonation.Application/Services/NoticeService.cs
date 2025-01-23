@@ -158,11 +158,15 @@ namespace BloodDonation.Application.Services
             };
         }
 
-        public List<NoticeVm> GetAll(int pageNo, int pageSize)
+        public object GetAll(int pageNo, int pageSize)
         {
-            var notices = _noticeRepository
+            var allNotices = _noticeRepository
                 .GetAll()
-                .OrderByDescending(n => n.LastModifiedTime)
+                .OrderByDescending(n => n.LastModifiedTime);
+
+            var totalRowCount = allNotices.Count();
+
+            var notices = allNotices
                 .Skip((pageNo - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
@@ -192,7 +196,11 @@ namespace BloodDonation.Application.Services
                 noticeList.Add(noticeVm);
             }
 
-            return noticeList;
+            return new
+            {
+                data = noticeList,
+                rowCount = totalRowCount
+            };
         }
 
         private void UpdateNoticeFiles(string noticeId, List<string> fileUrls, List<IFormFile> noticeFiles)

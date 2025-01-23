@@ -21,7 +21,7 @@ namespace BloodDonation.Web.Controllers
         public IActionResult Create([FromForm] NoticeVm noticeData)
         {
             var response = _noticeService.Create(noticeData);
-            return Ok(response);
+            return Ok(new {data = response});
         }
 
         [BloodDonationAuth]
@@ -29,7 +29,7 @@ namespace BloodDonation.Web.Controllers
         public IActionResult Update([FromForm] NoticeVm noticeData)
         {
             var response = _noticeService.Update(noticeData);
-            return Ok(response);
+            return Ok(new {data = response});
         }
 
         [BloodDonationAuth]
@@ -37,7 +37,7 @@ namespace BloodDonation.Web.Controllers
         public IActionResult Delete(string id)
         {
             var response = _noticeService.Delete(id);
-            return Ok(response);
+            return Ok(new {data = response});
         }
 
         [AllowAnonymous]
@@ -45,7 +45,7 @@ namespace BloodDonation.Web.Controllers
         public IActionResult Get(string id)
         {
             var response = _noticeService.Get(id);
-            return Ok(response);
+            return Ok(new {data = response});
         }
 
         [AllowAnonymous]

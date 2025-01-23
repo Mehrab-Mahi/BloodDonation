@@ -22,7 +22,7 @@ namespace BloodDonation.Web.Controllers
         public IActionResult Create([FromBody] Contact contactData)
         {
             var response = _contactService.Create(contactData);
-            return Ok(response);
+            return Ok(new {data = response});
         }
         
         [BloodDonationAuth]
@@ -38,7 +38,7 @@ namespace BloodDonation.Web.Controllers
         public IActionResult Read([FromBody] NoticeReadVm noticeReadData)
         {
             var response = _contactService.ReadContact(noticeReadData.Id);
-            return Ok(response);
+            return Ok(new {data = response});
         }
 
         [BloodDonationAuth]
@@ -46,7 +46,7 @@ namespace BloodDonation.Web.Controllers
         public IActionResult Get(string id)
         {
             var response = _contactService.Get(id);
-            return Ok(response);
+            return Ok(new {data = response});
         }
     }
 }

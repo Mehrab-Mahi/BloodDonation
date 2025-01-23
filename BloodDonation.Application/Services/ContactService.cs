@@ -50,11 +50,16 @@ namespace BloodDonation.Application.Services
             }
         }
 
-        public List<ContactVm> GetAll(string contactType, int pageNo, int pageSize)
+        public object GetAll(string contactType, int pageNo, int pageSize)
         {
-            var contactList = _contactRepository
+            var allContact = _contactRepository
                 .GetAll()
-                .Where(c => c.ContactType == contactType)
+                .Where(c => c.ContactType == contactType);
+
+            var totalRowCount = allContact
+                .Count();
+
+            var contactList = allContact
                 .Skip((pageNo - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
@@ -101,7 +106,11 @@ namespace BloodDonation.Application.Services
                     }
                 }).ToList();
 
-            return contactWithUserData;
+            return new
+            {
+                data = contactWithUserData,
+                rowCount = totalRowCount
+            };
         }
 
         public PayloadResponse ReadContact(string id)

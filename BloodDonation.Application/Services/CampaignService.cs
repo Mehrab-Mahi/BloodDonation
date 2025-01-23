@@ -218,7 +218,7 @@ namespace BloodDonation.Application.Services
             };
         }
 
-        public List<CampaignVm> GetAll(int pageNo, int pageSize)
+        public object GetAll(int pageNo, int pageSize)
         {
             var currentUser = _loggedInUserService.GetLoggedInUser();
 
@@ -226,6 +226,11 @@ namespace BloodDonation.Application.Services
             {
                 return VolunteerPermittedCampaign(currentUser.Id, pageNo, pageSize);
             }
+
+            var totalRowCount = _campaignRepository
+                .GetAll()
+                .OrderByDescending(c => c.CreateTime)
+                .Count();
 
             var campaignList = _campaignRepository
                 .GetAll()
@@ -257,10 +262,14 @@ namespace BloodDonation.Application.Services
                 });
             }
 
-            return permittedCampaignList;
+            return new
+            {
+                data = permittedCampaignList,
+                rowCount = totalRowCount
+            };
         }
 
-        private List<CampaignVm> VolunteerPermittedCampaign(string currentUserId, int pageNo, int pageSize)
+        private object VolunteerPermittedCampaign(string currentUserId, int pageNo, int pageSize)
         {
             var permittedCampaign = _campaignVolunteerMappingRepository
                 .GetConditionalList(v => v.VolunteerId == currentUserId)
@@ -268,10 +277,14 @@ namespace BloodDonation.Application.Services
                 .Distinct()
                 .ToList();
 
-            var campaignList = _campaignRepository
+            var allCampaign = _campaignRepository
                 .GetAll()
                 .Where(c => permittedCampaign.Contains(c.Id))
-                .OrderByDescending(c => c.CreateTime)
+                .OrderByDescending(c => c.CreateTime);
+
+            var totalRowCount = allCampaign.Count();
+
+            var campaignList = allCampaign
                 .Skip((pageNo - 1)*pageSize)
                 .Take(pageSize)
                 .Select(campaign => new CampaignVm()
@@ -285,7 +298,11 @@ namespace BloodDonation.Application.Services
                 })
                 .ToList();
 
-            return campaignList;
+            return new
+            {
+                data = campaignList,
+                rowCount = totalRowCount
+            };
         }
 
         private void UpdateVolunteerToCampaign(string id, List<string> volunteerList)
