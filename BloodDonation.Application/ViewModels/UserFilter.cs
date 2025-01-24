@@ -7,9 +7,9 @@
         public string Union { get; set; }
         public string UserType { get; set; }
         public string BloodDonationStatus { get; set; }
-        public int StartAge { get; set; } = 18;
-        public int EndAge { get; set; } = 62;
-        public int PageNo { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
+        public int? StartAge { get; set; }
+        public int? EndAge { get; set; }
+        public int? PageNo { get; set; }
+        public int? PageSize { get; set; }
     }
 }

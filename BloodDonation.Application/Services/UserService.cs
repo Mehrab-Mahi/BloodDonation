@@ -2,14 +2,12 @@
 using BloodDonation.Application.ViewModels;
 using BloodDonation.Domain.Entities;
 using BloodDonation.Domain.Interfaces;
-using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using BloodDonation.Application.Util;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using static System.Net.WebRequestMethods;
 
 namespace BloodDonation.Application.Services
 {
@@ -18,17 +16,14 @@ namespace BloodDonation.Application.Services
         private readonly IRepository<User> _userRepo;
         private readonly IRepository<Role> _roleRepo;
         private readonly IRepository<Location> _locationRepository;
-        private readonly IMapper _mapper;
         private readonly IFileService _fileService;
         public UserService(IRepository<User> userRepo,
             IRepository<Role> roleRepo,
-            IMapper mapper,
             IFileService fileService, 
             IRepository<Location> locationRepository)
         {
             _userRepo = userRepo;
             _roleRepo = roleRepo;
-            _mapper = mapper;
             _fileService = fileService;
             _locationRepository = locationRepository;
         }
@@ -70,17 +65,29 @@ namespace BloodDonation.Application.Services
                 allUser = FilterByUserType(allUser, filter.UserType);
             }
 
-            var startDob = GetDateDifference(filter.StartAge);
-            var endDob = GetDateDifference(filter.EndAge);
+            if (filter.StartAge is null || filter.EndAge is null)
+            {
+                filter.StartAge = 0;
+                filter.EndAge = 100;
+            }
+
+            var startDob = GetDateDifference(filter.StartAge.Value);
+            var endDob = GetDateDifference(filter.EndAge.Value);
 
             allUser = FilterByDate(allUser, startDob, endDob);
 
             var totalRowCount = allUser.Count();
 
+            if (filter.PageNo is null || filter.PageSize is null)
+            {
+                filter.PageNo = 0;
+                filter.PageSize = 10;
+            }
+
             allUser = allUser
                 .OrderByDescending(u => u.CreateTime)
-                .Skip((filter.PageNo - 1) * filter.PageSize)
-                .Take(filter.PageSize);
+                .Skip((filter.PageNo.Value - 1) * filter.PageSize.Value)
+                .Take(filter.PageSize.Value);
 
             var userData = (from user in allUser
                 join district in _locationRepository.GetAll() on user.District equals district.Id

@@ -42,16 +42,28 @@ namespace BloodDonation.Application.Services
                 user = FilterByUnion(user, filter.Union);
             }
 
-            var startDob = GetDateDifference(filter.StartAge);
-            var endDob = GetDateDifference(filter.EndAge);
+            if (filter.StartAge is null || filter.EndAge is null)
+            {
+                filter.StartAge = 0;
+                filter.EndAge = 100;
+            }
+
+            var startDob = GetDateDifference(filter.StartAge.Value);
+            var endDob = GetDateDifference(filter.EndAge.Value);
             var minimumLastDonationDate = GetMinimumLastDonationDate();
 
             user = FilterByDate(user, startDob, endDob, minimumLastDonationDate);
 
+            if (filter.PageNo is null || filter.PageSize is null)
+            {
+                filter.PageNo = 0;
+                filter.PageSize = 10;
+            }
+
             return user
                 .OrderBy(u => u.LastDonationTime)
-                .Skip((filter.PageNo - 1) * filter.PageSize)
-                .Take(filter.PageSize)
+                .Skip((filter.PageNo.Value - 1) * filter.PageSize.Value)
+                .Take(filter.PageSize.Value)
                 .Select(u => new BloodBankDonorDataVm()
                 {
                     Id = u.Id,
