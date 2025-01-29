@@ -51,7 +51,8 @@ namespace BloodDonation.Application.Services
                     StartDate = campaignData.StartDate,
                     EndDate = campaignData.EndDate,
                     Address = campaignData.Address,
-                    BannerUrl = bannerUrl
+                    BannerUrl = bannerUrl,
+                    Institute = campaignData.Institute
                 };
 
                 _campaignRepository.Insert(campaign);
@@ -118,6 +119,7 @@ namespace BloodDonation.Application.Services
                 previousData.StartDate = campaignData.StartDate;
                 previousData.EndDate = campaignData.EndDate;
                 previousData.Address = campaignData.Address;
+                previousData.Institute = campaignData.Institute;
                 previousData.BannerUrl = !string.IsNullOrEmpty(newBannerUrl) ? newBannerUrl : previousData.BannerUrl;
 
                 _campaignRepository.Update(previousData);
@@ -213,6 +215,7 @@ namespace BloodDonation.Application.Services
                 StartDate = campaign.StartDate,
                 EndDate = campaign.EndDate,
                 Address = campaign.Address,
+                Institute = campaign.Institute,
                 BannerUrl = campaign.BannerUrl,
                 VolunteerList = volunteerList
             };
@@ -253,6 +256,7 @@ namespace BloodDonation.Application.Services
                     StartDate = campaign.StartDate,
                     EndDate = campaign.EndDate,
                     Address = campaign.Address,
+                    Institute = campaign.Institute,
                     BannerUrl = campaign.BannerUrl,
                     VolunteerList = campaignVolunteer
                         .Where(c => c.CampaignId == campaign.Id)

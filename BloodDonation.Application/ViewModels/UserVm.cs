@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
@@ -51,6 +52,9 @@ namespace BloodDonation.Application.ViewModels
         public string ImageUrl { get; set; }
         public IFormFile ProfilePicture { get; set; }
         public int BloodDonationCount { get; set; }
+        public string PhysicalComplexity { get; set; }
+        public List<IFormFile> Nid { get; set; }
+        public List<string> NidUrls { get; set; }
     }
 
     public class UserAuthVm : UserCreationVm

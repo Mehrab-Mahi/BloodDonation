@@ -31,5 +31,7 @@ namespace BloodDonation.Domain.Entities
         public string UserType { get; set; }
         public DateTime? LastDonationTime { get; set; }
         public int BloodDonationCount { get; set; }
+        public string PhysicalComplexity { get; set; }
+        public string NidUrls { get; set; }
     }
 }

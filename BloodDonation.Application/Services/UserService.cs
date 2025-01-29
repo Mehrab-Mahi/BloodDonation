@@ -17,15 +17,18 @@ namespace BloodDonation.Application.Services
         private readonly IRepository<Role> _roleRepo;
         private readonly IRepository<Location> _locationRepository;
         private readonly IFileService _fileService;
+        private readonly ILoggedInUserService _loggedInUserService;
         public UserService(IRepository<User> userRepo,
             IRepository<Role> roleRepo,
             IFileService fileService, 
-            IRepository<Location> locationRepository)
+            IRepository<Location> locationRepository,
+            ILoggedInUserService loggedInUserService)
         {
             _userRepo = userRepo;
             _roleRepo = roleRepo;
             _fileService = fileService;
             _locationRepository = locationRepository;
+            _loggedInUserService = loggedInUserService;
         }
 
         public User Get(AuthRequest model)
@@ -115,7 +118,9 @@ namespace BloodDonation.Application.Services
                     LastDonationTime = user.LastDonationTime,
                     ImageUrl = user.ImageUrl,
                     BloodDonationCount = user.BloodDonationCount,
-                    IsApproved = user.IsApproved
+                    IsApproved = user.IsApproved,
+                    PhysicalComplexity = user.PhysicalComplexity,
+                    NidUrls = GetNidUrlsFromCommaSeparatedString(user.NidUrls)
                 })
                 .ToList();
 
@@ -124,6 +129,15 @@ namespace BloodDonation.Application.Services
                 data = userData,
                 rowCount = totalRowCount
             };
+        }
+
+        private static List<string> GetNidUrlsFromCommaSeparatedString(string nidUrls)
+        {
+            if(string.IsNullOrEmpty(nidUrls)) return new List<string>();
+
+            return nidUrls
+                .Split(",")
+                .ToList();
         }
 
         private IQueryable<User> FilterByBloodDonationStatus(IQueryable<User> allUser, string bloodDonationStatus)
@@ -216,13 +230,14 @@ namespace BloodDonation.Application.Services
                     user.Password = "123";
                 }
 
-                if (model.UserType == UserTypes.Volunteer)
+                if ((model.UserType == UserTypes.Volunteer) || IsSelfRegistration())
                 {
                     model.IsApproved = false;
                 }
 
                 model.PasswordHash = GeneratePassword(user.Password);
                 model.ImageUrl = UploadAndGetImageUrl(user.ProfilePicture);
+                model.NidUrls = UploadNidData(user.Nid);
 
                 _userRepo.Insert(model);
                 _userRepo.SaveChanges();
@@ -247,6 +262,33 @@ namespace BloodDonation.Application.Services
             }
         }
 
+        private string UploadNidData(List<IFormFile> userNid)
+        {
+            if (userNid is null || userNid.Count == 0) return string.Empty;
+
+            var nidUrlList = new List<string>();
+
+            foreach (var nid in userNid)
+            {
+                var fileName = GetFileName(nid.FileName);
+
+                var filePath = UploadFile(fileName, "ProfilePicture", nid);
+
+                nidUrlList.Add(filePath);
+            }
+
+            return string.Join(",", nidUrlList);
+        }
+
+        private bool IsSelfRegistration()
+        {
+            var user = _loggedInUserService.GetLoggedInUser();
+
+            if (user is null) return true;
+
+            return false;
+        }
+
         private bool IfDuplicateUser(string mobileNumber, string dateOfBirth)
         {
             var user = _userRepo.GetAll().FirstOrDefault(u => u.MobileNumber == mobileNumber && u.DateOfBirth == dateOfBirth);
@@ -259,11 +301,17 @@ namespace BloodDonation.Application.Services
             if (userProfilePicture is null) return string.Empty;
 
             var fileName = GetFileName(userProfilePicture.FileName);
-            var path = Path.Combine(_fileService.GetRootPath(), "ProfilePicture");
+
+            return UploadFile(fileName, "ProfilePicture", userProfilePicture);
+        }
+
+        private string UploadFile(string fileName, string fileSavePath, IFormFile file)
+        {
+            var path = Path.Combine(_fileService.GetRootPath(), fileSavePath);
             _fileService.CreateDirectoryIfNotExists(path);
             var filePath = Path.Combine(path, fileName);
-            _fileService.SaveFile(filePath, userProfilePicture);
-            return Path.Combine("ProfilePicture", fileName);
+            _fileService.SaveFile(filePath, file); 
+            return Path.Combine(fileSavePath, fileName);
         }
 
         private string GetFileName(string fileName)
@@ -321,6 +369,23 @@ namespace BloodDonation.Application.Services
                 {
                     _fileService.DeleteFile(model.ImageUrl);
                     model.ImageUrl = UploadAndGetImageUrl(user.ProfilePicture);
+                }
+
+                if (user.Nid is not null && user.Nid.Count > 0)
+                {
+                    var previousUrls = model.NidUrls;
+
+                    if (!string.IsNullOrEmpty(previousUrls))
+                    {
+                        var previousUrlList = previousUrls.Split(",").ToList();
+
+                        foreach (var url in previousUrlList)
+                        {
+                            _fileService.DeleteFile(url);
+                        }
+
+                        model.NidUrls = UploadNidData(user.Nid);
+                    }
                 }
 
                 _userRepo.Update(model);
@@ -518,7 +583,12 @@ namespace BloodDonation.Application.Services
                 LastDonationTime = user.LastDonationTime,
                 ImageUrl = user.ImageUrl,
                 IsSuperAdmin = user.IsSuperAdmin,
-                IsApproved = user.IsApproved
+                IsApproved = user.IsApproved,
+                PhysicalComplexity = user.PhysicalComplexity,
+                NidUrls = user
+                    .NidUrls
+                    .Split(",")
+                    .ToList()
             }).ToList();
 
             return mappedUserData;

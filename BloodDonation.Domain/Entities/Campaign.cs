@@ -8,6 +8,7 @@ namespace BloodDonation.Domain.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Address { get; set; }
+        public string Institute { get; set; }
         public string BannerUrl { get; set; }
     }
 }

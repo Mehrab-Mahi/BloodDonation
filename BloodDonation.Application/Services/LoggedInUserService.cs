@@ -1,6 +1,8 @@
 ﻿using BloodDonation.Application.Helper;
 using BloodDonation.Application.Interfaces;
 using BloodDonation.Application.ViewModels;
+using BloodDonation.Domain.Entities;
+using BloodDonation.Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
 
 namespace BloodDonation.Application.Services
@@ -8,19 +10,29 @@ namespace BloodDonation.Application.Services
     public class LoggedInUserService : ILoggedInUserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IRepository<User> _userRepository;
 
-        public LoggedInUserService(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
+            public LoggedInUserService(IHttpContextAccessor httpContextAccessor,
+                IRepository<User> userRepository)
+            {
+                _httpContextAccessor = httpContextAccessor;
+                _userRepository = userRepository;
+            }
 
-        public UserAuthVm GetLoggedInUser()
+        public User GetLoggedInUser()
         {
             var authorization = _httpContextAccessor.HttpContext!.Request.Headers["Authorization"].ToString();
 
-            return string.IsNullOrEmpty(authorization) ?
-                null :
-                _httpContextAccessor.HttpContext.Session.GetObject<UserAuthVm>("Auth");
+            if(string.IsNullOrEmpty(authorization)) return null;
+
+            var bytes = new byte[1024];
+            _httpContextAccessor.HttpContext.Session.TryGetValue("userId", out bytes);
+
+            if(bytes is null) return null;
+
+            var loggedInUserId = System.Text.Encoding.UTF8.GetString(bytes).Trim('"');
+
+            return _userRepository.GetConditional(u => u.Id == loggedInUserId);
         }
     }
 }
