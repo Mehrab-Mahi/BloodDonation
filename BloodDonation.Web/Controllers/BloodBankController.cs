@@ -20,7 +20,7 @@ namespace BloodDonation.Web.Controllers
         public IActionResult GetBloodBankData([FromBody]BloodBankFilter filter)
         {
             var data = _bloodBankService.GetBloodBankData(filter);
-            return Ok(new {data});
+            return Ok(data);
         }
 
         [AllowAnonymous]

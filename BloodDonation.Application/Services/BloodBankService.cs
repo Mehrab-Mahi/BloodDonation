@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using BloodDonation.Application.Interfaces;
 using BloodDonation.Application.Util;
@@ -21,7 +20,7 @@ namespace BloodDonation.Application.Services
             _campaignRepository = campaignRepository;
         }
 
-        public List<BloodBankDonorDataVm> GetBloodBankData(BloodBankFilter filter)
+        public object GetBloodBankData(BloodBankFilter filter)
         {
             var user = _userRepository
                 .GetAll()
@@ -65,7 +64,9 @@ namespace BloodDonation.Application.Services
                 filter.PageSize = 10;
             }
 
-            return user
+            var totalRowCount = user.Count();
+
+            var userData = user
                 .OrderBy(u => u.LastDonationTime)
                 .Skip((filter.PageNo.Value - 1) * filter.PageSize.Value)
                 .Take(filter.PageSize.Value)
@@ -81,6 +82,12 @@ namespace BloodDonation.Application.Services
                     LastDonationDayCount = u.LastDonationTime == null ? 0 : (DateTime.Now - u.LastDonationTime.Value).Days
                 })
                 .ToList();
+
+            return new
+            {
+                data = userData,
+                rowCount = totalRowCount
+            };
         }
 
         private IQueryable<User> FilterByGender(IQueryable<User> user, string gender)

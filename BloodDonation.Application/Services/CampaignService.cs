@@ -35,7 +35,7 @@ namespace BloodDonation.Application.Services
             {
                 List<string> volunteerList;
 
-                if (campaignData.VolunteerList.Count == 1 && campaignData.VolunteerList[0].Contains(","))
+                if (campaignData.VolunteerList.Count == 1 && campaignData.VolunteerList[0] != null)
                 {
                     volunteerList = campaignData.VolunteerList[0].Trim('"', '"').Split(',').ToList();
                 }
@@ -86,7 +86,7 @@ namespace BloodDonation.Application.Services
             {
                 List<string> volunteerList;
 
-                if (campaignData.VolunteerList.Count == 1 && campaignData.VolunteerList[0].Contains(","))
+                if (campaignData.VolunteerList.Count == 1 && campaignData.VolunteerList[0] != null)
                 {
                     volunteerList = campaignData.VolunteerList[0].Trim('"', '"').Split(',').ToList();
                 }

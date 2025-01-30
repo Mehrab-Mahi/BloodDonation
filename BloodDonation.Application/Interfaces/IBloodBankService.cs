@@ -5,7 +5,7 @@ namespace BloodDonation.Application.Interfaces
 {
     public interface IBloodBankService
     {
-        List<BloodBankDonorDataVm> GetBloodBankData(BloodBankFilter filter);
+        object GetBloodBankData(BloodBankFilter filter);
         DashboardDataVm GetDashboardData();
     }
 }
