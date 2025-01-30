@@ -600,10 +600,10 @@ namespace BloodDonation.Application.Services
                 IsSuperAdmin = user.IsSuperAdmin,
                 IsApproved = user.IsApproved,
                 PhysicalComplexity = user.PhysicalComplexity,
-                NidUrls = user
+                NidUrls = !string.IsNullOrEmpty(user.NidUrls) ? user
                     .NidUrls
                     .Split(",")
-                    .ToList()
+                    .ToList() : new List<string>()
             }).ToList();
 
             return mappedUserData;
