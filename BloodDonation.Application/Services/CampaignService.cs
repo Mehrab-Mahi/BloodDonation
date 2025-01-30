@@ -232,12 +232,12 @@ namespace BloodDonation.Application.Services
 
             var totalRowCount = _campaignRepository
                 .GetAll()
-                .OrderByDescending(c => c.CreateTime)
+                .OrderByDescending(c => c.EndDate)
                 .Count();
 
             var campaignList = _campaignRepository
                 .GetAll()
-                .OrderByDescending(c => c.CreateTime)
+                .OrderByDescending(c => c.EndDate)
                 .Skip((pageNo - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
