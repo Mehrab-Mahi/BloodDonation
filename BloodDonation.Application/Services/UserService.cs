@@ -67,6 +67,16 @@ namespace BloodDonation.Application.Services
             {
                 allUser = FilterByUserType(allUser, filter.UserType);
             }
+            
+            if (filter.IsApproved != null)
+            {
+                allUser = FilterByApproval(allUser, filter.IsApproved.Value);
+            }
+
+            if (!string.IsNullOrEmpty(filter.Gender))
+            {
+                allUser = FilterByGender(allUser, filter.Gender);
+            }
 
             if (filter.StartAge is null || filter.EndAge is null)
             {
@@ -131,6 +141,16 @@ namespace BloodDonation.Application.Services
             };
         }
 
+        private IQueryable<User> FilterByGender(IQueryable<User> allUser, string gender)
+        {
+            return allUser.Where(u => u.Gender == gender);
+        }
+
+        private IQueryable<User> FilterByApproval(IQueryable<User> allUser, bool isApproved)
+        {
+            return allUser.Where(u => u.IsApproved == isApproved);
+        }
+
         private static List<string> GetNidUrlsFromCommaSeparatedString(string nidUrls)
         {
             if(string.IsNullOrEmpty(nidUrls)) return new List<string>();
@@ -175,11 +195,6 @@ namespace BloodDonation.Application.Services
         private IQueryable<User> FilterByBloodGroup(IQueryable<User> user, string bloodGroup)
         {
             return user.Where(u => u.BloodGroup == bloodGroup);
-        }
-
-        private string GetRoleName(string roleId)
-        {
-            return _roleRepo.Find(roleId).Name;
         }
 
         public User GetById(string id)
@@ -472,7 +487,7 @@ namespace BloodDonation.Application.Services
             };
         }
 
-        public object GetUnapprovedUser(int pageNo, int pageSize)
+        public object GetUnapprovedVolunteer(int pageNo, int pageSize)
         {
             var unapprovedData = _userRepo
                 .GetAll()

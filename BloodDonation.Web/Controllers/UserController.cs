@@ -57,9 +57,9 @@ namespace BloodDonation.Web.Controllers
 
         [BloodDonationAuth]
         [HttpGet("getUnapprovedVolunteer")]
-        public IActionResult GetUnapprovedUser(int pageNo = 1, int pageSize = 10)
+        public IActionResult GetUnapprovedVolunteer(int pageNo = 1, int pageSize = 10)
         {
-            var data = _userService.GetUnapprovedUser(pageNo, pageSize);
+            var data = _userService.GetUnapprovedVolunteer(pageNo, pageSize);
             return Ok(data);
         }
         

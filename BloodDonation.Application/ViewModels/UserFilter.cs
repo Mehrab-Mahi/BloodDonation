@@ -11,5 +11,7 @@
         public int? EndAge { get; set; }
         public int? PageNo { get; set; }
         public int? PageSize { get; set; }
+        public bool? IsApproved { get; set; }
+        public string Gender { get; set; }
     }
 }

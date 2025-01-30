@@ -41,6 +41,11 @@ namespace BloodDonation.Application.Services
             {
                 user = FilterByUnion(user, filter.Union);
             }
+            
+            if (!string.IsNullOrEmpty(filter.Gender))
+            {
+                user = FilterByGender(user, filter.Gender);
+            }
 
             if (filter.StartAge is null || filter.EndAge is null)
             {
@@ -76,6 +81,11 @@ namespace BloodDonation.Application.Services
                     LastDonationDayCount = u.LastDonationTime == null ? 0 : (DateTime.Now - u.LastDonationTime.Value).Days
                 })
                 .ToList();
+        }
+
+        private IQueryable<User> FilterByGender(IQueryable<User> user, string gender)
+        {
+            return user.Where(u => u.Gender == gender);
         }
 
         private IQueryable<User> FilterByDate(IQueryable<User> user, DateTime startDob, DateTime endDob, DateTime minimumLastDonationDate)

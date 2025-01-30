@@ -16,7 +16,7 @@ namespace BloodDonation.Application.Interfaces
         public bool Delete(string id, string table);
         UserTypeResponse GetUserTypeByPhoneNumberAndDob(AuthRequest model);
         PayloadResponse ApproveUser(string id);
-        object GetUnapprovedUser(int pageNo, int pageSize);
+        object GetUnapprovedVolunteer(int pageNo, int pageSize);
         object GetApprovedVolunteer(int pageNo, int pageSize);
         PayloadResponse DisapproveUser(string id);
         PayloadResponse DeleteUser(string id);
