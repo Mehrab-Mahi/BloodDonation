@@ -273,6 +273,94 @@ namespace BloodDonation.Application.Services
             };
         }
 
+        public object GetRunningAndUpcomingCampaign(int pageNo, int pageSize)
+        {
+            var currentUser = _loggedInUserService.GetLoggedInUser();
+
+            if (currentUser is { UserType: UserTypes.Volunteer })
+            {
+                return VolunteerPermittedRunningAndUpcomingCampaign(currentUser.Id, pageNo, pageSize);
+            }
+
+            var totalRowCount = _campaignRepository
+                .GetConditionalList(c => c.EndDate >= DateTime.Now.Date)
+                .OrderByDescending(c => c.CreateTime)
+                .Count();
+
+            var campaignList = _campaignRepository
+                .GetConditionalList(c => c.EndDate >= DateTime.Now.Date)
+                .OrderByDescending(c => c.CreateTime)
+                .Skip((pageNo - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var campaignVolunteer = _campaignVolunteerMappingRepository.GetAll()
+                .Where(cv => campaignList.Select(c => c.Id).Contains(cv.CampaignId));
+
+            var permittedCampaignList = new List<CampaignVm>();
+
+            foreach (var campaign in campaignList)
+            {
+                permittedCampaignList.Add(new CampaignVm()
+                {
+                    Id = campaign.Id,
+                    Name = campaign.Name,
+                    StartDate = campaign.StartDate,
+                    EndDate = campaign.EndDate,
+                    Address = campaign.Address,
+                    Institute = campaign.Institute,
+                    BannerUrl = campaign.BannerUrl,
+                    VolunteerList = campaignVolunteer
+                        .Where(c => c.CampaignId == campaign.Id)
+                        .Select(v => v.VolunteerId)
+                        .ToList()
+
+                });
+            }
+
+            return new
+            {
+                data = permittedCampaignList,
+                rowCount = totalRowCount
+            };
+        }
+
+        private object VolunteerPermittedRunningAndUpcomingCampaign(string currentUserId, int pageNo, int pageSize)
+        {
+            var permittedCampaign = _campaignVolunteerMappingRepository
+                .GetConditionalList(v => v.VolunteerId == currentUserId)
+                .Select(c => c.CampaignId)
+                .Distinct()
+                .ToList();
+
+            var allCampaign = _campaignRepository
+                .GetConditionalList(c => c.EndDate >= DateTime.Now.Date)
+                .Where(c => permittedCampaign.Contains(c.Id))
+                .OrderByDescending(c => c.CreateTime);
+
+            var totalRowCount = allCampaign.Count();
+
+            var campaignList = allCampaign
+                .Skip((pageNo - 1) * pageSize)
+                .Take(pageSize)
+                .Select(campaign => new CampaignVm()
+                {
+                    Id = campaign.Id,
+                    Name = campaign.Name,
+                    StartDate = campaign.StartDate,
+                    EndDate = campaign.EndDate,
+                    Address = campaign.Address,
+                    BannerUrl = campaign.BannerUrl
+                })
+                .ToList();
+
+            return new
+            {
+                data = campaignList,
+                rowCount = totalRowCount
+            };
+        }
+
         private object VolunteerPermittedCampaign(string currentUserId, int pageNo, int pageSize)
         {
             var permittedCampaign = _campaignVolunteerMappingRepository

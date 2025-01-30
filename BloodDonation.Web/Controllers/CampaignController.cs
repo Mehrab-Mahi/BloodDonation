@@ -59,5 +59,14 @@ namespace BloodDonation.Web.Controllers
             
             return Ok(response);
         }
+        
+        [AllowAnonymous]
+        [HttpGet("getRunningAndUpcomingCampaign")]
+        public IActionResult GetRunningAndUpcomingCampaign(int pageNo = 1, int pageSize = 10)
+        {
+            var response = _campaignService.GetRunningAndUpcomingCampaign(pageNo, pageSize);
+            
+            return Ok(response);
+        }
     }
 }

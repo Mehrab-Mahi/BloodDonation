@@ -11,5 +11,6 @@ namespace BloodDonation.Application.Interfaces
         PayloadResponse Delete(string id);
         CampaignVm Get(string id);
         object GetAll(int pageNo, int pageSize);
+        object GetRunningAndUpcomingCampaign(int pageNo, int pageSize);
     }
 }
