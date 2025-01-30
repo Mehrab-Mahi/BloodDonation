@@ -61,7 +61,7 @@ namespace BloodDonation.Application.Services
 
             if (filter.PageNo is null || filter.PageSize is null)
             {
-                filter.PageNo = 0;
+                filter.PageNo = 1;
                 filter.PageSize = 10;
             }
 
