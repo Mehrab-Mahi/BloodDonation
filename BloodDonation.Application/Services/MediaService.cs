@@ -25,9 +25,16 @@ namespace BloodDonation.Application.Services
         {
             try
             {
-                UploadImages(mediaData.ModelId, mediaData.Images, "Campaign");
-                UploadVideo(mediaData.ModelId, mediaData.VideoUrls, "Campaign");
+                if (mediaData.ImageUrls is not null)
+                {
+                    UploadImages(mediaData.ModelId, mediaData.Images, "Campaign");
+                }
 
+                if (mediaData.VideoUrls is not null)
+                {
+                    UploadVideo(mediaData.ModelId, mediaData.VideoUrls, "Campaign");
+                }
+                
                 _fileModelRepository.SaveChanges();
 
                 return new PayloadResponse()
