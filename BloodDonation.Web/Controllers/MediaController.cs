@@ -17,7 +17,7 @@ namespace BloodDonation.Web.Controllers
         }
 
         [BloodDonationAuth]
-        [HttpPut("uploadcampaignmedia")]
+        [HttpPost("uploadcampaignmedia")]
         public IActionResult UploadCampaignMedia([FromForm] MediaVm mediaData)
         {
             var response = _mediaService.UploadCampaignMedia(mediaData);
