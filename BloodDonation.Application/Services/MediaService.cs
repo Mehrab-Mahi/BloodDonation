@@ -52,23 +52,32 @@ namespace BloodDonation.Application.Services
 
         public MediaDataVm GetCampaignMedia(MediaDataSizeVm mediaDataSize)
         {
-            var imageUrls = _fileModelRepository
-                .GetAll()
-                .Where(u => u.ModelName == "Campaign" && u.Type == "Image")
-                .OrderByDescending(c => c.LastModifiedTime)
-                .Skip((mediaDataSize.ImagePageNo - 1)* mediaDataSize.ImagePageSize)
-                .Take(mediaDataSize.ImagePageSize)
-                .Select(u => u.FileUrl)
-                .ToList();
+            var imageUrls = new List<string>();
+            var videoUrls = new List<string>();
 
-            var videoUrls = _fileModelRepository
-                .GetAll()
-                .Where(u => u.ModelName == "Campaign" && u.Type == "Video")
-                .OrderByDescending(c => c.LastModifiedTime)
-                .Skip((mediaDataSize.ImagePageNo - 1) * mediaDataSize.ImagePageSize)
-                .Take(mediaDataSize.ImagePageSize)
-                .Select(u => u.FileUrl)
-                .ToList();
+            if (mediaDataSize.ImagePageNo > 0)
+            {
+                imageUrls = _fileModelRepository
+                    .GetAll()
+                    .Where(u => u.ModelName == "Campaign" && u.Type == "Image")
+                    .OrderByDescending(c => c.LastModifiedTime)
+                    .Skip((mediaDataSize.ImagePageNo - 1) * mediaDataSize.ImagePageSize)
+                    .Take(mediaDataSize.ImagePageSize)
+                    .Select(u => u.FileUrl)
+                    .ToList();
+            }
+
+            if (mediaDataSize.VideoPageNo > 0)
+            {
+                videoUrls = _fileModelRepository
+                    .GetAll()
+                    .Where(u => u.ModelName == "Campaign" && u.Type == "Video")
+                    .OrderByDescending(c => c.LastModifiedTime)
+                    .Skip((mediaDataSize.ImagePageNo - 1) * mediaDataSize.ImagePageSize)
+                    .Take(mediaDataSize.ImagePageSize)
+                    .Select(u => u.FileUrl)
+                    .ToList();
+            }
 
             return new MediaDataVm()
             {
