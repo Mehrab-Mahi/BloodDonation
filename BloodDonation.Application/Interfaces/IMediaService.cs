@@ -5,7 +5,8 @@ namespace BloodDonation.Application.Interfaces
     public interface IMediaService
     {
         PayloadResponse UploadCampaignMedia(MediaVm mediaData);
-        MediaDataVm GetCampaignMedia(MediaDataSizeVm mediaDataSize);
+        MediaDataVm GetAllMedia(MediaDataSizeVm mediaDataSize);
         PayloadResponse DeleteCampaignMedia(MediaDeleteVm mediaDeleteData);
+        MediaDataVm GetCampaignMedia(string campaignId);
     }
 }

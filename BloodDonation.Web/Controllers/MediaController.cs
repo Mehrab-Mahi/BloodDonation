@@ -25,10 +25,10 @@ namespace BloodDonation.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("getcampaignmedia")]
-        public IActionResult GetCampaignMedia([FromBody] MediaDataSizeVm mediaDataSize)
+        [HttpPost("getallmedia")]
+        public IActionResult GetAllMedia([FromBody] MediaDataSizeVm mediaDataSize)
         {
-            var response = _mediaService.GetCampaignMedia(mediaDataSize);
+            var response = _mediaService.GetAllMedia(mediaDataSize);
             return Ok(new {data = response});
         }
 
@@ -38,6 +38,14 @@ namespace BloodDonation.Web.Controllers
         {
             var response = _mediaService.DeleteCampaignMedia(mediaDeleteData);
             return Ok(new {data = response});
+        }
+
+        [BloodDonationAuth]
+        [HttpGet("getcampaignmedia")]
+        public IActionResult GetCampaignMedia(string campaignId)
+        {
+            var response = _mediaService.GetCampaignMedia(campaignId);
+            return Ok(new { data = response });
         }
     }
 }

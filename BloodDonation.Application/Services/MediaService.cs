@@ -57,7 +57,7 @@ namespace BloodDonation.Application.Services
             }
         }
 
-        public MediaDataVm GetCampaignMedia(MediaDataSizeVm mediaDataSize)
+        public MediaDataVm GetAllMedia(MediaDataSizeVm mediaDataSize)
         {
             var imageUrls = new List<string>();
             var videoUrls = new List<string>();
@@ -80,8 +80,8 @@ namespace BloodDonation.Application.Services
                     .GetAll()
                     .Where(u => u.ModelName == "Campaign" && u.Type == "Video")
                     .OrderByDescending(c => c.LastModifiedTime)
-                    .Skip((mediaDataSize.ImagePageNo - 1) * mediaDataSize.ImagePageSize)
-                    .Take(mediaDataSize.ImagePageSize)
+                    .Skip((mediaDataSize.VideoPageNo - 1) * mediaDataSize.VideoPageSize)
+                    .Take(mediaDataSize.VideoPageSize)
                     .Select(u => u.FileUrl)
                     .ToList();
             }
@@ -126,6 +126,25 @@ namespace BloodDonation.Application.Services
                     Message = $"Media deletion failed because {ex.Message}"
                 };
             }
+        }
+
+        public MediaDataVm GetCampaignMedia(string campaignId)
+        {
+            var imageUrls = _fileModelRepository
+                .GetConditionalList(f => f.ModelId == campaignId && f.Type == "Image")
+                .Select(i => i.FileUrl)
+                .ToList();
+
+            var videoUrls = _fileModelRepository
+                .GetConditionalList(f => f.ModelId == campaignId && f.Type == "Video")
+                .Select(i => i.FileUrl)
+                .ToList();
+
+            return new MediaDataVm()
+            {
+                ImageUrls = imageUrls,
+                VideoUrls = videoUrls
+            };
         }
 
         private void UploadVideo(string modelId, List<string> videoUrls, string modelName)
