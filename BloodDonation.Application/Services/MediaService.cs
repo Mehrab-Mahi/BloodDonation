@@ -25,7 +25,7 @@ namespace BloodDonation.Application.Services
         {
             try
             {
-                if (mediaData.ImageUrls is not null)
+                if (mediaData.Images is not null)
                 {
                     UploadImages(mediaData.ModelId, mediaData.Images, "Campaign");
                 }
