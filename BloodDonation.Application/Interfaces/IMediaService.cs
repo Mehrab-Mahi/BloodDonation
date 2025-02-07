@@ -7,6 +7,6 @@ namespace BloodDonation.Application.Interfaces
         PayloadResponse UploadCampaignMedia(MediaVm mediaData);
         MediaDataVm GetAllMedia(MediaDataSizeVm mediaDataSize);
         PayloadResponse DeleteCampaignMedia(MediaDeleteVm mediaDeleteData);
-        MediaDataVm GetCampaignMedia(string campaignId);
+        MediaDataWithIdVm GetCampaignMedia(string campaignId);
     }
 }

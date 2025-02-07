@@ -2,7 +2,7 @@
 {
     public class MediaDeleteVm
     {
-        public string Id { get; set; }
-        public string FileUrl { get; set; }
+        public string MediaId { get; set; }
+        public string CampaignId { get; set; }
     }
 }

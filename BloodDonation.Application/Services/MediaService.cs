@@ -98,7 +98,7 @@ namespace BloodDonation.Application.Services
             try
             {
                 var fileModel = _fileModelRepository.GetConditional(f =>
-                    f.ModelId == mediaDeleteData.Id && f.FileUrl == mediaDeleteData.FileUrl);
+                    f.ModelId == mediaDeleteData.CampaignId && f.Id == mediaDeleteData.MediaId);
 
                 if (fileModel.Type == "Image")
                 {
@@ -128,22 +128,30 @@ namespace BloodDonation.Application.Services
             }
         }
 
-        public MediaDataVm GetCampaignMedia(string campaignId)
+        public MediaDataWithIdVm GetCampaignMedia(string campaignId)
         {
-            var imageUrls = _fileModelRepository
+            var imageData = _fileModelRepository
                 .GetConditionalList(f => f.ModelId == campaignId && f.Type == "Image")
-                .Select(i => i.FileUrl)
+                .Select(i => new ImageData()
+                {
+                    Id = i.Id,
+                    ImageUrl = i.FileUrl
+                })
                 .ToList();
 
-            var videoUrls = _fileModelRepository
+            var videoData = _fileModelRepository
                 .GetConditionalList(f => f.ModelId == campaignId && f.Type == "Video")
-                .Select(i => i.FileUrl)
+                .Select(i => new VideoData()
+                {
+                    Id = i.Id,
+                    VideoUrl = i.FileUrl
+                })
                 .ToList();
 
-            return new MediaDataVm()
+            return new MediaDataWithIdVm()
             {
-                ImageUrls = imageUrls,
-                VideoUrls = videoUrls
+                ImageData = imageData,
+                VideoData = videoData
             };
         }
 
