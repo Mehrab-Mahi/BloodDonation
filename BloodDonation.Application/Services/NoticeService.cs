@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using BloodDonation.Application.Interfaces;
 using BloodDonation.Application.ViewModels;
@@ -68,7 +69,7 @@ namespace BloodDonation.Application.Services
                 notice.Name = noticeData.Name;
                 notice.Description = noticeData.Description;
 
-                UpdateNoticeFiles(notice.Id, noticeData.FileUrls, noticeData.Files);
+                UpdateNoticeFiles(notice.Id, noticeData.Files);
 
                 return new PayloadResponse()
                 {
@@ -203,24 +204,23 @@ namespace BloodDonation.Application.Services
             };
         }
 
-        private void UpdateNoticeFiles(string noticeId, List<string> fileUrls, List<IFormFile> noticeFiles)
+        private void UpdateNoticeFiles(string noticeId, List<IFormFile> noticeFiles) 
         {
-            var previousFileUrls = _fileModelRepository
-                .GetAll()
-                .Where(n => n.ModelId == noticeId && n.ModelName == "Notice")
-                .ToList();
-
-            var filesToRemove = fileUrls.Except(previousFileUrls.Select(u => u.FileUrl));
-
-            var fileModels = previousFileUrls.Where(f => filesToRemove.Contains(f.FileUrl));
-
-            foreach (var file in fileModels)
+            if (noticeFiles.Count > 0)
             {
-                _fileService.DeleteFile(file.FileUrl);
-                _fileModelRepository.Delete(file);
-            }
+                var previousFileUrls = _fileModelRepository
+                    .GetAll()
+                    .Where(n => n.ModelId == noticeId && n.ModelName == "Notice")
+                    .ToList();
 
-            _fileModelRepository.SaveChanges();
+                foreach (var file in previousFileUrls)
+                {
+                    _fileService.DeleteFile(file.FileUrl);
+                    _fileModelRepository.Delete(file);
+                }
+
+                _fileModelRepository.SaveChanges();
+            }
 
             UploadNoticeFiles(noticeId, noticeFiles);
         }
