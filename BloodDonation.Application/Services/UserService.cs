@@ -8,6 +8,7 @@ using System.Linq;
 using BloodDonation.Application.Util;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Numerics;
 
 namespace BloodDonation.Application.Services
 {
@@ -217,6 +218,8 @@ namespace BloodDonation.Application.Services
 
             try
             {
+                var serial = GetSerialNumber();
+
                 var model = new User()
                 {
                     FullName = user.FullName,
@@ -236,7 +239,9 @@ namespace BloodDonation.Application.Services
                     ImageUrl = user.ImageUrl,
                     IsSuperAdmin = user.IsSuperAdmin,
                     BloodDonationCount = user.BloodDonationCount,
-                    Dob = DateTime.Parse(user.DateOfBirth)
+                    Dob = DateTime.Parse(user.DateOfBirth),
+                    Serial = serial,
+                    Code = serial.ToString("D6")
                 };
 
                 if (model.UserType != UserTypes.Admin)
@@ -275,6 +280,12 @@ namespace BloodDonation.Application.Services
                     Message = $"User Creation become unsuccessful because {ex.Message}"
                 };
             }
+        }
+
+        private int GetSerialNumber()
+        {
+            var maxSerial = _userRepo.GetAll().Max(s => s.Serial);
+            return maxSerial + 1;
         }
 
         private string UploadNidData(List<IFormFile> userNid)
@@ -603,7 +614,9 @@ namespace BloodDonation.Application.Services
                 NidUrls = !string.IsNullOrEmpty(user.NidUrls) ? user
                     .NidUrls
                     .Split(",")
-                    .ToList() : new List<string>()
+                    .ToList() : new List<string>(),
+                Serial = user.Serial,
+                Code = user.Code
             }).ToList();
 
             return mappedUserData;

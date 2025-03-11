@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
@@ -55,6 +56,8 @@ namespace BloodDonation.Application.ViewModels
         public string PhysicalComplexity { get; set; }
         public List<IFormFile> Nid { get; set; }
         public List<string> NidUrls { get; set; }
+        public int Serial { get; set; }
+        public string Code { get; set; }
     }
 
     public class UserAuthVm : UserCreationVm

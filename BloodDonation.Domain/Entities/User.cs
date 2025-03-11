@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 namespace BloodDonation.Domain.Entities
 {
@@ -33,5 +34,7 @@ namespace BloodDonation.Domain.Entities
         public int BloodDonationCount { get; set; }
         public string PhysicalComplexity { get; set; }
         public string NidUrls { get; set; }
+        public int Serial { get; set; }
+        public string Code { get; set; }
     }
 }
