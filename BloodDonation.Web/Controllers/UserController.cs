@@ -88,13 +88,13 @@ namespace BloodDonation.Web.Controllers
             return Ok(data);
         }
 
-        //[BloodDonationAuth]
-        //[HttpGet("getbyid/{id}")]
-        //public IActionResult GetById(string id)
-        //{
-        //    var list = _userService.GetById(id);
-        //    return Ok(new { data = list });
-        //}
+        [BloodDonationAuth]
+        [HttpGet("getbyid/{id}")]
+        public IActionResult GetById(string id)
+        {
+            var list = _userService.GetById(id);
+            return Ok(new { data = list });
+        }
         //[BloodDonationAuth]
         //[HttpGet("getusermenu/{id}")]
         //public IActionResult GetUserMenu(string id)
