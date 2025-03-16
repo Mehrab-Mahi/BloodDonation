@@ -60,6 +60,9 @@ public class NewsService : INewsService
             news.Description = newsData.Description;
             news.Url = newsData.Url;
 
+            _newsRepository.Update(news);
+            _newsRepository.SaveChanges();
+
             return new PayloadResponse()
             {
                 IsSuccess = true,
