@@ -77,6 +77,7 @@ namespace BloodDonation.Application.Services
                     BloodGroup = u.BloodGroup,
                     MobileNumber = u.MobileNumber,
                     Address = u.Address,
+                    ImageUrl = u.ImageUrl,
                     BloodDonationCount = u.BloodDonationCount,
                     LastDonationTime = u.LastDonationTime,
                     LastDonationDayCount = u.LastDonationTime == null ? 0 : (DateTime.Now - u.LastDonationTime.Value).Days
