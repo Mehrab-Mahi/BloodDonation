@@ -591,34 +591,41 @@ namespace BloodDonation.Application.Services
 
         private List<UserCreationVm> GetMappedData(List<User> userData)
         {
-            var mappedUserData = userData.Select(user => new UserCreationVm()
-            {
-                Id = user.Id,
-                FullName = user.FullName,
-                BloodGroup = user.BloodGroup,
-                DateOfBirth = user.DateOfBirth,
-                MobileNumber = user.MobileNumber,
-                District = user.District,
-                Upazila = user.Upazila,
-                Union = user.Union,
-                Address = user.Address,
-                FatherName = user.FatherName,
-                MotherName = user.MotherName,
-                BloodDonationStatus = user.BloodDonationStatus,
-                Gender = user.Gender,
-                UserType = user.UserType,
-                LastDonationTime = user.LastDonationTime,
-                ImageUrl = user.ImageUrl,
-                IsSuperAdmin = user.IsSuperAdmin,
-                IsApproved = user.IsApproved,
-                PhysicalComplexity = user.PhysicalComplexity,
-                NidUrls = !string.IsNullOrEmpty(user.NidUrls) ? user
-                    .NidUrls
-                    .Split(",")
-                    .ToList() : new List<string>(),
-                Serial = user.Serial,
-                Code = user.Code
-            }).ToList();
+            var mappedUserData = (from user in userData
+                join district in _locationRepository.GetAll() on user.District equals district.Id
+                join upazila in _locationRepository.GetAll() on user.Upazila equals upazila.Id
+                join union in _locationRepository.GetAll() on user.Union equals union.Id
+                select new UserCreationVm()
+                {
+                    Id = user.Id,
+                    FullName = user.FullName,
+                    BloodGroup = user.BloodGroup,
+                    DateOfBirth = user.DateOfBirth,
+                    MobileNumber = user.MobileNumber,
+                    District = user.District,
+                    DistrictName = district.Name,
+                    Upazila = user.Upazila,
+                    UpazilaName = upazila.Name,
+                    Union = user.Union,
+                    UnionName = union.Name,
+                    Address = user.Address,
+                    FatherName = user.FatherName,
+                    MotherName = user.MotherName,
+                    BloodDonationStatus = user.BloodDonationStatus,
+                    Gender = user.Gender,
+                    UserType = user.UserType,
+                    LastDonationTime = user.LastDonationTime,
+                    ImageUrl = user.ImageUrl,
+                    IsSuperAdmin = user.IsSuperAdmin,
+                    IsApproved = user.IsApproved,
+                    PhysicalComplexity = user.PhysicalComplexity,
+                    NidUrls = !string.IsNullOrEmpty(user.NidUrls) ? user
+                        .NidUrls
+                        .Split(",")
+                        .ToList() : new List<string>(),
+                    Serial = user.Serial,
+                    Code = user.Code
+                }).ToList();
 
             return mappedUserData;
         }
