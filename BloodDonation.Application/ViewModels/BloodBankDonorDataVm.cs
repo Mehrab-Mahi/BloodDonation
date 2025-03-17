@@ -14,6 +14,6 @@ namespace BloodDonation.Application.ViewModels
         public DateTime? LastDonationTime { get; set; }
         public int LastDonationDayCount { get; set; }
         public string BloodDonationStatus { get; set; }
-        public string PhysicalComplexity { get; set; }
+        public bool PhysicalComplexity { get; set; }
     }
 }

@@ -131,7 +131,8 @@ namespace BloodDonation.Application.Services
                     BloodDonationCount = user.BloodDonationCount,
                     IsApproved = user.IsApproved,
                     PhysicalComplexity = user.PhysicalComplexity,
-                    NidUrls = GetNidUrlsFromCommaSeparatedString(user.NidUrls)
+                    NidUrls = GetNidUrlsFromCommaSeparatedString(user.NidUrls),
+                    Code = user.Code
                 })
                 .ToList();
 

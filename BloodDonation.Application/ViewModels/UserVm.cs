@@ -53,7 +53,7 @@ namespace BloodDonation.Application.ViewModels
         public string ImageUrl { get; set; }
         public IFormFile ProfilePicture { get; set; }
         public int BloodDonationCount { get; set; }
-        public string PhysicalComplexity { get; set; }
+        public bool PhysicalComplexity { get; set; }
         public List<IFormFile> Nid { get; set; }
         public List<string> NidUrls { get; set; }
         public int Serial { get; set; }
