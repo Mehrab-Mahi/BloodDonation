@@ -80,7 +80,9 @@ namespace BloodDonation.Application.Services
                     ImageUrl = u.ImageUrl,
                     BloodDonationCount = u.BloodDonationCount,
                     LastDonationTime = u.LastDonationTime,
-                    LastDonationDayCount = u.LastDonationTime == null ? 0 : (DateTime.Now - u.LastDonationTime.Value).Days
+                    LastDonationDayCount = u.LastDonationTime == null ? 0 : (DateTime.Now - u.LastDonationTime.Value).Days,
+                    BloodDonationStatus = u.BloodDonationStatus,
+                    PhysicalComplexity = u.PhysicalComplexity
                 })
                 .ToList();
 
