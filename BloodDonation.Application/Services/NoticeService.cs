@@ -73,6 +73,9 @@ namespace BloodDonation.Application.Services
                     UpdateNoticeFiles(notice.Id, noticeData.Files);
                 }
 
+                _noticeRepository.Update(notice);
+                _noticeRepository.SaveChanges();
+
                 return new PayloadResponse()
                 {
                     IsSuccess = true,
