@@ -223,13 +223,6 @@ namespace BloodDonation.Application.Services
 
         public object GetAll(int pageNo, int pageSize)
         {
-            var currentUser = _loggedInUserService.GetLoggedInUser();
-
-            if (currentUser is { UserType: UserTypes.Volunteer })
-            {
-                return VolunteerPermittedCampaign(currentUser.Id, pageNo, pageSize);
-            }
-
             var totalRowCount = _campaignRepository
                 .GetAll()
                 .OrderByDescending(c => c.EndDate)
@@ -322,6 +315,22 @@ namespace BloodDonation.Application.Services
             {
                 data = permittedCampaignList,
                 rowCount = totalRowCount
+            };
+        }
+
+        public object GetVolunteerPermittedCampaigns(int pageNo, int pageSize)
+        {
+            var currentUser = _loggedInUserService.GetLoggedInUser();
+
+            if (currentUser is { UserType: UserTypes.Volunteer })
+            {
+                return VolunteerPermittedCampaign(currentUser.Id, pageNo, pageSize);
+            }
+
+            return new
+            {
+                data = new List<CampaignVm>(),
+                rowCount = 0
             };
         }
 

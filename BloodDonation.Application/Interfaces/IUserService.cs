@@ -20,5 +20,8 @@ namespace BloodDonation.Application.Interfaces
         object GetApprovedVolunteer(int pageNo, int pageSize);
         PayloadResponse DisapproveUser(string id);
         PayloadResponse DeleteUser(string id);
+        object GetApprovedDonor(DonorFilter donorFilter);
+        object GetUnapprovedDonor(DonorFilter donorFilter);
+        object GetAllAdmin(int pageNo, int pageSize);
     }
 }

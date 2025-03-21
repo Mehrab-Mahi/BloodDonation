@@ -29,7 +29,6 @@ namespace BloodDonation.Application.ViewModels
         public string Id { get; set; }
         [JsonIgnore]
         public bool IsSuperAdmin { get; set; }
-        [JsonIgnore]
         public string Password { get; set; }
         [JsonIgnore]
         public bool IsApproved { get; set; }
@@ -58,6 +57,7 @@ namespace BloodDonation.Application.ViewModels
         public List<string> NidUrls { get; set; }
         public int Serial { get; set; }
         public string Code { get; set; }
+        public string? InstituteName { get; set; }
     }
 
     public class UserAuthVm : UserCreationVm

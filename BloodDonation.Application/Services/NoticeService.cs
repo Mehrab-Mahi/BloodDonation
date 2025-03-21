@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using BloodDonation.Application.Interfaces;
 using BloodDonation.Application.ViewModels;
@@ -69,7 +68,10 @@ namespace BloodDonation.Application.Services
                 notice.Name = noticeData.Name;
                 notice.Description = noticeData.Description;
 
-                UpdateNoticeFiles(notice.Id, noticeData.Files);
+                if (noticeData.Files != null)
+                {
+                    UpdateNoticeFiles(notice.Id, noticeData.Files);
+                }
 
                 return new PayloadResponse()
                 {

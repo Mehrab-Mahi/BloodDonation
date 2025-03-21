@@ -10,18 +10,11 @@ namespace BloodDonation.Web.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
-        private readonly IAuthService _authService;
 
-        public UserController(IUserService userService, IAuthService authService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _authService = authService;
         }
-
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
 
         [AllowAnonymous]
         [HttpPost("registration")]
@@ -87,6 +80,30 @@ namespace BloodDonation.Web.Controllers
             var data = _userService.GetAll(userFilter);
             return Ok(data);
         }
+        
+        [BloodDonationAuth]
+        [HttpPost("getApprovedDonor")]
+        public IActionResult GetApprovedDonor([FromBody] DonorFilter donorFilter)
+        {
+            var data = _userService.GetApprovedDonor(donorFilter);
+            return Ok(data);
+        }
+        
+        [BloodDonationAuth]
+        [HttpPost("getUnapprovedDonor")]
+        public IActionResult GetUnapprovedDonor([FromBody] DonorFilter donorFilter)
+        {
+            var data = _userService.GetUnapprovedDonor(donorFilter);
+            return Ok(data);
+        }
+        
+        [BloodDonationAuth]
+        [HttpGet("getAllAdmin")]
+        public IActionResult GetAllAdmin(int pageNo = 1, int pageSize = 10)
+        {
+            var data = _userService.GetAllAdmin(pageNo, pageSize);
+            return Ok(data);
+        }
 
         [BloodDonationAuth]
         [HttpGet("getbyid/{id}")]
@@ -95,12 +112,5 @@ namespace BloodDonation.Web.Controllers
             var list = _userService.GetById(id);
             return Ok(new { data = list });
         }
-        //[BloodDonationAuth]
-        //[HttpGet("getusermenu/{id}")]
-        //public IActionResult GetUserMenu(string id)
-        //{
-        //    var data = _authService.GetUserMenu(id);
-        //    return Ok(data);
-        //}
     }
 }

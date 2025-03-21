@@ -9,6 +9,7 @@ using BloodDonation.Application.Util;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Numerics;
+using static System.Net.WebRequestMethods;
 
 namespace BloodDonation.Application.Services
 {
@@ -242,7 +243,8 @@ namespace BloodDonation.Application.Services
                     BloodDonationCount = user.BloodDonationCount,
                     Dob = DateTime.Parse(user.DateOfBirth),
                     Serial = serial,
-                    Code = serial.ToString("D6")
+                    Code = serial.ToString("D6"),
+                    InstituteName = user.InstituteName
                 };
 
                 if (model.UserType != UserTypes.Admin)
@@ -254,6 +256,11 @@ namespace BloodDonation.Application.Services
                 if ((model.UserType == UserTypes.Volunteer) || IsSelfRegistration())
                 {
                     model.IsApproved = false;
+                }
+
+                if (model.UserType == UserTypes.Admin)
+                {
+                    model.IsApproved = true;
                 }
 
                 model.PasswordHash = GeneratePassword(user.Password);
@@ -391,6 +398,7 @@ namespace BloodDonation.Application.Services
                 model.LastDonationTime = user.LastDonationTime;
                 model.BloodDonationCount = user.BloodDonationCount;
                 model.Dob = DateTime.Parse(user.DateOfBirth);
+                model.InstituteName = user.InstituteName;
 
                 if (user.ProfilePicture is { Length: > 0 })
                 {
@@ -586,6 +594,131 @@ namespace BloodDonation.Application.Services
             {
                 IsSuccess = true,
                 Message = "User has been deleted successfully!"
+            };
+        }
+
+        public object GetApprovedDonor(DonorFilter filter)
+        {
+            var allUser = _userRepo
+            .GetAll().Where(u => u.UserType == "Donor" && u.IsApproved);
+
+            return GetDonorData(allUser, filter);
+        }
+
+        public object GetUnapprovedDonor(DonorFilter filter)
+        {
+            var allUser = _userRepo
+                .GetAll().Where(u => u.UserType == "Donor" && !u.IsApproved);
+
+            return GetDonorData(allUser, filter);
+        }
+
+        public object GetAllAdmin(int pageNo, int pageSize)
+        {
+            var adminData = _userRepo
+                .GetAll()
+                .Where(u => u.UserType == "Admin" && !u.IsSuperAdmin);
+
+            var totalRowCount = adminData.Count();
+            var paginatedData = adminData
+                .Skip((pageNo - 1) * pageSize)
+                .Take(pageSize);
+
+            return new
+            {
+                data = paginatedData,
+                rowCount = totalRowCount
+            };
+        }
+
+        private object GetDonorData(IQueryable<User> allUser, DonorFilter filter)
+        {
+            if (!string.IsNullOrEmpty(filter.BloodGroup))
+            {
+                allUser = FilterByBloodGroup(allUser, filter.BloodGroup);
+            }
+
+            if (!string.IsNullOrEmpty(filter.Upazila))
+            {
+                allUser = FilterByUpazila(allUser, filter.Upazila);
+            }
+
+            if (!string.IsNullOrEmpty(filter.Union))
+            {
+                allUser = FilterByUnion(allUser, filter.Union);
+            }
+
+            if (!string.IsNullOrEmpty(filter.BloodDonationStatus))
+            {
+                allUser = FilterByBloodDonationStatus(allUser, filter.BloodDonationStatus);
+            }
+
+            if (!string.IsNullOrEmpty(filter.Gender))
+            {
+                allUser = FilterByGender(allUser, filter.Gender);
+            }
+
+            if (filter.StartAge is null || filter.EndAge is null)
+            {
+                filter.StartAge = 0;
+                filter.EndAge = 100;
+            }
+
+            var startDob = GetDateDifference(filter.StartAge.Value);
+            var endDob = GetDateDifference(filter.EndAge.Value);
+
+            allUser = FilterByDate(allUser, startDob, endDob);
+
+            var totalRowCount = allUser.Count();
+
+            if (filter.PageNo is null || filter.PageSize is null)
+            {
+                filter.PageNo = 0;
+                filter.PageSize = 10;
+            }
+
+            allUser = allUser
+            .OrderByDescending(u => u.CreateTime)
+            .Skip((filter.PageNo.Value - 1) * filter.PageSize.Value)
+                .Take(filter.PageSize.Value);
+
+            var userData = (from user in allUser
+                            join district in _locationRepository.GetAll() on user.District equals district.Id
+                            join upazila in _locationRepository.GetAll() on user.Upazila equals upazila.Id
+                            join union in _locationRepository.GetAll() on user.Union equals union.Id
+                            select new UserCreationVm()
+                            {
+                                Id = user.Id,
+                                FullName = user.FullName,
+                                BloodGroup = user.BloodGroup,
+                                DateOfBirth = user.DateOfBirth,
+                                MobileNumber = user.MobileNumber,
+                                District = user.District,
+                                DistrictName = district.Name,
+                                Upazila = user.Upazila,
+                                UpazilaName = upazila.Name,
+                                Union = user.Union,
+                                UnionName = union.Name,
+                                Address = user.Address,
+                                FatherName = user.FatherName,
+                                MotherName = user.MotherName,
+                                BloodDonationStatus = user.BloodDonationStatus,
+                                Gender = user.Gender,
+                                UserType = user.UserType,
+                                LastDonationTime = user.LastDonationTime,
+                                ImageUrl = user.ImageUrl,
+                                BloodDonationCount = user.BloodDonationCount,
+                                IsApproved = user.IsApproved,
+                                PhysicalComplexity = user.PhysicalComplexity,
+                                NidUrls = GetNidUrlsFromCommaSeparatedString(user.NidUrls),
+                                Code = user.Code
+                            })
+                .ToList();
+
+            return new
+            {
+                data = userData,
+                rowCount = totalRowCount
             };
         }
 

@@ -100,6 +100,9 @@ public class NewsService : INewsService
                 };
             }
 
+            _newsRepository.Delete(news);
+            _newsRepository.SaveChanges();
+
             return new PayloadResponse()
             {
                 IsSuccess = true,

@@ -68,5 +68,14 @@ namespace BloodDonation.Web.Controllers
             
             return Ok(response);
         }
+
+        [BloodDonationAuth]
+        [HttpGet("getVolunteerPermittedCampaigns")]
+        public IActionResult GetVolunteerPermittedCampaigns(int pageNo = 1, int pageSize = 10)
+        {
+            var response = _campaignService.GetVolunteerPermittedCampaigns(pageNo, pageSize);
+
+            return Ok(response);
+        }
     }
 }

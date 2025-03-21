@@ -36,5 +36,6 @@ namespace BloodDonation.Domain.Entities
         public string NidUrls { get; set; }
         public int Serial { get; set; }
         public string Code { get; set; }
+        public string? InstituteName { get; set; }
     }
 }

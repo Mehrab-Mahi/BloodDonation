@@ -12,5 +12,6 @@ namespace BloodDonation.Application.Interfaces
         CampaignVm Get(string id);
         object GetAll(int pageNo, int pageSize);
         object GetRunningAndUpcomingCampaign(int pageNo, int pageSize);
+        object GetVolunteerPermittedCampaigns(int pageNo, int pageSize);
     }
 }
