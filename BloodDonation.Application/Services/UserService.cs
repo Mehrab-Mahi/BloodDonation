@@ -8,26 +8,21 @@ using System.Linq;
 using BloodDonation.Application.Util;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using System.Numerics;
-using static System.Net.WebRequestMethods;
 
 namespace BloodDonation.Application.Services
 {
     public class UserService : IUserService
     {
         private readonly IRepository<User> _userRepo;
-        private readonly IRepository<Role> _roleRepo;
         private readonly IRepository<Location> _locationRepository;
         private readonly IFileService _fileService;
         private readonly ILoggedInUserService _loggedInUserService;
         public UserService(IRepository<User> userRepo,
-            IRepository<Role> roleRepo,
             IFileService fileService, 
             IRepository<Location> locationRepository,
             ILoggedInUserService loggedInUserService)
         {
             _userRepo = userRepo;
-            _roleRepo = roleRepo;
             _fileService = fileService;
             _locationRepository = locationRepository;
             _loggedInUserService = loggedInUserService;
@@ -244,7 +239,8 @@ namespace BloodDonation.Application.Services
                     Dob = DateTime.Parse(user.DateOfBirth),
                     Serial = serial,
                     Code = serial.ToString("D6"),
-                    InstituteName = user.InstituteName
+                    InstituteName = user.InstituteName,
+                    LeaderType = user.LeaderType
                 };
 
                 if (model.UserType != UserTypes.Admin)
@@ -399,6 +395,7 @@ namespace BloodDonation.Application.Services
                 model.BloodDonationCount = user.BloodDonationCount;
                 model.Dob = DateTime.Parse(user.DateOfBirth);
                 model.InstituteName = user.InstituteName;
+                model.LeaderType = user.LeaderType;
 
                 if (user.ProfilePicture is { Length: > 0 })
                 {
@@ -757,7 +754,8 @@ namespace BloodDonation.Application.Services
                         .Split(",")
                         .ToList() : new List<string>(),
                     Serial = user.Serial,
-                    Code = user.Code
+                    Code = user.Code,
+                    LeaderType = user.LeaderType
                 }).ToList();
 
             return mappedUserData;

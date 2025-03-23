@@ -32,10 +32,11 @@ namespace BloodDonation.Domain.Entities
         public string UserType { get; set; }
         public DateTime? LastDonationTime { get; set; }
         public int BloodDonationCount { get; set; }
-        public bool PhysicalComplexity { get; set; } = false;
+        public string? PhysicalComplexity { get; set; }
         public string NidUrls { get; set; }
         public int Serial { get; set; }
         public string Code { get; set; }
         public string? InstituteName { get; set; }
+        public string? LeaderType { get; set; }
     }
 }

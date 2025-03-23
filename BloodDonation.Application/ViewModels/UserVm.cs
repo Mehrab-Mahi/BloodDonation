@@ -52,12 +52,13 @@ namespace BloodDonation.Application.ViewModels
         public string ImageUrl { get; set; }
         public IFormFile ProfilePicture { get; set; }
         public int BloodDonationCount { get; set; }
-        public bool PhysicalComplexity { get; set; }
+        public string? PhysicalComplexity { get; set; }
         public List<IFormFile> Nid { get; set; }
         public List<string> NidUrls { get; set; }
         public int Serial { get; set; }
         public string Code { get; set; }
         public string? InstituteName { get; set; }
+        public string? LeaderType { get; set; }
     }
 
     public class UserAuthVm : UserCreationVm
