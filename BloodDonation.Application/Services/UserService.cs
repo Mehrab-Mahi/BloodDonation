@@ -621,9 +621,42 @@ namespace BloodDonation.Application.Services
                 .Skip((pageNo - 1) * pageSize)
                 .Take(pageSize);
 
+            var adminUserData = (from user in paginatedData
+                                 join district in _locationRepository.GetAll() on user.District equals district.Id
+                    join upazila in _locationRepository.GetAll() on user.Upazila equals upazila.Id
+                    join union in _locationRepository.GetAll() on user.Union equals union.Id
+                    select new UserCreationVm()
+                    {
+                        Id = user.Id,
+                        FullName = user.FullName,
+                        BloodGroup = user.BloodGroup,
+                        DateOfBirth = user.DateOfBirth,
+                        MobileNumber = user.MobileNumber,
+                        District = user.District,
+                        DistrictName = district.Name,
+                        Upazila = user.Upazila,
+                        UpazilaName = upazila.Name,
+                        Union = user.Union,
+                        UnionName = union.Name,
+                        Address = user.Address,
+                        FatherName = user.FatherName,
+                        MotherName = user.MotherName,
+                        BloodDonationStatus = user.BloodDonationStatus,
+                        Gender = user.Gender,
+                        UserType = user.UserType,
+                        LastDonationTime = user.LastDonationTime,
+                        ImageUrl = user.ImageUrl,
+                        BloodDonationCount = user.BloodDonationCount,
+                        IsApproved = user.IsApproved,
+                        PhysicalComplexity = user.PhysicalComplexity,
+                        NidUrls = GetNidUrlsFromCommaSeparatedString(user.NidUrls),
+                        Code = user.Code
+                    })
+                .ToList();
+
             return new
             {
-                data = paginatedData,
+                data = adminUserData,
                 rowCount = totalRowCount
             };
         }

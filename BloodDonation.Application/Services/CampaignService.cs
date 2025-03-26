@@ -35,7 +35,7 @@ namespace BloodDonation.Application.Services
             {
                 List<string> volunteerList;
 
-                if (campaignData.VolunteerList.Count == 1 && campaignData.VolunteerList[0] != null)
+                if (campaignData.VolunteerList is { Count: 1 } && campaignData.VolunteerList[0] != null)
                 {
                     volunteerList = campaignData.VolunteerList[0].Trim('"', '"').Split(',').ToList();
                 }
