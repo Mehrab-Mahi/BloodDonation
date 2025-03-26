@@ -130,8 +130,8 @@ namespace BloodDonation.Application.Services
             {
                 Volunteer = volunteers.Count,
                 Donor = _userRepository.GetAll().Count(u => u.UserType == UserTypes.Donor && volunteers.Contains(u.CreatedBy)),
-                RegisteredDonor = _userRepository.GetAll().Count(u => u.UserType == UserTypes.Donor && !volunteers.Contains(u.CreatedBy)),
-                Campaign = _campaignRepository.GetAll().Count(c => c.StartDate <= DateTime.Now && c.EndDate >= DateTime.Now)
+                RegisteredDonor = _userRepository.GetAll().Count(u => u.UserType == UserTypes.Donor),
+                Campaign = _campaignRepository.GetAll().Count()
             };
 
             return dashboardData;
