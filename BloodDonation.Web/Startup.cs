@@ -111,10 +111,13 @@ namespace BloodDonation.Web
             app.UseSession();
             app.Use(async (context, next) =>
             {
-                var JWToken = context.Session.GetString("token");
-                if (!string.IsNullOrEmpty(JWToken))
+                if (!context.Request.Headers.ContainsKey("Authorization"))
                 {
-                    context.Request.Headers.Add("Authorization", "Bearer " + JWToken);
+                    var JWToken = context.Session.GetString("token");
+                    if (!string.IsNullOrEmpty(JWToken))
+                    {
+                        context.Request.Headers.Add("Authorization", "Bearer " + JWToken);
+                    }
                 }
                 await next();
             });
