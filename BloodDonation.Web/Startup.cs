@@ -104,28 +104,28 @@ namespace BloodDonation.Web
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Media")),
                 RequestPath = "/Media"
             });
 
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Campaign")),
                 RequestPath = "/Campaign"
             });
 
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Notice")),
                 RequestPath = "/Notice"
             });
             
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProfilePicture")),
                 RequestPath = "/ProfilePicture"
             });
 
