@@ -257,6 +257,7 @@ namespace BloodDonation.Application.Services
                 if (model.UserType == UserTypes.Admin)
                 {
                     model.IsApproved = true;
+                    user.Password = "12345678";
                 }
 
                 model.PasswordHash = GeneratePassword(user.Password);
