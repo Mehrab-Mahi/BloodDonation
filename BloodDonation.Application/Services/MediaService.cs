@@ -12,13 +12,16 @@ namespace BloodDonation.Application.Services
     public class MediaService : IMediaService
     {
         private readonly IRepository<FileModelMapping> _fileModelRepository;
+        private readonly IRepository<Campaign> _campaignRepository;
         private readonly IFileService _fileService;
 
         public MediaService(IRepository<FileModelMapping> fileModelRepository,
-            IFileService fileService)
+            IFileService fileService, 
+            IRepository<Campaign> campaignRepository)
         {
             _fileModelRepository = fileModelRepository;
             _fileService = fileService;
+            _campaignRepository = campaignRepository;
         }
 
         public PayloadResponse UploadCampaignMedia(MediaVm mediaData)
@@ -59,37 +62,53 @@ namespace BloodDonation.Application.Services
 
         public MediaDataVm GetAllMedia(MediaDataSizeVm mediaDataSize)
         {
-            var imageUrls = new List<string>();
-            var videoUrls = new List<string>();
+            var imageData = new List<MediaUrlWithCampaignDataDto>();
+            var videoData = new List<MediaUrlWithCampaignDataDto>();
 
             if (mediaDataSize.ImagePageNo > 0)
             {
-                imageUrls = _fileModelRepository
+                var imageModelMapping = _fileModelRepository
                     .GetAll()
                     .Where(u => u.ModelName == "Campaign" && u.Type == "Image")
                     .OrderByDescending(c => c.LastModifiedTime)
                     .Skip((mediaDataSize.ImagePageNo - 1) * mediaDataSize.ImagePageSize)
-                    .Take(mediaDataSize.ImagePageSize)
-                    .Select(u => u.FileUrl)
+                    .Take(mediaDataSize.ImagePageSize);
+
+                imageData = (from imageModel in imageModelMapping
+                    join campaign in _campaignRepository.GetAll()
+                        on imageModel.ModelId equals campaign.Id
+                    select new MediaUrlWithCampaignDataDto()
+                    {
+                        CampaignName = campaign.Name,
+                        ImageUrl = imageModel.FileUrl
+                    })
                     .ToList();
             }
 
             if (mediaDataSize.VideoPageNo > 0)
             {
-                videoUrls = _fileModelRepository
+                var videoModelMapping = _fileModelRepository
                     .GetAll()
                     .Where(u => u.ModelName == "Campaign" && u.Type == "Video")
                     .OrderByDescending(c => c.LastModifiedTime)
                     .Skip((mediaDataSize.VideoPageNo - 1) * mediaDataSize.VideoPageSize)
-                    .Take(mediaDataSize.VideoPageSize)
-                    .Select(u => u.FileUrl)
+                    .Take(mediaDataSize.VideoPageSize);
+
+                videoData = (from videoModel in videoModelMapping
+                             join campaign in _campaignRepository.GetAll()
+                            on videoModel.ModelId equals campaign.Id
+                        select new MediaUrlWithCampaignDataDto()
+                        {
+                            CampaignName = campaign.Name,
+                            ImageUrl = videoModel.FileUrl
+                        })
                     .ToList();
             }
 
             return new MediaDataVm()
             {
-                ImageUrls = imageUrls,
-                VideoUrls = videoUrls
+                ImageData = imageData,
+                VideoData = videoData
             };
         }
 

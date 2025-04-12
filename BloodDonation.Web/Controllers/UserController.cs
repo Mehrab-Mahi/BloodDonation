@@ -104,6 +104,14 @@ namespace BloodDonation.Web.Controllers
             var data = _userService.GetAllAdmin(pageNo, pageSize);
             return Ok(data);
         }
+        
+        [BloodDonationAuth]
+        [HttpGet("getPermittedDonors")]
+        public IActionResult GetPermittedDonors(int pageNo = 1, int pageSize = 10)
+        {
+            var data = _userService.GetPermittedDonors(pageNo, pageSize);
+            return Ok(data);
+        }
 
         [BloodDonationAuth]
         [HttpGet("getbyid/{id}")]
