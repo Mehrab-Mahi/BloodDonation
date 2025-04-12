@@ -24,5 +24,7 @@ namespace BloodDonation.Application.Interfaces
         object GetUnapprovedDonor(DonorFilter donorFilter);
         object GetAllAdmin(int pageNo, int pageSize);
         object GetPermittedDonors(int pageNo, int pageSize);
+        OfficialLeaderDto GetOfficialLeaders();
+        object GetScoutLeaders(int pageNo, int pageSize);
     }
 }

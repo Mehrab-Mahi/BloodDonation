@@ -112,6 +112,22 @@ namespace BloodDonation.Web.Controllers
             var data = _userService.GetPermittedDonors(pageNo, pageSize);
             return Ok(data);
         }
+        
+        [AllowAnonymous]
+        [HttpGet("getOfficialLeaders")]
+        public IActionResult GetOfficialLeaders()
+        {
+            var data = _userService.GetOfficialLeaders();
+            return Ok(data);
+        }
+        
+        [AllowAnonymous]
+        [HttpGet("getScoutLeaders")]
+        public IActionResult GetScoutLeaders(int pageNo = 1, int pageSize = 10)
+        {
+            var data = _userService.GetScoutLeaders(pageNo, pageSize);
+            return Ok(data);
+        }
 
         [BloodDonationAuth]
         [HttpGet("getbyid/{id}")]

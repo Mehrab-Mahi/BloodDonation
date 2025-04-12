@@ -715,6 +715,67 @@ namespace BloodDonation.Application.Services
             };
         }
 
+        public OfficialLeaderDto GetOfficialLeaders()
+        {
+            var dcOfficeLeaders = _userRepo
+                .GetConditionalList(u => u.LeaderType == "DcOffice")
+                .Select(l => new LeaderDataDto()
+                {
+                        Id = l.Id,
+                        FullName = l.FullName,
+                        Gender = l.Gender,
+                        InstituteName = l.InstituteName,
+                        LeaderType = l.LeaderType,
+                        ImageUrl = l.ImageUrl
+                })
+                .ToList();
+
+            var civilOfficeLeaders = _userRepo
+                .GetConditionalList(u => u.LeaderType == "CivilOffice")
+                .Select(l => new LeaderDataDto()
+                {
+                    Id = l.Id,
+                    FullName = l.FullName,
+                    Gender = l.Gender,
+                    InstituteName = l.InstituteName,
+                    LeaderType = l.LeaderType,
+                    ImageUrl = l.ImageUrl
+                })
+                .ToList();
+
+            return new OfficialLeaderDto()
+            {
+                DcOfficeLeaders = dcOfficeLeaders,
+                CivilOfficeLeaders = civilOfficeLeaders
+            };
+        }
+
+        public object GetScoutLeaders(int pageNo, int pageSize)
+        {
+            var allScoutLeaders = _userRepo
+                .GetConditionalList(u => u.LeaderType == "Scouts")
+                .OrderByDescending(u => u.CreateTime);
+
+            var scoutLeaders = allScoutLeaders.Skip((pageNo - 1) * pageSize)
+                .Take(pageSize)
+                .Select(l => new LeaderDataDto()
+                {
+                    Id = l.Id,
+                    FullName = l.FullName,
+                    Gender = l.Gender,
+                    InstituteName = l.InstituteName,
+                    LeaderType = l.LeaderType,
+                    ImageUrl = l.ImageUrl
+                })
+                .ToList();
+
+            return new
+            {
+                data = allScoutLeaders.Count(),
+                rowCount = scoutLeaders
+            };
+        }
+
         private object GetDonorData(IQueryable<User> allUser, DonorFilter filter)
         {
             if (!string.IsNullOrEmpty(filter.BloodGroup))
