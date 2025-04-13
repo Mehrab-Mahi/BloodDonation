@@ -260,11 +260,15 @@ namespace BloodDonation.Application.Services
                     user.Password = "12345678";
                 }
 
+                var currentUser = _loggedInUserService.GetLoggedInUser();
+
                 model.PasswordHash = GeneratePassword(user.Password);
                 model.ImageUrl = UploadAndGetImageUrl(user.ProfilePicture);
                 model.NidUrls = UploadNidData(user.Nid);
+                model.CreatedBy = currentUser is null ? "" : currentUser.Id;
+                model.LastModifiedBy = currentUser is null ? "" : currentUser.Id;
 
-                _userRepo.Insert(model);
+                _userRepo.InsertWithUserData(model);
                 _userRepo.SaveChanges();
 
                 return new PayloadResponse

@@ -48,6 +48,17 @@ namespace BloodDonation.Infra.Data.Repositories
             _dbContext.Entry(model).State = EntityState.Added;
         }
 
+        public void InsertWithUserData(T model)
+        {
+            if (model != null)
+            {
+                var createdTime = DateTime.Now;
+                model.CreateTime = createdTime;
+                model.LastModifiedTime = createdTime;
+            }
+            _dbContext.Entry(model).State = EntityState.Added;
+        }
+
         public virtual IQueryable<T> GetConditionalList(Expression<Func<T, bool>> expression)
         {
             return _dbContext.Set<T>().Where(expression);

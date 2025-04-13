@@ -11,6 +11,7 @@ namespace BloodDonation.Domain.Interfaces
     public interface IRepository<T> where T : Entity
     {
         void Insert(T model);
+        void InsertWithUserData(T model);
         void Insert(List<T> models);
         void InsertList(List<T> models);
         void Update(T entity);
