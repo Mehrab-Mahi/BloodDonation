@@ -775,8 +775,8 @@ namespace BloodDonation.Application.Services
 
             return new
             {
-                data = allScoutLeaders.Count(),
-                rowCount = scoutLeaders
+                data = scoutLeaders,
+                rowCount = allScoutLeaders.Count()
             };
         }
 
