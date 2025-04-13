@@ -130,6 +130,14 @@ namespace BloodDonation.Web.Controllers
         }
 
         [BloodDonationAuth]
+        [HttpPost("donorRegistration")]
+        public IActionResult DonorRegistration([FromForm] UserCreationVm model)
+        {
+            var data = _userService.Insert(model);
+            return Ok(new { data });
+        }
+
+        [BloodDonationAuth]
         [HttpGet("getbyid/{id}")]
         public IActionResult GetById(string id)
         {
