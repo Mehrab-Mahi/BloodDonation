@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 
 namespace BloodDonation.Domain.Entities
 {
@@ -38,5 +37,6 @@ namespace BloodDonation.Domain.Entities
         public string Code { get; set; }
         public string? InstituteName { get; set; }
         public string? LeaderType { get; set; }
+        public string? CampaignId { get; set; }
     }
 }

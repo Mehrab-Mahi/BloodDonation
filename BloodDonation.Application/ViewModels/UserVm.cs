@@ -59,6 +59,8 @@ namespace BloodDonation.Application.ViewModels
         public string Code { get; set; }
         public string? InstituteName { get; set; }
         public string? LeaderType { get; set; }
+        public string? CampaignId { get; set; }
+        public string? CampaignName { get; set; }
     }
 
     public class UserAuthVm : UserCreationVm

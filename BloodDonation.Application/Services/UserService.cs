@@ -15,17 +15,20 @@ namespace BloodDonation.Application.Services
     {
         private readonly IRepository<User> _userRepo;
         private readonly IRepository<Location> _locationRepository;
+        private readonly IRepository<Campaign> _campaignRepository;
         private readonly IFileService _fileService;
         private readonly ILoggedInUserService _loggedInUserService;
         public UserService(IRepository<User> userRepo,
             IFileService fileService, 
             IRepository<Location> locationRepository,
-            ILoggedInUserService loggedInUserService)
+            ILoggedInUserService loggedInUserService,
+            IRepository<Campaign> campaignRepository)
         {
             _userRepo = userRepo;
             _fileService = fileService;
             _locationRepository = locationRepository;
             _loggedInUserService = loggedInUserService;
+            _campaignRepository = campaignRepository;
         }
 
         public User Get(AuthRequest model)
@@ -202,14 +205,14 @@ namespace BloodDonation.Application.Services
 
         public PayloadResponse Insert(UserCreationVm user)
         {
-            if (IfDuplicateUser(user.MobileNumber, user.DateOfBirth))
+            if (IfDuplicateUser(user.MobileNumber))
             {
                 return new PayloadResponse
                 {
                     IsSuccess = false,
                     PayloadType = "User Creation",
                     Content = null,
-                    Message = $"User with this mobile number and date of birth is already exist!"
+                    Message = "User with this mobile number already exists!"
                 };
             }
 
@@ -240,7 +243,8 @@ namespace BloodDonation.Application.Services
                     Serial = serial,
                     Code = serial.ToString("D6"),
                     InstituteName = user.InstituteName,
-                    LeaderType = user.LeaderType
+                    LeaderType = user.LeaderType,
+                    CampaignId = user.CampaignId
                 };
 
                 if (model.UserType != UserTypes.Admin)
@@ -324,9 +328,9 @@ namespace BloodDonation.Application.Services
             return false;
         }
 
-        private bool IfDuplicateUser(string mobileNumber, string dateOfBirth)
+        private bool IfDuplicateUser(string mobileNumber)
         {
-            var user = _userRepo.GetAll().FirstOrDefault(u => u.MobileNumber == mobileNumber && u.DateOfBirth == dateOfBirth);
+            var user = _userRepo.GetAll().FirstOrDefault(u => u.MobileNumber == mobileNumber);
 
             return user is not null;
         }
@@ -369,16 +373,16 @@ namespace BloodDonation.Application.Services
             var model = _userRepo.GetConditional(u => u.Id == user.Id);
             try
             {
-                if (user.MobileNumber != model.MobileNumber || user.DateOfBirth != model.DateOfBirth)
+                if (user.MobileNumber != model.MobileNumber)
                 {
-                    if (IfDuplicateUser(user.MobileNumber, user.DateOfBirth))
+                    if (IfDuplicateUser(user.MobileNumber))
                     {
                         return new PayloadResponse
                         {
                             IsSuccess = false,
                             PayloadType = "User Update",
                             Content = null,
-                            Message = "User with the mobile number and date of birth already exists!"
+                            Message = "User with the mobile number already exists!"
                         };
                     }
                 }
@@ -397,7 +401,8 @@ namespace BloodDonation.Application.Services
                 model.Gender = user.Gender;
                 model.UserType = user.UserType;
                 model.LastDonationTime = user.LastDonationTime;
-                model.BloodDonationCount = user.BloodDonationCount;
+                model.LastDonationTime = user.LastDonationTime;
+                model.PhysicalComplexity = user.PhysicalComplexity;
                 model.Dob = DateTime.Parse(user.DateOfBirth);
                 model.InstituteName = user.InstituteName;
                 model.LeaderType = user.LeaderType;
@@ -655,7 +660,9 @@ namespace BloodDonation.Application.Services
                         IsApproved = user.IsApproved,
                         PhysicalComplexity = user.PhysicalComplexity,
                         NidUrls = GetNidUrlsFromCommaSeparatedString(user.NidUrls),
-                        Code = user.Code
+                        Code = user.Code,
+                        LeaderType = user.LeaderType,
+                        InstituteName = user.InstituteName
                     })
                 .ToList();
 
@@ -683,6 +690,7 @@ namespace BloodDonation.Application.Services
                     join district in _locationRepository.GetAll() on user.District equals district.Id
                     join upazila in _locationRepository.GetAll() on user.Upazila equals upazila.Id
                     join union in _locationRepository.GetAll() on user.Union equals union.Id
+                    join campaign in _campaignRepository.GetAll() on user.CampaignId equals campaign.Id
                     select new UserCreationVm()
                     {
                         Id = user.Id,
@@ -708,7 +716,8 @@ namespace BloodDonation.Application.Services
                         IsApproved = user.IsApproved,
                         PhysicalComplexity = user.PhysicalComplexity,
                         NidUrls = GetNidUrlsFromCommaSeparatedString(user.NidUrls),
-                        Code = user.Code
+                        Code = user.Code,
+                        CampaignName = campaign.Name
                     })
                 .ToList();
 
@@ -722,7 +731,7 @@ namespace BloodDonation.Application.Services
         public OfficialLeaderDto GetOfficialLeaders()
         {
             var dcOfficeLeaders = _userRepo
-                .GetConditionalList(u => u.LeaderType == "DcOffice")
+                .GetConditionalList(u => u.LeaderType == "Deputy Commissioner Official")
                 .Select(l => new LeaderDataDto()
                 {
                         Id = l.Id,
@@ -735,7 +744,7 @@ namespace BloodDonation.Application.Services
                 .ToList();
 
             var civilOfficeLeaders = _userRepo
-                .GetConditionalList(u => u.LeaderType == "CivilOffice")
+                .GetConditionalList(u => u.LeaderType == "Civil Surgeon Official")
                 .Select(l => new LeaderDataDto()
                 {
                     Id = l.Id,
@@ -757,7 +766,7 @@ namespace BloodDonation.Application.Services
         public object GetScoutLeaders(int pageNo, int pageSize)
         {
             var allScoutLeaders = _userRepo
-                .GetConditionalList(u => u.LeaderType == "Scouts")
+                .GetConditionalList(u => u.LeaderType == "Volunteer (Scout)")
                 .OrderByDescending(u => u.CreateTime);
 
             var scoutLeaders = allScoutLeaders.Skip((pageNo - 1) * pageSize)
@@ -907,7 +916,9 @@ namespace BloodDonation.Application.Services
                         .ToList() : new List<string>(),
                     Serial = user.Serial,
                     Code = user.Code,
-                    LeaderType = user.LeaderType
+                    LeaderType = user.LeaderType,
+                    InstituteName = user.InstituteName,
+                    BloodDonationCount = user.BloodDonationCount
                 }).ToList();
 
             return mappedUserData;
