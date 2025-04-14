@@ -395,7 +395,8 @@ namespace BloodDonation.Application.Services
                     StartDate = campaign.StartDate,
                     EndDate = campaign.EndDate,
                     Address = campaign.Address,
-                    BannerUrl = campaign.BannerUrl
+                    BannerUrl = campaign.BannerUrl,
+                    Institute = campaign.Institute
                 })
                 .ToList();
 
