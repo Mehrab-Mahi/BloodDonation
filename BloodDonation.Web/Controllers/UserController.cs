@@ -141,8 +141,8 @@ namespace BloodDonation.Web.Controllers
         [HttpGet("getbyid/{id}")]
         public IActionResult GetById(string id)
         {
-            var list = _userService.GetById(id);
-            return Ok(new { data = list });
+            var userData = _userService.GetById(id);
+            return Ok(new { data = userData });
         }
     }
 }

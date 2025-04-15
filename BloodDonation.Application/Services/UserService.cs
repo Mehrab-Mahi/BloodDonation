@@ -198,9 +198,17 @@ namespace BloodDonation.Application.Services
             return user.Where(u => u.BloodGroup == bloodGroup);
         }
 
-        public User GetById(string id)
+        public UserCreationVm GetById(string id)
         {
-            return _userRepo.GetConditional(u => u.Id == id);
+            var user = _userRepo.GetConditional(u => u.Id == id);
+
+            if (user == null) return new UserCreationVm();
+
+            var userFakeList = new List<User> { user };
+
+            var mappedData = GetMappedData(userFakeList);
+
+            return mappedData.FirstOrDefault();
         }
 
         public PayloadResponse Insert(UserCreationVm user)

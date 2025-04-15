@@ -8,7 +8,7 @@ namespace BloodDonation.Application.Interfaces
     {
         User Get(AuthRequest model);
 
-        User GetById(string id);
+        UserCreationVm GetById(string id);
 
         PayloadResponse Update(UserCreationVm User);
         object GetAll(UserFilter userFilter);
