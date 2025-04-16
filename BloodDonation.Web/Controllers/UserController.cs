@@ -147,7 +147,7 @@ namespace BloodDonation.Web.Controllers
         
         [BloodDonationAuth]
         [HttpPost("changePassword")]
-        public IActionResult ChangePassword(ChangePassword changePassword)
+        public IActionResult ChangePassword([FromBody]ChangePassword changePassword)
         {
             var response = _userService.ChangePassword(changePassword);
             return Ok(new { data = response });
