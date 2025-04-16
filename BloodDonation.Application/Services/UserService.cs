@@ -8,6 +8,7 @@ using System.Linq;
 using BloodDonation.Application.Util;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Microsoft.AspNetCore.Identity;
 
 namespace BloodDonation.Application.Services
 {
@@ -795,6 +796,64 @@ namespace BloodDonation.Application.Services
                 data = scoutLeaders,
                 rowCount = allScoutLeaders.Count()
             };
+        }
+
+        public PayloadResponse ChangePassword(ChangePassword changePassword)
+        {
+            try
+            {
+                var currentUser = _loggedInUserService.GetLoggedInUser();
+
+                if (!OldPasswordIsCorrect(changePassword.OldPassword, currentUser))
+                {
+                    return new PayloadResponse()
+                    {
+                        IsSuccess = false,
+                        Message = "Old password is not correct!"
+                    };
+                }
+
+                if (IfNewPasswordNotSame(changePassword.NewPassword, changePassword.ConfirmNewPassword))
+                {
+                    return new PayloadResponse()
+                    {
+                        IsSuccess = false,
+                        Message = "New password and Confirm New Password is not matched!"
+                    };
+                }
+
+                var newPasswordHash = GeneratePassword(changePassword.NewPassword);
+
+                currentUser.PasswordHash = newPasswordHash;
+
+                _userRepo.Update(currentUser);
+                _userRepo.SaveChanges();
+
+                return new PayloadResponse()
+                {
+                    IsSuccess = true,
+                    Message = "Password changed successfully!"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new PayloadResponse()
+                {
+                    IsSuccess = false,
+                    Message = $"Exception {ex.Message}"
+                };
+            }
+        }
+
+        private bool IfNewPasswordNotSame(string newPassword, string confirmNewPassword)
+        {
+            if (newPassword != confirmNewPassword) return true;
+            return false;
+        }
+
+        private bool OldPasswordIsCorrect(string oldPassword, User currentUser)
+        {
+            return BCrypt.Net.BCrypt.Verify(oldPassword, currentUser.PasswordHash);
         }
 
         private object GetDonorData(IQueryable<User> allUser, DonorFilter filter)

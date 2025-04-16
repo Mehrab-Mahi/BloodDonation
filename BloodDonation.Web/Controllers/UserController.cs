@@ -144,5 +144,13 @@ namespace BloodDonation.Web.Controllers
             var userData = _userService.GetById(id);
             return Ok(new { data = userData });
         }
+        
+        [BloodDonationAuth]
+        [HttpPost("changePassword")]
+        public IActionResult ChangePassword(ChangePassword changePassword)
+        {
+            var response = _userService.ChangePassword(changePassword);
+            return Ok(new { data = response });
+        }
     }
 }

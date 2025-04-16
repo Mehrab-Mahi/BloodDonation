@@ -26,5 +26,6 @@ namespace BloodDonation.Application.Interfaces
         object GetPermittedDonors(int pageNo, int pageSize);
         OfficialLeaderDto GetOfficialLeaders();
         object GetScoutLeaders(int pageNo, int pageSize);
+        PayloadResponse ChangePassword(ChangePassword changePassword);
     }
 }
