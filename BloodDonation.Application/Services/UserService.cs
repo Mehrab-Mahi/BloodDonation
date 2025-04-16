@@ -408,7 +408,7 @@ namespace BloodDonation.Application.Services
                 model.BloodDonationStatus = user.BloodDonationStatus;
                 model.Gender = user.Gender;
                 model.UserType = user.UserType;
-                model.LastDonationTime = user.LastDonationTime;
+                model.BloodDonationCount = user.BloodDonationCount;
                 model.LastDonationTime = user.LastDonationTime;
                 model.PhysicalComplexity = user.PhysicalComplexity;
                 model.Dob = DateTime.Parse(user.DateOfBirth);
