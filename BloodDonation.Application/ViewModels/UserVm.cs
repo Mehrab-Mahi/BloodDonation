@@ -62,6 +62,7 @@ namespace BloodDonation.Application.ViewModels
         public string? CampaignId { get; set; }
         public string? CampaignName { get; set; }
         public string? Designation { get; set; }
+        public DateTime CreateTime { get; set; }
     }
 
     public class UserAuthVm : UserCreationVm

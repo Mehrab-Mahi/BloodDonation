@@ -988,7 +988,9 @@ namespace BloodDonation.Application.Services
                     LeaderType = user.LeaderType,
                     InstituteName = user.InstituteName,
                     BloodDonationCount = user.BloodDonationCount,
-                    Designation = user.Designation
+                    Designation = user.Designation,
+                    CreateTime = user.CreateTime,
+                    CampaignId = user.CampaignId
                 }).ToList();
 
             return mappedUserData;
