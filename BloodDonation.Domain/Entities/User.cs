@@ -38,5 +38,6 @@ namespace BloodDonation.Domain.Entities
         public string? InstituteName { get; set; }
         public string? LeaderType { get; set; }
         public string? CampaignId { get; set; }
+        public string? Designation { get; set; }
     }
 }

@@ -80,6 +80,7 @@ namespace BloodDonation.Application.Services
                     select new MediaUrlWithCampaignDataDto()
                     {
                         CampaignName = campaign.Name,
+                        Institute = campaign.Institute,
                         ImageUrl = imageModel.FileUrl
                     })
                     .ToList();
@@ -100,6 +101,7 @@ namespace BloodDonation.Application.Services
                         select new MediaUrlWithCampaignDataDto()
                         {
                             CampaignName = campaign.Name,
+                            Institute = campaign.Institute,
                             ImageUrl = videoModel.FileUrl
                         })
                     .ToList();

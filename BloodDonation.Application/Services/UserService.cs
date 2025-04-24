@@ -253,7 +253,8 @@ namespace BloodDonation.Application.Services
                     Code = serial.ToString("D6"),
                     InstituteName = user.InstituteName,
                     LeaderType = user.LeaderType,
-                    CampaignId = user.CampaignId
+                    CampaignId = user.CampaignId,
+                    Designation = user.Designation
                 };
 
                 if (model.UserType != UserTypes.Admin)
@@ -415,6 +416,7 @@ namespace BloodDonation.Application.Services
                 model.Dob = DateTime.Parse(user.DateOfBirth);
                 model.InstituteName = user.InstituteName;
                 model.LeaderType = user.LeaderType;
+                model.Designation = user.Designation;
 
                 if (user.ProfilePicture is { Length: > 0 })
                 {
@@ -985,7 +987,8 @@ namespace BloodDonation.Application.Services
                     Code = user.Code,
                     LeaderType = user.LeaderType,
                     InstituteName = user.InstituteName,
-                    BloodDonationCount = user.BloodDonationCount
+                    BloodDonationCount = user.BloodDonationCount,
+                    Designation = user.Designation
                 }).ToList();
 
             return mappedUserData;
