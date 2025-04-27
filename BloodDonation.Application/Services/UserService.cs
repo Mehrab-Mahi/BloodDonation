@@ -743,6 +743,7 @@ namespace BloodDonation.Application.Services
         {
             var dcOfficeLeaders = _userRepo
                 .GetConditionalList(u => u.LeaderType == "Deputy Commissioner Official")
+                .OrderBy(u => u.CreateTime)
                 .Select(l => new LeaderDataDto()
                 {
                         Id = l.Id,
@@ -756,6 +757,7 @@ namespace BloodDonation.Application.Services
 
             var civilOfficeLeaders = _userRepo
                 .GetConditionalList(u => u.LeaderType == "Civil Surgeon Official")
+                .OrderBy(u => u.CreateTime)
                 .Select(l => new LeaderDataDto()
                 {
                     Id = l.Id,
