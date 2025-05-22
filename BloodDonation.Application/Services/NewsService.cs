@@ -74,10 +74,31 @@ public class NewsService : INewsService
 
         if (jsonDoc.RootElement.TryGetProperty("image", out var imageProperty))
         {
-            return imageProperty.GetString();
+            var thumbnailImageUrl = imageProperty.GetString();
+
+            if (await IsImageUrlValidAsync(thumbnailImageUrl, client))
+            {
+                return thumbnailImageUrl;
+            }
         }
 
         return string.Empty;
+    }
+
+    private async Task<bool> IsImageUrlValidAsync(string imageUrl, HttpClient client)
+    {
+        try
+        {
+            var request = new HttpRequestMessage(HttpMethod.Head, imageUrl);
+            var response = await client.SendAsync(request);
+            var contentType = response.Content.Headers.ContentType?.MediaType;
+
+            return response.IsSuccessStatusCode && contentType?.StartsWith("image") == true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public PayloadResponse Update(NewsVm newsData)
