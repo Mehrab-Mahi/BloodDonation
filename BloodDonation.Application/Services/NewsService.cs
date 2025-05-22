@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 using BloodDonation.Application.Interfaces;
 using BloodDonation.Application.ViewModels;
 using BloodDonation.Domain.Entities;
@@ -10,10 +13,14 @@ namespace BloodDonation.Application.Services;
 public class NewsService : INewsService
 {
     private readonly IRepository<News> _newsRepository;
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly string _apiKey = "34247144435bdc18f2b3e0e4fe791364";
 
-    public NewsService(IRepository<News> newsRepository)
+    public NewsService(IRepository<News> newsRepository, 
+        IHttpClientFactory httpClientFactory)
     {
         _newsRepository = newsRepository;
+        _httpClientFactory = httpClientFactory;
     }
 
     public PayloadResponse Create(NewsVm newsData)
@@ -25,6 +32,7 @@ public class NewsService : INewsService
                 Name = newsData.Name,
                 Description = newsData.Description,
                 Url = newsData.Url,
+                ThumbnailUrl = GetThumbnailUrl(newsData.Url).Result
             };
 
             _newsRepository.Insert(news);
@@ -50,6 +58,28 @@ public class NewsService : INewsService
         }
     }
 
+    private async Task<string> GetThumbnailUrl(string newsUrl)
+    {
+        if(string.IsNullOrEmpty(newsUrl)) return string.Empty;
+
+        var client = _httpClientFactory.CreateClient();
+        var requestUrl = $"https://api.linkpreview.net?q={Uri.EscapeDataString(newsUrl)}";
+        var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
+        request.Headers.Add("X-Linkpreview-Api-Key", _apiKey);
+        
+        var response = await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+        var json = await response.Content.ReadAsStringAsync();
+        var jsonDoc = JsonDocument.Parse(json);
+
+        if (jsonDoc.RootElement.TryGetProperty("image", out var imageProperty))
+        {
+            return imageProperty.GetString();
+        }
+
+        return string.Empty;
+    }
+
     public PayloadResponse Update(NewsVm newsData)
     {
         try
@@ -59,6 +89,7 @@ public class NewsService : INewsService
             news.Name = newsData.Name;
             news.Description = newsData.Description;
             news.Url = newsData.Url;
+            news.ThumbnailUrl = GetThumbnailUrl(newsData.Url).Result;
 
             _newsRepository.Update(news);
             _newsRepository.SaveChanges();

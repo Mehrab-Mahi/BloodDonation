@@ -47,7 +47,7 @@ namespace BloodDonation.Web
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
             });
-
+            services.AddHttpClient();
             RegisterServices(services);
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
