@@ -8,4 +8,5 @@ public class LeaderDataDto
     public string? InstituteName { get; set; }
     public string? LeaderType { get; set; }
     public string ImageUrl { get; set; }
+    public string Designation { get; set; }
 }

@@ -122,7 +122,7 @@ namespace BloodDonation.Application.Services
         {
             var volunteers = _userRepository
                 .GetAll()
-                .Where(u => u.UserType == UserTypes.Volunteer)
+                .Where(u => u.LeaderType == "Volunteer (Scout)" && u.IsActive)
                 .Select(u => u.Id)
                 .ToList();
 

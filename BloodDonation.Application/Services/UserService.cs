@@ -751,7 +751,8 @@ namespace BloodDonation.Application.Services
                         Gender = l.Gender,
                         InstituteName = l.InstituteName,
                         LeaderType = l.LeaderType,
-                        ImageUrl = l.ImageUrl
+                        ImageUrl = l.ImageUrl,
+                        Designation = l.Designation
                 })
                 .ToList();
 
@@ -765,7 +766,8 @@ namespace BloodDonation.Application.Services
                     Gender = l.Gender,
                     InstituteName = l.InstituteName,
                     LeaderType = l.LeaderType,
-                    ImageUrl = l.ImageUrl
+                    ImageUrl = l.ImageUrl,
+                    Designation = l.Designation
                 })
                 .ToList();
 
@@ -779,7 +781,7 @@ namespace BloodDonation.Application.Services
         public object GetScoutLeaders(int pageNo, int pageSize)
         {
             var allScoutLeaders = _userRepo
-                .GetConditionalList(u => u.LeaderType == "Volunteer (Scout)")
+                .GetConditionalList(u => u.LeaderType == "Volunteer (Scout)" && u.IsActive)
                 .OrderByDescending(u => u.CreateTime);
 
             var scoutLeaders = allScoutLeaders.Skip((pageNo - 1) * pageSize)
@@ -791,7 +793,8 @@ namespace BloodDonation.Application.Services
                     Gender = l.Gender,
                     InstituteName = l.InstituteName,
                     LeaderType = l.LeaderType,
-                    ImageUrl = l.ImageUrl
+                    ImageUrl = l.ImageUrl,
+                    Designation = l.Designation
                 })
                 .ToList();
 
