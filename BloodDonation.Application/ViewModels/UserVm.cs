@@ -63,6 +63,7 @@ namespace BloodDonation.Application.ViewModels
         public string? CampaignName { get; set; }
         public string? Designation { get; set; }
         public DateTime CreateTime { get; set; }
+        public bool IsEmergencyContact { get; set; } = false;
     }
 
     public class UserAuthVm : UserCreationVm

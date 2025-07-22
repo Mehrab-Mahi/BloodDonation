@@ -1105,7 +1105,8 @@ namespace BloodDonation.Application.Services
                     BloodDonationCount = user.BloodDonationCount,
                     Designation = user.Designation,
                     CreateTime = user.CreateTime,
-                    CampaignId = user.CampaignId
+                    CampaignId = user.CampaignId,
+                    IsEmergencyContact = user.IsEmergencyContact
                 }).ToList();
 
             return mappedUserData;
