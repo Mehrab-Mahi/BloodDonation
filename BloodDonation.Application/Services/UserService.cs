@@ -8,7 +8,6 @@ using System.Linq;
 using BloodDonation.Application.Util;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using Microsoft.AspNetCore.Identity;
 
 namespace BloodDonation.Application.Services
 {
@@ -415,7 +414,6 @@ namespace BloodDonation.Application.Services
                 model.PhysicalComplexity = user.PhysicalComplexity;
                 model.Dob = DateTime.Parse(user.DateOfBirth);
                 model.InstituteName = user.InstituteName;
-                model.LeaderType = user.LeaderType;
                 model.Designation = user.Designation;
 
                 if (user.ProfilePicture is { Length: > 0 })
@@ -852,6 +850,107 @@ namespace BloodDonation.Application.Services
             }
         }
 
+        public PayloadResponse MakeEmergencyContact(EmergencyContactRequest emergencyContactRequest)
+        {
+            try
+            {
+                var user = _userRepo.GetConditional(u => u.Id == emergencyContactRequest.UserId);
+
+                if (user is null)
+                {
+                    return new PayloadResponse
+                    {
+                        IsSuccess = false,
+                        Message = "User not found!"
+                    };
+                }
+
+                user.IsEmergencyContact = true;
+
+                _userRepo.Update(user);
+                _userRepo.SaveChanges();
+
+                return new PayloadResponse
+                {
+                    IsSuccess = true,
+                    Message = "User has been added to emergency contact successfully!"
+                };
+            }
+            catch(Exception ex)
+            {
+                return new PayloadResponse
+                {
+                    IsSuccess = false,
+                    Message = $"An error occurred while adding user to emergency contact: {ex.Message}"
+                };
+            }
+        }
+
+        public PayloadResponse RemoveFromEmergencyContact(EmergencyContactRequest emergencyContactRequest)
+        {
+            try
+            {
+                var user = _userRepo.GetConditional(u => u.Id == emergencyContactRequest.UserId);
+
+                if (user is null)
+                {
+                    return new PayloadResponse
+                    {
+                        IsSuccess = false,
+                        Message = "User not found!"
+                    };
+                }
+
+                user.IsEmergencyContact = false;
+
+                _userRepo.Update(user);
+                _userRepo.SaveChanges();
+
+                return new PayloadResponse
+                {
+                    IsSuccess = true,
+                    Message = "User has been removed from emergency contact!"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new PayloadResponse
+                {
+                    IsSuccess = false,
+                    Message = $"An error occurred while removing user from emergency contact: {ex.Message}"
+                };
+            }
+        }
+
+        public object GetEmergencyContactList(int pageNo, int pageSize)
+        {
+            var allEmergencyContacts = _userRepo
+                .GetConditionalList(u => u.IsEmergencyContact)
+                .OrderByDescending(u => u.CreateTime);
+
+            var emergencyContacts = allEmergencyContacts
+                .Skip((pageNo - 1) * pageSize)
+                .Take(pageSize)
+                .Select(l => new EmergencyContactData()
+                {
+                    Id = l.Id,
+                    FullName = l.FullName,
+                    Gender = l.Gender,
+                    InstituteName = l.InstituteName,
+                    LeaderType = l.LeaderType,
+                    ImageUrl = l.ImageUrl,
+                    Designation = l.Designation,
+                    MobileNumber = l.MobileNumber
+                })
+                .ToList();
+
+            return new
+            {
+                data = emergencyContacts,
+                rowCount = allEmergencyContacts.Count()
+            };
+        }
+
         private bool IfNewPasswordNotSame(string newPassword, string confirmNewPassword)
         {
             if (newPassword != confirmNewPassword) return true;
@@ -888,6 +987,17 @@ namespace BloodDonation.Application.Services
             if (!string.IsNullOrEmpty(filter.Gender))
             {
                 allUser = FilterByGender(allUser, filter.Gender);
+            }
+
+            if (!string.IsNullOrEmpty(filter.SearchQuery))
+            {
+                var keyword = filter.SearchQuery.ToLower();
+
+                allUser = allUser.Where(u =>
+                    (!string.IsNullOrEmpty(u.FullName) && u.FullName.ToLower().Contains(keyword)) ||
+                    (!string.IsNullOrEmpty(u.MobileNumber) && u.MobileNumber.ToLower().Contains(keyword)) ||
+                    (!string.IsNullOrEmpty(u.Code) && u.Code.ToLower().Contains(keyword))
+                );
             }
 
             if (filter.StartAge is null || filter.EndAge is null)

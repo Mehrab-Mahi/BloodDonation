@@ -39,5 +39,6 @@ namespace BloodDonation.Domain.Entities
         public string? LeaderType { get; set; }
         public string? CampaignId { get; set; }
         public string? Designation { get; set; }
+        public bool IsEmergencyContact { get; set; }
     }
 }

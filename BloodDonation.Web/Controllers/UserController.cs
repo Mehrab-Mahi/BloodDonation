@@ -152,5 +152,29 @@ namespace BloodDonation.Web.Controllers
             var response = _userService.ChangePassword(changePassword);
             return Ok(new { data = response });
         }
+        
+        [BloodDonationAuth]
+        [HttpPost("makeEmergencyContact")]
+        public IActionResult MakeEmergencyContact([FromBody] EmergencyContactRequest emergencyContactRequest)
+        {
+            var response = _userService.MakeEmergencyContact(emergencyContactRequest);
+            return Ok(new { data = response });
+        }
+        
+        [BloodDonationAuth]
+        [HttpPost("removeFromEmergencyContact")]
+        public IActionResult RemoveFromEmergencyContact([FromBody] EmergencyContactRequest emergencyContactRequest)
+        {
+            var response = _userService.RemoveFromEmergencyContact(emergencyContactRequest);
+            return Ok(new { data = response });
+        }
+        
+        [BloodDonationAuth]
+        [HttpGet("getEmergencyContactList")]
+        public IActionResult GetEmergencyContactList(int pageNo = 1, int pageSize = 10)
+        {
+            var response = _userService.GetEmergencyContactList(pageNo, pageSize);
+            return Ok(new { data = response });
+        }
     }
 }

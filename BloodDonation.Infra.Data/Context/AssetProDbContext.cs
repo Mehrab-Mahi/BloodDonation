@@ -34,6 +34,8 @@ namespace BloodDonation.Infra.Data.Context
         public DbSet<FileModelMapping> FileModelMappings { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<News> News { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<DonationTracking> DonationTrackings { get; set; }
       
         protected override void OnModelCreating(ModelBuilder builder)
         {

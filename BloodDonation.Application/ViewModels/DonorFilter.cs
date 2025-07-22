@@ -11,4 +11,5 @@ public class DonorFilter
     public int? PageNo { get; set; }
     public int? PageSize { get; set; }
     public string Gender { get; set; }
+    public string SearchQuery { get; set; }
 }

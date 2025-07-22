@@ -27,5 +27,8 @@ namespace BloodDonation.Application.Interfaces
         OfficialLeaderDto GetOfficialLeaders();
         object GetScoutLeaders(int pageNo, int pageSize);
         PayloadResponse ChangePassword(ChangePassword changePassword);
+        PayloadResponse MakeEmergencyContact(EmergencyContactRequest emergencyContactRequest);
+        PayloadResponse RemoveFromEmergencyContact(EmergencyContactRequest emergencyContactRequest);
+        object GetEmergencyContactList(int pageNo, int pageSize);
     }
 }
