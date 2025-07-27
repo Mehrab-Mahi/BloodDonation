@@ -1,6 +1,7 @@
 ﻿using BloodDonation.Application.Helper;
 using BloodDonation.Application.Interfaces;
 using BloodDonation.Application.ViewModels.Review;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BloodDonation.Web.Controllers;
@@ -23,7 +24,7 @@ public class ReviewController : Controller
         return Ok(new { data = response });
     }
     
-    [BloodDonationAuth]
+    [AllowAnonymous]
     [HttpGet("approvedReviews")]
     public IActionResult GetApprovedReviews(int pageNo = 1, int pageSize = 10)
     {

@@ -43,7 +43,8 @@ public class DonationTrackingService : IDonationTrackingService
             {
                 _donationTrackingRepository.Insert(new DonationTracking
                 {
-                    DonorId = currentUser.Id
+                    DonorId = currentUser.Id,
+                    DonationDate = DateTime.Now,
                 });
                 _donationTrackingRepository.SaveChanges();
             }
@@ -52,7 +53,7 @@ public class DonationTrackingService : IDonationTrackingService
                 _donationTrackingRepository.Insert(new DonationTracking
                 {
                     DonorId = currentUser.Id,
-                    DonationDate = donationTrackingData.DonationDate,
+                    DonationDate = donationTrackingData.DonationDate ?? DateTime.Now,
                     ReceiverName = donationTrackingData.ReceiverName,
                     MobileNumber = donationTrackingData.MobileNumber
                 });
@@ -75,10 +76,10 @@ public class DonationTrackingService : IDonationTrackingService
         }
     }
 
-    public object GetHighestDonorList(int pageNo = 1, int pageSize = 10)
+    public object GetHighestDonorList(DateTime startTime, DateTime endTime, int pageNo = 1, int pageSize = 10)
     {
-        var totalCount = GetTotalCountOfDonation();
-        var donorData = GetDonorsData(pageNo, pageSize);
+        var totalCount = GetTotalCountOfDonation(startTime, endTime);
+        var donorData = GetDonorsData(startTime, endTime, pageNo, pageSize);
 
         return new
         {
@@ -99,7 +100,7 @@ public class DonationTrackingService : IDonationTrackingService
         return donationDetail;
     }
 
-    private List<DonationTrackingData> GetDonorsData(int pageNo, int pageSize)
+    private List<DonationTrackingData> GetDonorsData(DateTime startTime, DateTime endTime, int pageNo, int pageSize)
     {
         var query = $@"SELECT 
                         u.FullName,
@@ -113,13 +114,14 @@ public class DonationTrackingService : IDonationTrackingService
                         DonationTrackings dt
                     INNER JOIN 
                         Users u ON dt.DonorId = u.Id
+                    where dt.DonationDate >= '{startTime}' and dt.DonationDate <='{endTime}'
                     GROUP BY 
                         u.FullName, 
                         u.MobileNumber, 
                         u.DateOfBirth, 
                         u.BloodGroup, 
                         u.LastDonationTime,
-                        dt.DonorId
+                        dt.Id
                     ORDER BY 
                         DonationCount DESC,
                         MAX(dt.CreateTime) DESC
@@ -134,9 +136,9 @@ public class DonationTrackingService : IDonationTrackingService
         return data;
     }
 
-    private int GetTotalCountOfDonation()
+    private int GetTotalCountOfDonation(DateTime startTime, DateTime endTime)
     {
-        var query = @"
+        var query = @$"
                     with data as (
                     SELECT 
                         u.FullName,
@@ -150,13 +152,14 @@ public class DonationTrackingService : IDonationTrackingService
                         DonationTrackings dt
                     INNER JOIN 
                         Users u ON dt.DonorId = u.Id
+                    where dt.DonationDate >= '{startTime}' and dt.DonationDate <='{endTime}'
                     GROUP BY 
                         u.FullName, 
                         u.MobileNumber, 
                         u.DateOfBirth, 
                         u.BloodGroup, 
                         u.LastDonationTime,
-                        dt.DonorId)
+                        dt.Id)
                     select count(*) as count
                     from data
                     ";

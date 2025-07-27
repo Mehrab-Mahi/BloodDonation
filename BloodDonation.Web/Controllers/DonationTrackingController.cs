@@ -1,4 +1,5 @@
-﻿using BloodDonation.Application.Helper;
+﻿using System;
+using BloodDonation.Application.Helper;
 using BloodDonation.Application.Interfaces;
 using BloodDonation.Application.ViewModels.DonationTracking;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +26,9 @@ public class DonationTrackingController : Controller
     
     [BloodDonationAuth]
     [HttpGet("GetHighestDonorList")]
-    public IActionResult GetHighestDonorList(int pageNo = 1, int pageSize = 10) 
+    public IActionResult GetHighestDonorList(DateTime startTime, DateTime endTime, int pageNo = 1, int pageSize = 10) 
     {
-        var data = _donationTrackingService.GetHighestDonorList(pageNo, pageSize);
+        var data = _donationTrackingService.GetHighestDonorList(startTime, endTime, pageNo, pageSize);
         return Ok(new { data });
     }
     
