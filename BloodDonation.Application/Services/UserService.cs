@@ -671,7 +671,8 @@ namespace BloodDonation.Application.Services
                         NidUrls = GetNidUrlsFromCommaSeparatedString(user.NidUrls),
                         Code = user.Code,
                         LeaderType = user.LeaderType,
-                        InstituteName = user.InstituteName
+                        InstituteName = user.InstituteName,
+                        Designation = user.Designation
                     })
                 .ToList();
 
