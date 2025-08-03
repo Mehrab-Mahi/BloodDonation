@@ -169,7 +169,7 @@ namespace BloodDonation.Web.Controllers
             return Ok(new { data = response });
         }
         
-        [BloodDonationAuth]
+        [AllowAnonymous]
         [HttpGet("getEmergencyContactList")]
         public IActionResult GetEmergencyContactList(int pageNo = 1, int pageSize = 10)
         {
