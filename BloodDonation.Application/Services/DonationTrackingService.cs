@@ -121,7 +121,7 @@ public class DonationTrackingService : IDonationTrackingService
                         u.DateOfBirth, 
                         u.BloodGroup, 
                         u.LastDonationTime,
-                        dt.Id
+                        dt.DonorId
                     ORDER BY 
                         DonationCount DESC,
                         MAX(dt.CreateTime) DESC
@@ -146,7 +146,7 @@ public class DonationTrackingService : IDonationTrackingService
                         u.DateOfBirth,
                         u.BloodGroup,
                         u.LastDonationTime,
-                        dt.Id as DonorId,
+                        dt.DonorId as DonorId,
                         COUNT(dt.Id) AS DonationCount
                     FROM 
                         DonationTrackings dt
@@ -159,7 +159,7 @@ public class DonationTrackingService : IDonationTrackingService
                         u.DateOfBirth, 
                         u.BloodGroup, 
                         u.LastDonationTime,
-                        dt.Id)
+                        dt.DonorId)
                     select count(*) as count
                     from data
                     ";
