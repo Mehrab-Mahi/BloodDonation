@@ -78,6 +78,7 @@ public class DonationTrackingService : IDonationTrackingService
 
     public object GetHighestDonorList(DateTime startTime, DateTime endTime, int pageNo = 1, int pageSize = 10)
     {
+        endTime = endTime.AddHours(23).AddMinutes(59).AddSeconds(59); // Set end time to the end of the day
         var totalCount = GetTotalCountOfDonation(startTime, endTime);
         var donorData = GetDonorsData(startTime, endTime, pageNo, pageSize);
 
