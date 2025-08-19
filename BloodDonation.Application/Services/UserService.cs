@@ -633,7 +633,8 @@ namespace BloodDonation.Application.Services
         {
             var adminData = _userRepo
                 .GetAll()
-                .Where(u => u.UserType == "Admin" && !u.IsSuperAdmin);
+                .Where(u => u.UserType == "Admin" && !u.IsSuperAdmin)
+                .OrderBy(u => u.CreateTime);
 
             var totalRowCount = adminData.Count();
             var paginatedData = adminData
