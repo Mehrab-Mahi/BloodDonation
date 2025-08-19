@@ -97,7 +97,7 @@ namespace BloodDonation.Web.Controllers
             return Ok(data);
         }
         
-        [BloodDonationAuth]
+        [AllowAnonymous]
         [HttpGet("getAllAdmin")]
         public IActionResult GetAllAdmin(int pageNo = 1, int pageSize = 10)
         {
